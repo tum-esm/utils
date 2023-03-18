@@ -1,0 +1,67 @@
+name: 'test'
+on:
+    push:
+        branches:
+            - main
+        paths:
+            - 'scripts/**'
+            - 'tests/**'
+            - 'tum_esm_utils/**'
+            - '.github/workflows/test.yaml'
+    pull_request:
+        branches:
+            - main
+        paths:
+            - 'scripts/**'
+            - 'tests/**'
+            - 'tum_esm_utils/**'
+            - '.github/workflows/test.yaml'
+
+jobs:
+    test-sensor-codebase:
+        runs-on: ubuntu-latest
+        steps:
+            # check-out repo
+            - name: Check out repository
+              uses: actions/checkout@v3
+
+            # load cached venv if cache exists
+            - name: Load cached venv
+              id: cached-poetry-dependencies
+              uses: actions/cache@v3
+              with:
+                  path: .venv
+                  key: venv-${{ runner.os }}-3.9.16-${{ hashFiles('poetry.lock') }}
+
+            # generate venv if not in cache
+            - name: Set up Python 3.9.16
+              if: steps.cached-poetry-dependencies.outputs.cache-hit != 'true'
+              uses: actions/setup-python@v3
+              with:
+                  python-version: 3.9.16
+            - name: Install Poetry
+              if: steps.cached-poetry-dependencies.outputs.cache-hit != 'true'
+              uses: snok/install-poetry@v1
+              with:
+                  version: 1.3.2
+                  virtualenvs-create: true
+                  virtualenvs-in-project: true
+                  installer-parallel: true
+            - name: Install dependencies
+              if: steps.cached-poetry-dependencies.outputs.cache-hit != 'true'
+              run: poetry install --with=dev
+
+            # run test suite
+            - name: Run static type analysis
+              run: |
+                  source .venv/bin/activate
+                  bash scripts/check_static_types.sh
+            - name: Run ci-pytests
+              env:
+                  HERMES_MQTT_URL: ${{ secrets.HERMES_MQTT_URL }}
+                  HERMES_MQTT_PORT: ${{ secrets.HERMES_MQTT_PORT }}
+                  HERMES_MQTT_USERNAME: ${{ secrets.HERMES_MQTT_USERNAME }}
+                  HERMES_MQTT_PASSWORD: ${{ secrets.HERMES_MQTT_PASSWORD }}
+              run: |
+                  source .venv/bin/activate
+                  pytest -m "ci" --cov=src --cov=cli tests/
