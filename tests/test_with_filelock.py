@@ -6,9 +6,9 @@ import multiprocessing
 from typing import Optional
 
 import pytest
-from tum_esm_utils.decorators import with_filelock
+import tum_esm_utils
 
-TIMEOUT_UNIT = 1
+TIMEOUT_UNIT = 0.5
 res_queue_th: queue.Queue[int] = queue.Queue()
 res_queue_mp: queue.Queue[int] = multiprocessing.Queue()
 lockfile_path = os.path.join(
@@ -27,7 +27,9 @@ def count_queue_items(q: queue.Queue[int]) -> int:
             return c
 
 
-@with_filelock(lockfile_path=lockfile_path, timeout=TIMEOUT_UNIT * 2)
+@tum_esm_utils.decorators.with_filelock(
+    lockfile_path=lockfile_path, timeout=TIMEOUT_UNIT * 2
+)
 def f(delay: int = 0, q: Optional[queue.Queue[int]] = None) -> int:
     """this funtion will sleep for the amount passed as `delay`, put
     1 into the passed queue (optional) and return 1. It will raise a

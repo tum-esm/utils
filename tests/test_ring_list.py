@@ -1,8 +1,8 @@
-from tum_esm_utils.datastructures import RingList
+import tum_esm_utils
 
 
 def test_ring_list() -> None:
-    ring_list = RingList(4)
+    ring_list = tum_esm_utils.datastructures.RingList(4)
 
     # list is empty at first
     assert ring_list.get() == []
