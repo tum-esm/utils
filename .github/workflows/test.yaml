@@ -18,7 +18,7 @@ on:
             - '.github/workflows/test.yaml'
 
 jobs:
-    test-sensor-codebase:
+    test:
         runs-on: ubuntu-latest
         steps:
             # check-out repo
@@ -56,12 +56,7 @@ jobs:
               run: |
                   source .venv/bin/activate
                   bash scripts/check_static_types.sh
-            - name: Run ci-pytests
-              env:
-                  HERMES_MQTT_URL: ${{ secrets.HERMES_MQTT_URL }}
-                  HERMES_MQTT_PORT: ${{ secrets.HERMES_MQTT_PORT }}
-                  HERMES_MQTT_USERNAME: ${{ secrets.HERMES_MQTT_USERNAME }}
-                  HERMES_MQTT_PASSWORD: ${{ secrets.HERMES_MQTT_PASSWORD }}
+            - name: Run pytests
               run: |
                   source .venv/bin/activate
-                  pytest -m "ci" --cov=src --cov=cli tests/
+                  pytest tests/
