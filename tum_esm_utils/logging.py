@@ -4,6 +4,8 @@ import traceback
 from datetime import datetime, timedelta
 from typing import Literal, Optional
 
+import filelock
+
 from .shell import CommandLineException
 from .string import pad_string
 from .system import get_utc_offset
@@ -37,6 +39,9 @@ class Logger:
     ) -> None:
         self.origin: str = origin
 
+        self.filelock = filelock.FileLock(
+            os.path.join(logfile_directory, "logging.lock"), timeout=30
+        )
         self.current_logfile_path = os.path.join(logfile_directory, "current-logs.log")
         self.log_archive_path = os.path.join(logfile_directory, "archive")
 
@@ -157,12 +162,13 @@ class Logger:
         if self.print_to_console:
             print(log_string)
         else:
-            with open(self.current_logfile_path, "a") as f1:
-                f1.write(log_string + "\n")
+            with self.filelock:
+                with open(self.current_logfile_path, "a") as f1:
+                    f1.write(log_string + "\n")
 
-            # Archive lines older than 60 minutes, every 10 minutes
-            if (now - Logger.last_archive_time).total_seconds() > 600:
-                self._archive()
+                # Archive lines older than 60 minutes, every 10 minutes
+                if (now - Logger.last_archive_time).total_seconds() > 600:
+                    self._archive()
 
     def _archive(self) -> None:
         """moves old log lines in "logs/current-logs.log" into an
