@@ -1,0 +1,18 @@
+[tool.poetry]
+name = "tum-esm-utils"
+version = "0.1.0"
+description = ""
+authors = ["Moritz Makowski <moritz.makowski@tum.de>"]
+readme = "README.md"
+packages = [{include = "tum_esm_utils"}]
+
+[tool.poetry.dependencies]
+python = "^3.9"
+
+
+[tool.poetry.group.dev.dependencies]
+black = "^23.1.0"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
