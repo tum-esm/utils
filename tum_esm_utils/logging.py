@@ -54,34 +54,21 @@ class Logger:
 
     def debug(self, message: str, details: Optional[str] = None) -> None:
         """writes a debug log line"""
-        if details is None:
-            self._write_log_line("DEBUG", message)
-        else:
-            self._write_log_line("DEBUG", message, details={"details": details})
+        self._write_log_line("DEBUG", message, details=details)
 
     def info(self, message: str, details: Optional[str] = None) -> None:
         """writes an info log line"""
-        if details is None:
-            self._write_log_line("INFO", message)
-        else:
-            self._write_log_line("INFO", message, details={"details": details})
+        self._write_log_line("INFO", message, details=details)
 
     def warning(self, message: str, details: Optional[str] = None) -> None:
         """writes a warning log line"""
-        if details is None:
-            self._write_log_line("WARNING", message)
-        else:
-            self._write_log_line("WARNING", message, details={"details": details})
+        self._write_log_line("WARNING", message, details=details)
 
     def error(self, message: str, details: Optional[str] = None) -> None:
         """writes an error log line, sends the message via
         MQTT when config is passed (required for revision number)
         """
-        self._write_log_line(
-            "ERROR",
-            message,
-            details={} if details is None else {"details": details},
-        )
+        self._write_log_line("ERROR", message, details=details)
 
     def exception(self, label: Optional[str] = None) -> None:
         """logs the traceback of an exception; output will be
@@ -112,17 +99,15 @@ class Logger:
         self._write_log_line(
             "EXCEPTION",
             subject_string,
-            details={
-                "details": exception_details,
-                "traceback": exception_traceback,
-            },
+            details=exception_details,
+            traceback=exception_traceback,
         )
 
     def _write_log_line(
         self,
         level: str,
         message: str,
-        **kwargs: dict[str, Optional[str]],
+        **kwargs: Optional[str],
     ) -> None:
         """Formats the log line string and writes it to `logs/current-logs.log`.
         All keyword arguments will be added to the log message with horizontal
@@ -141,16 +126,17 @@ class Logger:
         if utc_offset % 1 == 0:
             utc_offset = round(utc_offset)
 
-        additional_labels = [k for k, v in kwargs.items() if v is not None]
-        if len(additional_labels) > 0:
-            for label in additional_labels:
+        additional_log_items = [(k, v) for k, v in kwargs.items() if v is not None]
+        if len(additional_log_items) > 0:
+            message += "\n"
+            for label, value in additional_log_items:
                 message += pad_string(
                     f"--- {label}: ---",
                     min_width=40,
                     pad_position="right",
                     fill_char="-",
                 )
-                message += "\n" + kwargs[label] + "\n"
+                message += "\n" + value + "\n"
             message += "-" * 40
 
         log_string = (
