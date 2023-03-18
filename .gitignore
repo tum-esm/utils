@@ -1,5 +1,6 @@
 # custom
 tests/pytest_filelock_test.lock
+nohup.out
 
 # Created by https://www.toptal.com/developers/gitignore/api/macos,linux,windows,python,jetbrains
 # Edit at https://www.toptal.com/developers/gitignore?templates=macos,linux,windows,python,jetbrains

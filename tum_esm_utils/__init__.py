@@ -4,6 +4,7 @@ from . import (
     files,
     github,
     math,
+    processes,
     shell,
     string,
     system,
