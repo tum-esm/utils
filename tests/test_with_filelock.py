@@ -4,6 +4,8 @@ import queue
 import threading
 import multiprocessing
 from typing import Optional
+
+import pytest
 from tum_esm_utils.decorators import with_filelock
 
 TIMEOUT_UNIT = 3
@@ -45,7 +47,11 @@ def test_filelock_without_concurrency() -> None:
     assert f() == 1
 
 
+@pytest.mark.last
 def test_filelock_with_threading() -> None:
+    """takes quite long because I had to increase `TIMEOUT_UNIT`
+    to `3` for it to work on GitHub's CI small runners"""
+
     t1 = threading.Thread(target=f, kwargs={"delay": 1, "q": res_queue_th})
     t2 = threading.Thread(target=f, kwargs={"delay": 1, "q": res_queue_th})
     t1.start()
@@ -63,7 +69,11 @@ def test_filelock_with_threading() -> None:
     assert count_queue_items(res_queue_th) == 1
 
 
+@pytest.mark.last
 def test_filelock_with_multiprocessing() -> None:
+    """takes quite long because I had to increase `TIMEOUT_UNIT`
+    to `3` for it to work on GitHub's CI small runners"""
+
     t1 = threading.Thread(target=f, kwargs={"delay": 1, "q": res_queue_mp})
     t2 = threading.Thread(target=f, kwargs={"delay": 1, "q": res_queue_mp})
     t1.start()
