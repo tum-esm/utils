@@ -1,5 +1,5 @@
 import psutil
-import datetime
+from datetime import datetime
 
 
 def get_cpu_usage() -> list[float]:
@@ -35,6 +35,9 @@ def get_system_battery() -> int:
 
 def get_last_boot_time() -> str:
     """Returns last OS boot time."""
-    return datetime.datetime.fromtimestamp(psutil.boot_time()).strftime(
-        "%Y-%m-%d %H:%M:%S"
-    )
+    return datetime.fromtimestamp(psutil.boot_time()).strftime("%Y-%m-%d %H:%M:%S")
+
+
+def get_utc_offset() -> float:
+    """Returns the UTC offset of the system"""
+    return round((datetime.now() - datetime.utcnow()).total_seconds() / 3600, 1)
