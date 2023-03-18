@@ -6,7 +6,7 @@ def request_github_file(
     github_repository: str,
     filepath: str,
     access_token: Optional[str] = None,
-) -> list[Any]:
+) -> str:
     """Sends a request and returns the content of the response, in unicode."""
     response = requests.get(
         f"https://raw.githubusercontent.com/{github_repository}/main/{filepath}",
