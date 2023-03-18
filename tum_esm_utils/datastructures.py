@@ -1,3 +1,6 @@
+from typing import Any
+
+
 class RingList:
     def __init__(self, max_size: int):
         assert max_size > 0, "a max_size of zero doesn't make any sense"
@@ -54,3 +57,44 @@ class RingList:
 
     def __str__(self) -> str:
         return str(self.get())
+
+
+def merge_dicts(old_object: Any, new_object: Any) -> Any:
+    """
+    For a given dict, update it recursively from a new dict.
+    It will not add any properties and assert that the types
+    remain the same (or null). null->int or int->null is possible
+    but not int->dict or list->int.
+
+    example:
+    ```python
+    merge_dicts(
+        old_object={"a": 3, "b": {"c": 50, "e": None}},
+        new_object={"b": {"e": 80}},
+    ) == {"a": 3, "b": {"c": 50, "e": 80}}
+    ```
+    """
+
+    if old_object is None or new_object is None:
+        return new_object
+
+    # merging is only possible when both are dicts
+    if (type(old_object) == dict) and (type(new_object) == dict):
+        updated_dict = {}
+
+        old_keys = set(old_object.keys())
+        new_keys = set(new_object.keys())
+
+        # recursively merge keys that are in both dicts
+        for k in old_keys.intersection(new_keys):
+            updated_dict[k] = merge_dicts(old_object[k], new_object[k])
+
+        # simple add keys that are only in one of the dicts
+        for k in new_keys.difference(old_keys):
+            updated_dict[k] = new_object[k]
+        for k in old_keys.difference(new_keys):
+            updated_dict[k] = old_object[k]
+
+        return updated_dict
+    else:
+        return new_object
