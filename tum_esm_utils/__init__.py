@@ -1,1 +1,6 @@
-from . import shell, math, string
+from . import (
+    datastructures,
+    math,
+    shell,
+    string,
+)
