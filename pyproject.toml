@@ -1,10 +1,13 @@
 [tool.poetry]
-name = "tum-esm-utils"
+name = "tum_esm_utils"
 version = "0.1.0"
 description = ""
 authors = ["Moritz Makowski <moritz.makowski@tum.de>"]
 readme = "README.md"
-packages = [{include = "tum_esm_utils"}]
+packages = [
+    {include = "tum_esm_utils"},
+    {include = "tum_esm_utils/py.typed"}
+]
 
 [tool.poetry.dependencies]
 python = "^3.9"

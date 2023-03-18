@@ -1,3 +1,5 @@
+"""Python utilities by the Professorship of Environmental Sensing and Modeling"""
+
 from . import (
     datastructures,
     decorators,
