@@ -1,1 +1,1 @@
-from . import shell, math
+from . import shell, math, string
