@@ -50,3 +50,20 @@ def get_hostname() -> str:
 
     raw = run_shell_command("hostname")
     return (raw.split(".")[0]) if ("." in raw) else raw
+
+
+def get_commit_sha() -> Optional[str]:
+    """Get the current commit sha of the repository. Returns
+    `None` if there is not git repository in any parent directory."""
+
+    p = subprocess.run(
+        ["git", "rev-parse", "--verify", "HEAD", "--short"],
+        stdout=subprocess.PIPE,
+        stderr=subprocess.STDOUT,
+    )
+    stdout = p.stdout.decode().strip("\n ")
+    if (p.returncode != 0) or ("fatal: not a git repository" in stdout):
+        return None
+
+    assert len(stdout) > 0
+    return stdout
