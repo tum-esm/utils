@@ -1,6 +1,6 @@
-# 🧰 TUM ESM Utilities Library
+# 🧰 &nbsp;TUM ESM Python Utilities
 
-Install the Python library with:
+**Install the Python library with:**
 
 ```bash
 poetry add tum_esm_utils
@@ -8,9 +8,13 @@ poetry add tum_esm_utils
 pip install tum_esm_utils
 ```
 
+**✨ API Reference and more documentation coming soon ✨**
+
 <br/>
 
-## For Developers: Publish the Packaga to PyPI
+## For Developers
+
+**Publish the Package to PyPI**
 
 ```bash
 poetry build

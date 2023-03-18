@@ -1,4 +1,5 @@
-"""Python utilities by the Professorship of Environmental Sensing and Modeling"""
+"""Python utilities by the Professorship of Environmental
+Sensing and Modeling at the Technical University of Munich"""
 
 from . import (
     datastructures,
