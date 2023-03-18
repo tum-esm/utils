@@ -1,3 +1,6 @@
+# custom
+tests/pytest_filelock_test.lock
+
 # Created by https://www.toptal.com/developers/gitignore/api/macos,linux,windows,python,jetbrains
 # Edit at https://www.toptal.com/developers/gitignore?templates=macos,linux,windows,python,jetbrains
 

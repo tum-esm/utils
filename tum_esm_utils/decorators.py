@@ -17,15 +17,15 @@ class with_filelock:
     See https://en.wikipedia.org/wiki/Semaphore_(programming)
     """
 
-    def __init__(self, file_lock_path: str, timeout: float = -1) -> None:
+    def __init__(self, lockfile_path: str, timeout: float = -1) -> None:
         """A timeout of -1 means that the code waits forever"""
-        self.file_lock_path: str = file_lock_path
+        self.lockfile_path: str = lockfile_path
         self.timeout: float = timeout
 
     def __call__(self, f: F) -> F:
         @wraps(f)
         def wrapper(*args: tuple[Any], **kwargs: dict[str, Any]) -> Any:
-            with filelock.FileLock(self.file_lock_path, timeout=self.timeout):
+            with filelock.FileLock(self.lockfile_path, timeout=self.timeout):
                 return f(*args, **kwargs)
 
         return cast(F, wrapper)

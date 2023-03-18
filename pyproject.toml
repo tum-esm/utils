@@ -15,6 +15,12 @@ filelock = "^3.10.0"
 black = "^23.1.0"
 pytest = "^7.2.2"
 
+
+[tool.pytest.ini_options]
+filterwarnings = [
+    "ignore::pytest.PytestUnhandledThreadExceptionWarning"
+]
+
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
