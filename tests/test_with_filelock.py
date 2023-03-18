@@ -8,7 +8,7 @@ from typing import Optional
 import pytest
 from tum_esm_utils.decorators import with_filelock
 
-TIMEOUT_UNIT = 3
+TIMEOUT_UNIT = 1
 res_queue_th: queue.Queue[int] = queue.Queue()
 res_queue_mp: queue.Queue[int] = multiprocessing.Queue()
 lockfile_path = os.path.join(
@@ -74,16 +74,16 @@ def test_filelock_with_multiprocessing() -> None:
     """takes quite long because I had to increase `TIMEOUT_UNIT`
     to `3` for it to work on GitHub's CI small runners"""
 
-    t1 = threading.Thread(target=f, kwargs={"delay": 1, "q": res_queue_mp})
-    t2 = threading.Thread(target=f, kwargs={"delay": 1, "q": res_queue_mp})
+    t1 = multiprocessing.Process(target=f, kwargs={"delay": 1, "q": res_queue_mp})
+    t2 = multiprocessing.Process(target=f, kwargs={"delay": 1, "q": res_queue_mp})
     t1.start()
     t2.start()
     t1.join()
     t2.join()
     assert count_queue_items(res_queue_mp) == 2
 
-    t3 = threading.Thread(target=f, kwargs={"delay": 3, "q": res_queue_mp})
-    t4 = threading.Thread(target=f, kwargs={"delay": 3, "q": res_queue_mp})
+    t3 = multiprocessing.Process(target=f, kwargs={"delay": 3, "q": res_queue_mp})
+    t4 = multiprocessing.Process(target=f, kwargs={"delay": 3, "q": res_queue_mp})
     t3.start()
     t4.start()
     t3.join()
