@@ -58,6 +58,19 @@ Returns true if string is in `YYYYMMDD` format and date exists
 
 <a href="https://github.com/tum-esm/utils/tree/main/tum_esm_utils/text.py#L40"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
+## <kbd>function</kbd> `date_is_too_recent`
+
+```python
+date_is_too_recent(date_string: str, min_days_delay: int = 1) → bool
+```
+
+A min delay of two days means 20220101 will be too recent any time before 20220103 00:00 (start of day) 
+
+
+---
+
+<a href="https://github.com/tum-esm/utils/tree/main/tum_esm_utils/text.py#L52"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+
 ## <kbd>function</kbd> `insert_replacements`
 
 ```python

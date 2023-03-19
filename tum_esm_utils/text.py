@@ -37,6 +37,18 @@ def is_date_string(date_string: str) -> bool:
         return False
 
 
+def date_is_too_recent(
+    date_string: str,
+    min_days_delay: int = 1,
+) -> bool:
+    """A min delay of two days means 20220101 will be too recent
+    any time before 20220103 00:00 (start of day)"""
+    date_object = datetime.strptime(
+        date_string, "%Y%m%d"
+    )  # will have the time 00:00:00
+    return (datetime.now() - date_object).days >= min_days_delay
+
+
 def insert_replacements(content: str, replacements: dict[str, str]) -> str:
     """For every key in replacements, replaces `%key$` in the
     content with its value."""
