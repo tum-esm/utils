@@ -1,4 +1,4 @@
-# 🧰 &nbsp;TUM ESM Python Utilities
+# 🔬 &nbsp;TUM ESM Python Utilities
 
 **Install the Python library with:**
 
