@@ -19,6 +19,7 @@ python = "^3.9"
 filelock = "^3.10.0"
 requests = "^2.28.2"
 psutil = "^5.9.4"
+lazydocs = "^0.4.8"
 
 
 [tool.poetry.group.dev.dependencies]
@@ -28,6 +29,7 @@ mypy = "^1.1.1"
 types-psutil = "^5.9.5.10"
 types-requests = "^2.28.11.15"
 pytest-ordering = "^0.6"
+pydocstyle = "^6.3.0"
 
 
 [tool.pytest.ini_options]
