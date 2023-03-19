@@ -39,7 +39,7 @@ def test_logger(empty_log_dir: Any) -> None:
     # -------------------------------------------------------------------------
     # check whether logs lines were written correctly
 
-    logger = tum_esm_utils.logging.Logger(
+    logger = tum_esm_utils.logger.Logger(
         origin="pytests", logfile_directory=LOG_DIR_PATH
     )
     logger.debug("some message a")
@@ -72,7 +72,7 @@ def test_log_message_details_format(empty_log_dir: Any) -> None:
     # -------------------------------------------------------------------------
     # check whether logs lines were written correctly
 
-    logger = tum_esm_utils.logging.Logger(
+    logger = tum_esm_utils.logger.Logger(
         origin="pytests", logfile_directory=LOG_DIR_PATH
     )
     logger.info("some message xy", details="somedetails")

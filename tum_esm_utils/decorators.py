@@ -18,7 +18,7 @@ class with_filelock:
     """
 
     def __init__(self, lockfile_path: str, timeout: float = -1) -> None:
-        """A timeout of -1 means that the code waits forever"""
+        """A timeout of -1 means that the code waits forever."""
         self.lockfile_path: str = lockfile_path
         self.timeout: float = timeout
 

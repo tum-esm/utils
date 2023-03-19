@@ -1,7 +1,17 @@
+from datetime import datetime
 import os
 import re
-from . import string as string_utils
 from typing import Any, Callable, Optional
+
+
+# duplicate method because lazydocs complains when using relative imports
+def _is_date_string(date_string: str) -> bool:
+    """Returns true if string is in `YYYYMMDD` format and date exists"""
+    try:
+        datetime.strptime(date_string, "%Y%m%d")
+        return True
+    except (AssertionError, ValueError):
+        return False
 
 
 def validate_bool() -> Callable[[Any, bool], bool]:
@@ -96,7 +106,7 @@ def validate_str(
             raise ValueError(f'"{v}" is not a directory')
         if is_file and not os.path.isfile(v):
             raise ValueError(f'"{v}" is not a file')
-        if is_date_string and not string_utils.is_date_string(v):
+        if is_date_string and not _is_date_string(v):
             raise ValueError(f'"{v}" is not a day string ("YYYYMMDD")')
         return v
 
