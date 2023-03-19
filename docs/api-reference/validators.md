@@ -74,13 +74,32 @@ validate_str(
     nullable: bool = False,
     min_len: Optional[float] = None,
     max_len: Optional[float] = None,
-    allowed: Optional[list[str]] = None,
     regex: Optional[str] = None,
     is_numeric: bool = False,
     is_directory: bool = False,
     is_file: bool = False,
-    is_date_string: bool = False
+    is_date_string: bool = False,
+    allowed: Optional[list[int]] = None,
+    forbidden: Optional[list[int]] = None
 ) → Callable[[Any, str], str]
+```
+
+
+
+
+
+
+---
+
+<a href="https://github.com/tum-esm/utils/tree/main/tum_esm_utils/validators.py#L122"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+
+## <kbd>function</kbd> `validate_list`
+
+```python
+validate_list(
+    min_len: Optional[float] = None,
+    max_len: Optional[float] = None
+) → Callable[[Any, list[~T]], list[~T]]
 ```
 
 
