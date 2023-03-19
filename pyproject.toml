@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "tum_esm_utils"
-version = "0.2.0"
+version = "0.2.1"
 description = "Python utilities by the Professorship of Environmental Sensing and Modeling at the Technical University of Munich"
 authors = ["Moritz Makowski <moritz.makowski@tum.de>"]
 readme = "README.md"
@@ -24,8 +24,9 @@ python = "^3.9"
 filelock = "^3.10.0"
 requests = "^2.28.2"
 psutil = "^5.9.4"
-lazydocs = "^0.4.8"
 
+[tool.poetry.group.dev]
+optional = true
 
 [tool.poetry.group.dev.dependencies]
 black = "^23.1.0"
@@ -35,6 +36,7 @@ types-psutil = "^5.9.5.10"
 types-requests = "^2.28.11.15"
 pytest-ordering = "^0.6"
 pydocstyle = "^6.3.0"
+lazydocs = "^0.4.8"
 
 
 [tool.pytest.ini_options]
