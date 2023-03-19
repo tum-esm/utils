@@ -82,8 +82,8 @@ def validate_str(
     is_directory: bool = False,
     is_file: bool = False,
     is_date_string: bool = False,
-    allowed: Optional[list[int]] = None,
-    forbidden: Optional[list[int]] = None,
+    allowed: Optional[list[str]] = None,
+    forbidden: Optional[list[str]] = None,
 ) -> Callable[[Any, str], str]:
     def f(cls: Any, v: str) -> str:
         if v is None:
