@@ -53,7 +53,7 @@
                 --sidebar-name-font-weight: bold;
 
                 --sidebar-nav-pagelink-background: none;
-                --sidebar-nav-margin: 0.5em 0 0 0;
+                --sidebar-nav-margin: 0 0 0 0;
             }
             hr {
                 margin: 4em 0;
@@ -82,6 +82,12 @@
                 font-weight: bold;
                 margin: 1.8em 0 0.4em 0;
             }
+
+            .sidebar .search .clear-button[class*='show'] {
+                display: flex;
+                align-items: center;
+                justify-items: center;
+            }
         </style>
     </head>
     <body>
@@ -91,11 +97,14 @@
                 name: 'TUM ESM Python Utilities',
                 repo: 'https://github.com/tum-esm/utils',
                 loadSidebar: true,
+                search: 'auto',
             };
         </script>
+
         <!-- DOCSIFY V4 -->
         <script src="//cdn.jsdelivr.net/npm/docsify@4"></script>
         <script src="//cdn.jsdelivr.net/npm/docsify-copy-code/dist/docsify-copy-code.min.js"></script>
+        <script src="//cdn.jsdelivr.net/npm/docsify/lib/plugins/search.min.js"></script>
 
         <!-- PRISM SYNTAX HIGHLIGHTING -->
         <script src="//cdn.jsdelivr.net/npm/prismjs@1/components/prism-python.min.js"></script>
