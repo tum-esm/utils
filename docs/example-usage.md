@@ -42,11 +42,11 @@ new_pid = start_background_process(
 )
 
 # pid should be returned from this list
-assert get_process_pids(SCRIPT_PATH) == [expected_pid]
+assert get_process_pids(SCRIPT_PATH) == [new_pid]
 
 # terminate the process
 terminated_pids = terminate_process(SCRIPT_PATH)
-assert terminated_pids == [expected_pid]
+assert terminated_pids == [new_pid]
 
 # pid list should be empty
 assert get_process_pids(SCRIPT_PATH) == []
