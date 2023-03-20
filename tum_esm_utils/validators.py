@@ -14,6 +14,16 @@ def _is_date_string(date_string: str) -> bool:
         return False
 
 
+# duplicate method because lazydocs complains when using relative imports
+def _is_datetime_string(datetime_string: str) -> bool:
+    """Returns true if string is in `YYYYMMDD HH:MM:SS` format and date exists"""
+    try:
+        datetime.strptime(datetime_string, "%Y%m%d %H:%M:%S")
+        return True
+    except (AssertionError, ValueError):
+        return False
+
+
 def validate_bool() -> Callable[[Any, bool], bool]:
     def f(cls: Any, v: Any) -> bool:
         if not isinstance(v, bool):
@@ -82,6 +92,7 @@ def validate_str(
     is_directory: bool = False,
     is_file: bool = False,
     is_date_string: bool = False,
+    is_datetime_string: bool = False,
     allowed: Optional[list[str]] = None,
     forbidden: Optional[list[str]] = None,
 ) -> Callable[[Any, str], str]:
@@ -107,6 +118,8 @@ def validate_str(
             raise ValueError(f'"{v}" is not a file')
         if is_date_string and not _is_date_string(v):
             raise ValueError(f'"{v}" is not a day string ("YYYYMMDD")')
+        if is_datetime_string and not _is_datetime_string(v):
+            raise ValueError(f'"{v}" is not a day string ("YYYYMMDD HH:MM:SS")')
         if allowed is not None and v not in allowed:
             raise ValueError(f'"{v}" is not allowed (not one of {allowed})')
         if forbidden is not None and v in forbidden:

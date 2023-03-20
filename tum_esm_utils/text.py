@@ -29,9 +29,18 @@ def pad_string(
 
 
 def is_date_string(date_string: str) -> bool:
-    """Returns true if string is in `YYYYMMDD` format and date exists"""
+    """Returns `True` if string is in a valid `YYYYMMDD` format"""
     try:
         datetime.strptime(date_string, "%Y%m%d")
+        return True
+    except (AssertionError, ValueError):
+        return False
+
+
+def is_datetime_string(datetime_string: str) -> bool:
+    """Returns `True` if string is in a valid `YYYYMMDD HH:MM:SS` format"""
+    try:
+        datetime.strptime(datetime_string, "%Y%m%d %H:%M:%S")
         return True
     except (AssertionError, ValueError):
         return False
