@@ -51,12 +51,25 @@ pad_string(
 is_date_string(date_string: str) → bool
 ```
 
-Returns true if string is in `YYYYMMDD` format and date exists 
+Returns `True` if string is in a valid `YYYYMMDD` format 
 
 
 ---
 
 <a href="https://github.com/tum-esm/utils/tree/main/tum_esm_utils/text.py#L40"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+
+## <kbd>function</kbd> `is_datetime_string`
+
+```python
+is_datetime_string(datetime_string: str) → bool
+```
+
+Returns `True` if string is in a valid `YYYYMMDD HH:MM:SS` format 
+
+
+---
+
+<a href="https://github.com/tum-esm/utils/tree/main/tum_esm_utils/text.py#L49"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ## <kbd>function</kbd> `date_is_too_recent`
 
@@ -69,7 +82,7 @@ A min delay of two days means 20220101 will be too recent any time before 202201
 
 ---
 
-<a href="https://github.com/tum-esm/utils/tree/main/tum_esm_utils/text.py#L52"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="https://github.com/tum-esm/utils/tree/main/tum_esm_utils/text.py#L61"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ## <kbd>function</kbd> `insert_replacements`
 

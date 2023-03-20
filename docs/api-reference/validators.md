@@ -10,7 +10,7 @@
 
 ---
 
-<a href="https://github.com/tum-esm/utils/tree/main/tum_esm_utils/validators.py#L17"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="https://github.com/tum-esm/utils/tree/main/tum_esm_utils/validators.py#L27"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ## <kbd>function</kbd> `validate_bool`
 
@@ -25,7 +25,7 @@ validate_bool() → Callable[[Any, bool], bool]
 
 ---
 
-<a href="https://github.com/tum-esm/utils/tree/main/tum_esm_utils/validators.py#L26"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="https://github.com/tum-esm/utils/tree/main/tum_esm_utils/validators.py#L36"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ## <kbd>function</kbd> `validate_float`
 
@@ -44,7 +44,7 @@ validate_float(
 
 ---
 
-<a href="https://github.com/tum-esm/utils/tree/main/tum_esm_utils/validators.py#L48"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="https://github.com/tum-esm/utils/tree/main/tum_esm_utils/validators.py#L58"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ## <kbd>function</kbd> `validate_int`
 
@@ -65,7 +65,7 @@ validate_int(
 
 ---
 
-<a href="https://github.com/tum-esm/utils/tree/main/tum_esm_utils/validators.py#L76"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="https://github.com/tum-esm/utils/tree/main/tum_esm_utils/validators.py#L86"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ## <kbd>function</kbd> `validate_str`
 
@@ -79,8 +79,9 @@ validate_str(
     is_directory: bool = False,
     is_file: bool = False,
     is_date_string: bool = False,
-    allowed: Optional[list[int]] = None,
-    forbidden: Optional[list[int]] = None
+    is_datetime_string: bool = False,
+    allowed: Optional[list[str]] = None,
+    forbidden: Optional[list[str]] = None
 ) → Callable[[Any, str], str]
 ```
 
@@ -91,7 +92,7 @@ validate_str(
 
 ---
 
-<a href="https://github.com/tum-esm/utils/tree/main/tum_esm_utils/validators.py#L122"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="https://github.com/tum-esm/utils/tree/main/tum_esm_utils/validators.py#L135"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ## <kbd>function</kbd> `validate_list`
 
