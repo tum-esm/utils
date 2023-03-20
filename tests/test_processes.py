@@ -1,6 +1,8 @@
 import os
 import sys
 import time
+from typing import Any
+import pytest
 import tum_esm_utils
 
 
@@ -11,7 +13,15 @@ SCRIPT_PATH = os.path.join(
 )
 
 
-def test_processes() -> None:
+@pytest.fixture
+def _dummy_process_script() -> Any:
+    with open(SCRIPT_PATH, "w") as f:
+        f.write("import time\ntime.sleep(30)")
+    yield
+    os.remove(SCRIPT_PATH)
+
+
+def test_processes(_dummy_process_script: Any) -> None:
     expected_pid = tum_esm_utils.processes.start_background_process(
         sys.executable, SCRIPT_PATH
     )
