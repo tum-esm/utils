@@ -137,9 +137,9 @@ def validate_str(
 
         # date and datetime string validation
         if is_date_string and not _is_date_string(v):
-            raise ValueError(f'"{v}" is not a day string ("YYYYMMDD")')
+            raise ValueError(f'"{v}" is not a date string ("YYYYMMDD")')
         if is_datetime_string and not _is_datetime_string(v):
-            raise ValueError(f'"{v}" is not a day string ("YYYYMMDD HH:mm:ss")')
+            raise ValueError(f'"{v}" is not a datetime string ("YYYYMMDD HH:mm:ss")')
         if is_rfc3339_datetime_string and not _is_rfc3339_datetime_string(v):
             raise ValueError(f'"{v}" is not a datetime string ("YYYY-MM-DDTHH:mm:ssZ")')
 
