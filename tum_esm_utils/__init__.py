@@ -6,6 +6,7 @@ from . import (
     decorators,
     files,
     github,
+    interferograms,
     logger,
     mathematics,
     processes,
