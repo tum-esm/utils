@@ -2,6 +2,7 @@ from datetime import datetime
 import random
 import string
 from typing import Literal
+import pendulum
 
 
 def get_random_string(length: int, forbidden: list[str] = []) -> str:
@@ -31,18 +32,28 @@ def pad_string(
 def is_date_string(date_string: str) -> bool:
     """Returns `True` if string is in a valid `YYYYMMDD` format"""
     try:
-        datetime.strptime(date_string, "%Y%m%d")
+        pendulum.from_format(date_string, "YYYYMMDD")
         return True
-    except (AssertionError, ValueError):
+    except ValueError:
         return False
 
 
 def is_datetime_string(datetime_string: str) -> bool:
-    """Returns `True` if string is in a valid `YYYYMMDD HH:MM:SS` format"""
+    """Returns `True` if string is in a valid `YYYYMMDD HH:mm:ss` format"""
     try:
-        datetime.strptime(datetime_string, "%Y%m%d %H:%M:%S")
+        pendulum.from_format(datetime_string, "YYYYMMDD HH:mm:ss")
         return True
-    except (AssertionError, ValueError):
+    except ValueError:
+        return False
+
+
+def is_rfc3339_datetime_string(rfc3339_datetime_string: str) -> bool:
+    """Returns `True` if string is in a valid `YYYY-MM-DDTHH:mm:ssZ` (RFC3339)
+    format. Caution: The appendix of `+00:00` is required for UTC!"""
+    try:
+        pendulum.from_format(rfc3339_datetime_string, fmt="YYYY-MM-DDTHH:mm:ssZ")
+        return True
+    except ValueError:
         return False
 
 

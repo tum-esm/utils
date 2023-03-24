@@ -10,7 +10,7 @@
 
 ---
 
-<a href="https://github.com/tum-esm/utils/tree/main/tum_esm_utils/text.py#L7"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="https://github.com/tum-esm/utils/tree/main/tum_esm_utils/text.py#L8"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ## <kbd>function</kbd> `get_random_string`
 
@@ -23,7 +23,7 @@ Return a random string from lowercase letter, the strings from the list passed a
 
 ---
 
-<a href="https://github.com/tum-esm/utils/tree/main/tum_esm_utils/text.py#L18"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="https://github.com/tum-esm/utils/tree/main/tum_esm_utils/text.py#L19"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ## <kbd>function</kbd> `pad_string`
 
@@ -43,7 +43,7 @@ pad_string(
 
 ---
 
-<a href="https://github.com/tum-esm/utils/tree/main/tum_esm_utils/text.py#L31"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="https://github.com/tum-esm/utils/tree/main/tum_esm_utils/text.py#L32"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ## <kbd>function</kbd> `is_date_string`
 
@@ -56,7 +56,7 @@ Returns `True` if string is in a valid `YYYYMMDD` format
 
 ---
 
-<a href="https://github.com/tum-esm/utils/tree/main/tum_esm_utils/text.py#L40"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="https://github.com/tum-esm/utils/tree/main/tum_esm_utils/text.py#L41"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ## <kbd>function</kbd> `is_datetime_string`
 
@@ -64,12 +64,25 @@ Returns `True` if string is in a valid `YYYYMMDD` format
 is_datetime_string(datetime_string: str) → bool
 ```
 
-Returns `True` if string is in a valid `YYYYMMDD HH:MM:SS` format 
+Returns `True` if string is in a valid `YYYYMMDD HH:mm:ss` format 
 
 
 ---
 
-<a href="https://github.com/tum-esm/utils/tree/main/tum_esm_utils/text.py#L49"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="https://github.com/tum-esm/utils/tree/main/tum_esm_utils/text.py#L50"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+
+## <kbd>function</kbd> `is_rfc3339_datetime_string`
+
+```python
+is_rfc3339_datetime_string(rfc3339_datetime_string: str) → bool
+```
+
+Returns `True` if string is in a valid `YYYY-MM-DDTHH:mm:ssZ` (RFC3339) format. Caution: The appendix of `+00:00` is required for UTC! 
+
+
+---
+
+<a href="https://github.com/tum-esm/utils/tree/main/tum_esm_utils/text.py#L60"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ## <kbd>function</kbd> `date_is_too_recent`
 
@@ -82,7 +95,7 @@ A min delay of two days means 20220101 will be too recent any time before 202201
 
 ---
 
-<a href="https://github.com/tum-esm/utils/tree/main/tum_esm_utils/text.py#L61"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="https://github.com/tum-esm/utils/tree/main/tum_esm_utils/text.py#L72"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ## <kbd>function</kbd> `insert_replacements`
 

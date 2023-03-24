@@ -3,12 +3,14 @@ import os
 import re
 from typing import Any, Callable, Optional, TypeVar
 
+import pendulum
+
 
 # duplicate method because lazydocs complains when using relative imports
 def _is_date_string(date_string: str) -> bool:
     """Returns true if string is in `YYYYMMDD` format and date exists"""
     try:
-        datetime.strptime(date_string, "%Y%m%d")
+        pendulum.from_format(date_string, "YYYYMMDD")
         return True
     except (AssertionError, ValueError):
         return False
@@ -16,9 +18,20 @@ def _is_date_string(date_string: str) -> bool:
 
 # duplicate method because lazydocs complains when using relative imports
 def _is_datetime_string(datetime_string: str) -> bool:
-    """Returns true if string is in `YYYYMMDD HH:MM:SS` format and date exists"""
+    """Returns true if string is in `YYYYMMDD HH:mm:ss` format and date exists"""
     try:
-        datetime.strptime(datetime_string, "%Y%m%d %H:%M:%S")
+        pendulum.from_format(datetime_string, "YYYYMMDD HH:mm:ss")
+        return True
+    except (AssertionError, ValueError):
+        return False
+
+
+# duplicate method because lazydocs complains when using relative imports
+def _is_rfc3339_datetime_string(datetime_string: str) -> bool:
+    """Returns true if string is in `YYYY-MM-DDTHH:mm:ssZ` (RFC3339)
+    format and date exists. Caution: The appendix of `+00:00` is required for UTC!"""
+    try:
+        pendulum.from_format(datetime_string, fmt="YYYY-MM-DDTHH:mm:ssZ")
         return True
     except (AssertionError, ValueError):
         return False
@@ -93,6 +106,7 @@ def validate_str(
     is_file: bool = False,
     is_date_string: bool = False,
     is_datetime_string: bool = False,
+    is_rfc3339_datetime_string: bool = False,
     allowed: Optional[list[str]] = None,
     forbidden: Optional[list[str]] = None,
 ) -> Callable[[Any, str], str]:
@@ -104,6 +118,8 @@ def validate_str(
                 raise ValueError(f"value cannot be None")
         if not isinstance(v, str):
             raise ValueError(f'"{v}" is not a string')
+
+        # length and regex validation
         if min_len is not None and len(v) < min_len:
             raise ValueError(f'"{v}" has less than {min_len} characters')
         if max_len is not None and len(v) > max_len:
@@ -112,14 +128,22 @@ def validate_str(
             raise ValueError(f'"{v}" does not match the regex "{regex}"')
         if is_numeric and not v.isnumeric():
             raise ValueError(f'"{v}" is not numeric')
+
+        # directory and file validation
         if is_directory and not os.path.isdir(v):
             raise ValueError(f'"{v}" is not a directory')
         if is_file and not os.path.isfile(v):
             raise ValueError(f'"{v}" is not a file')
+
+        # date and datetime string validation
         if is_date_string and not _is_date_string(v):
             raise ValueError(f'"{v}" is not a day string ("YYYYMMDD")')
         if is_datetime_string and not _is_datetime_string(v):
-            raise ValueError(f'"{v}" is not a day string ("YYYYMMDD HH:MM:SS")')
+            raise ValueError(f'"{v}" is not a day string ("YYYYMMDD HH:mm:ss")')
+        if is_rfc3339_datetime_string and not _is_rfc3339_datetime_string(v):
+            raise ValueError(f'"{v}" is not a datetime string ("YYYY-MM-DDTHH:mm:ssZ")')
+
+        # allowed and forbidden values
         if allowed is not None and v not in allowed:
             raise ValueError(f'"{v}" is not allowed (not one of {allowed})')
         if forbidden is not None and v in forbidden:
