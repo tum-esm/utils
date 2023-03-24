@@ -4,14 +4,14 @@ import subprocess
 from typing import Literal
 
 
-PARSER_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "ifg_parser")
+_PARSER_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "ifg_parser")
 
 
 def _compile_fortran_code(
     silent: bool = True,
     fortran_compiler: Literal["gfortran", "gfortran-9"] = "gfortran",
 ) -> None:
-    if not os.path.isfile(os.path.join(PARSER_DIR, "ifg_parser")):
+    if not os.path.isfile(os.path.join(_PARSER_DIR, "ifg_parser")):
         if not silent:
             print("compiling fortran code")
 
@@ -21,7 +21,7 @@ def _compile_fortran_code(
             shell=True,
             stdout=subprocess.PIPE,
             stderr=subprocess.PIPE,
-            cwd=PARSER_DIR,
+            cwd=_PARSER_DIR,
             env=os.environ.copy(),
         )
         if p.returncode != 0:
@@ -34,9 +34,9 @@ def _compile_fortran_code(
 
 
 def _write_input_file(ifgs: list[str]) -> None:
-    with open(f"{PARSER_DIR}/ifg_parser.template.inp", "r") as f:
+    with open(f"{_PARSER_DIR}/ifg_parser.template.inp", "r") as f:
         template_content = f.read()
-    with open(f"{PARSER_DIR}/ifg_parser.inp", "w") as f:
+    with open(f"{_PARSER_DIR}/ifg_parser.inp", "w") as f:
         f.write(template_content.replace("%IFG_LIST%", "\n".join(ifgs)))
 
 
@@ -62,7 +62,7 @@ def detect_corrupt_ifgs(
         _write_input_file(ifgs)
         process = subprocess.run(
             ["./ifg_parser", "ifg_parser.inp"],
-            cwd=PARSER_DIR,
+            cwd=_PARSER_DIR,
             stdout=subprocess.PIPE,
             stderr=subprocess.PIPE,
         )
@@ -86,7 +86,7 @@ def detect_corrupt_ifgs(
             if not silent:
                 print(f'error with file "{failing_filename}", running again')
 
-    with open(os.path.join(PARSER_DIR, "output.txt"), "w") as f:
+    with open(os.path.join(_PARSER_DIR, "output.txt"), "w") as f:
         f.write(stdout)
 
     file_parsing_block = stdout.split("Done!")[-1]
