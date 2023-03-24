@@ -10,6 +10,7 @@
     -   [decorators](api-reference/decorators.md)
     -   [files](api-reference/files.md)
     -   [github](api-reference/github.md)
+    -   [interferograms](api-reference/interferograms.md)
     -   [logger](api-reference/logger.md)
     -   [mathematics](api-reference/mathematics.md)
     -   [processes](api-reference/processes.md)
