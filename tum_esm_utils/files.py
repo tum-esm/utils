@@ -1,6 +1,6 @@
 import json
 import os
-from typing import Any
+from typing import Any, Optional
 
 
 def load_file(path: str) -> str:
@@ -18,9 +18,9 @@ def load_json_file(path: str) -> Any:
         return json.load(f)
 
 
-def dump_json_file(path: str, content: Any) -> None:
+def dump_json_file(path: str, content: Any, indent: Optional[int] = 4) -> None:
     with open(path, "w") as f:
-        json.dump(content, f)
+        json.dump(content, f, indent=indent)
 
 
 def get_parent_dir_path(script_path: str, current_depth: int = 1) -> str:
