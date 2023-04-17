@@ -1,6 +1,7 @@
 import os
+import re
 import subprocess
-from typing import Optional
+from typing import Callable, Optional
 
 
 class CommandLineException(Exception):
@@ -67,3 +68,32 @@ def get_commit_sha() -> Optional[str]:
 
     assert len(stdout) > 0
     return stdout
+
+
+_permission_string_pattern = re.compile(r"^((r|-)(w|-)(x|-)){3}$")
+
+
+def change_file_permissions(file_path: str, permission_string: str) -> None:
+    """Change a file's system permissions.
+
+    Example permission_strings: `--x------`, `rwxr-xr-x`, `rw-r--r--`."""
+
+    assert _permission_string_pattern.match(
+        permission_string
+    ), "Invalid permission string"
+
+    permission_str_to_bit: Callable[[str], int] = lambda p: sum(
+        [
+            int(c)
+            for c in p.replace("r", "4")
+            .replace("w", "2")
+            .replace("x", "1")
+            .replace("-", "0")
+        ]
+    )
+    os.chmod(
+        file_path,
+        64 * permission_str_to_bit(permission_string[:3])
+        + 8 * permission_str_to_bit(permission_string[3:6])
+        + permission_str_to_bit(permission_string[6:]),
+    )
