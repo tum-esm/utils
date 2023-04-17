@@ -38,6 +38,31 @@ def is_date_string(date_string: str) -> bool:
         return False
 
 
+def date_range(from_date_string: str, to_date_string: str) -> list[str]:
+    """Returns a list of dates between `from_date_string` and `to_date_string`.
+
+    Example:
+
+    ```python
+    date_range("20210101", "20210103") == ["20210101", "20210102", "20210103"]
+    ```
+    """
+
+    assert is_date_string(from_date_string), "from_date_string is not a valid date"
+    assert is_date_string(to_date_string), "to_date_string is not a valid date"
+    assert (
+        from_date_string <= to_date_string
+    ), "from_date_string cannot be after to_date_string"
+
+    output = []
+    for date in pendulum.period(
+        pendulum.from_format(from_date_string, "YYYYMMDD"),
+        pendulum.from_format(to_date_string, "YYYYMMDD"),
+    ).range("days"):
+        output.append(date.format("YYYYMMDD"))
+    return output
+
+
 def is_datetime_string(datetime_string: str) -> bool:
     """Returns `True` if string is in a valid `YYYYMMDD HH:mm:ss` format"""
     try:
