@@ -58,6 +58,28 @@ Returns `True` if string is in a valid `YYYYMMDD` format
 
 <a href="https://github.com/tum-esm/utils/tree/main/tum_esm_utils/text.py#L41"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
+## <kbd>function</kbd> `date_range`
+
+```python
+date_range(from_date_string: str, to_date_string: str) → list[str]
+```
+
+Returns a list of dates between `from_date_string` and `to_date_string`. 
+
+
+
+**Example:**
+ 
+
+```python
+date_range("20210101", "20210103") == ["20210101", "20210102", "20210103"]
+``` 
+
+
+---
+
+<a href="https://github.com/tum-esm/utils/tree/main/tum_esm_utils/text.py#L64"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+
 ## <kbd>function</kbd> `is_datetime_string`
 
 ```python
@@ -69,7 +91,7 @@ Returns `True` if string is in a valid `YYYYMMDD HH:mm:ss` format
 
 ---
 
-<a href="https://github.com/tum-esm/utils/tree/main/tum_esm_utils/text.py#L50"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="https://github.com/tum-esm/utils/tree/main/tum_esm_utils/text.py#L73"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ## <kbd>function</kbd> `is_rfc3339_datetime_string`
 
@@ -82,7 +104,7 @@ Returns `True` if string is in a valid `YYYY-MM-DDTHH:mm:ssZ` (RFC3339) format. 
 
 ---
 
-<a href="https://github.com/tum-esm/utils/tree/main/tum_esm_utils/text.py#L60"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="https://github.com/tum-esm/utils/tree/main/tum_esm_utils/text.py#L83"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ## <kbd>function</kbd> `date_is_too_recent`
 
@@ -95,7 +117,7 @@ A min delay of two days means 20220101 will be too recent any time before 202201
 
 ---
 
-<a href="https://github.com/tum-esm/utils/tree/main/tum_esm_utils/text.py#L72"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="https://github.com/tum-esm/utils/tree/main/tum_esm_utils/text.py#L95"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ## <kbd>function</kbd> `insert_replacements`
 

@@ -60,7 +60,7 @@ load_json_file(path: str) → Any
 ## <kbd>function</kbd> `dump_json_file`
 
 ```python
-dump_json_file(path: str, content: Any) → None
+dump_json_file(path: str, content: Any, indent: Optional[int] = 4) → None
 ```
 
 

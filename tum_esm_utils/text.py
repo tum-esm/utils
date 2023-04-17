@@ -55,11 +55,9 @@ def date_range(from_date_string: str, to_date_string: str) -> list[str]:
     ), "from_date_string cannot be after to_date_string"
 
     output = []
-    for date in pendulum.period(
-        pendulum.from_format(from_date_string, "YYYYMMDD"),
-        pendulum.from_format(to_date_string, "YYYYMMDD"),
-    ).range("days"):
-        output.append(date.format("YYYYMMDD"))
+    for date in range(int(from_date_string), int(to_date_string) + 1):
+        if is_date_string(str(date)):
+            output.append(str(date))
     return output
 
 

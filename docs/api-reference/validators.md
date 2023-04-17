@@ -100,7 +100,10 @@ validate_str(
 ```python
 validate_list(
     min_len: Optional[float] = None,
-    max_len: Optional[float] = None
+    max_len: Optional[float] = None,
+    allowed: Optional[list[~T]] = None,
+    required: Optional[list[~T]] = None,
+    forbidden: Optional[list[~T]] = None
 ) → Callable[[Any, list[~T]], list[~T]]
 ```
 
