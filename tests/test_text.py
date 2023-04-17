@@ -52,3 +52,39 @@ def test_insert_replacements() -> None:
         tum_esm_utils.text.insert_replacements("Hello %YOU%!", {"YOU": "replacement"})
         == "Hello replacement!"
     )
+
+
+# write a unit test for the function `date_range` in `tum_esm_utils/text.py`
+# write a bunch of sample inputs and expected outputs
+def test_date_range() -> None:
+    assert tum_esm_utils.text.date_range("20210101", "20210101") == ["20210101"]
+    assert tum_esm_utils.text.date_range("20210101", "20210102") == [
+        "20210101",
+        "20210102",
+    ]
+    assert tum_esm_utils.text.date_range("20210101", "20210103") == [
+        "20210101",
+        "20210102",
+        "20210103",
+    ]
+
+    # test for inputs that are in different months
+    assert tum_esm_utils.text.date_range("20210128", "20210202") == [
+        "20210128",
+        "20210129",
+        "20210130",
+        "20210131",
+        "20210201",
+        "20210202",
+    ]
+
+    # test for inputs that are in different years
+    assert tum_esm_utils.text.date_range("20211228", "20220103") == [
+        "20211228",
+        "20211229",
+        "20211230",
+        "20211231",
+        "20220101",
+        "20220102",
+        "20220103",
+    ]
