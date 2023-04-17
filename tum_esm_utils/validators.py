@@ -159,6 +159,9 @@ T = TypeVar("T")
 def validate_list(
     min_len: Optional[float] = None,
     max_len: Optional[float] = None,
+    allowed: Optional[list[T]] = None,
+    required: Optional[list[T]] = None,
+    forbidden: Optional[list[T]] = None,
 ) -> Callable[[Any, list[T]], list[T]]:
     def f(cls: Any, v: list[T]) -> list[T]:
         if not isinstance(v, list):
@@ -167,6 +170,18 @@ def validate_list(
             raise ValueError(f'"{v}" has less than {min_len} elements')
         if max_len is not None and len(v) > max_len:
             raise ValueError(f'"{v}" has more than {max_len} elements')
+        if allowed is not None:
+            for item in v:
+                if item not in allowed:
+                    raise ValueError(f'"{item}" is not allowed')
+        if required is not None:
+            for item in required:
+                if item not in v:
+                    raise ValueError(f'"{v}" has to include "{item}"')
+        if forbidden is not None:
+            for item in forbidden:
+                if item in v:
+                    raise ValueError(f'"{v}" should not include "{item}"')
         return v
 
     return f
