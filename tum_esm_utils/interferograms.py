@@ -72,7 +72,7 @@ def detect_corrupt_ifgs(
             )
             _write_input_file(random_id, ifgs)
         process = subprocess.run(
-            ["./ifg_parser", "ifg_parser.inp"],
+            ["./ifg_parser", f"ifg_parser.inp.{random_id}"],
             cwd=_PARSER_DIR,
             stdout=subprocess.PIPE,
             stderr=subprocess.PIPE,
