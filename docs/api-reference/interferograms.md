@@ -10,7 +10,7 @@
 
 ---
 
-<a href="https://github.com/tum-esm/utils/tree/main/tum_esm_utils/interferograms.py#L43"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="https://github.com/tum-esm/utils/tree/main/tum_esm_utils/interferograms.py#L45"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ## <kbd>function</kbd> `detect_corrupt_ifgs`
 
