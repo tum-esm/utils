@@ -3,6 +3,8 @@ import re
 import subprocess
 from typing import Literal
 
+from filelock import FileLock
+import tum_esm_utils
 
 _PARSER_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "ifg_parser")
 
@@ -33,10 +35,10 @@ def _compile_fortran_code(
             )
 
 
-def _write_input_file(ifgs: list[str]) -> None:
+def _write_input_file(random_id: str, ifgs: list[str]) -> None:
     with open(f"{_PARSER_DIR}/ifg_parser.template.inp", "r") as f:
         template_content = f.read()
-    with open(f"{_PARSER_DIR}/ifg_parser.inp", "w") as f:
+    with open(f"{_PARSER_DIR}/ifg_parser.inp.{random_id}", "w") as f:
         f.write(template_content.replace("%IFG_LIST%", "\n".join(ifgs)))
 
 
@@ -59,13 +61,23 @@ def detect_corrupt_ifgs(
     results: dict[str, list[str]] = {}
     stdout: str = ""
     while True:
-        _write_input_file(ifgs)
+        with FileLock(f"{_PARSER_DIR}/ifg_parser.inp.lock"):
+            random_id = tum_esm_utils.text.get_random_string(
+                10,
+                forbidden=[
+                    f.replace("ifg_parser.inp.", "")
+                    for f in os.listdir(_PARSER_DIR)
+                    if f.startswith("ifg_parser.inp.")
+                ],
+            )
+            _write_input_file(random_id, ifgs)
         process = subprocess.run(
             ["./ifg_parser", "ifg_parser.inp"],
             cwd=_PARSER_DIR,
             stdout=subprocess.PIPE,
             stderr=subprocess.PIPE,
         )
+        os.remove(f"{_PARSER_DIR}/ifg_parser.inp.{random_id}")
         stdout = process.stdout.decode()
         stderr = process.stderr.decode()
         if process.returncode == 0:

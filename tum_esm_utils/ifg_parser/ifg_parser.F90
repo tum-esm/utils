@@ -34,7 +34,7 @@ implicit none
 
 logical :: dateidadec
 integer :: imeas,itest,iunit,iscan,narg,next_free_unit
-character(len=200) :: inputdatei,logdatei,logdatei_test
+character(len=300) :: inputdatei,logdatei,logdatei_test
 character(len=10) :: idchar
 character(len=7) :: imeaschar
 character(len=4) :: argchar
