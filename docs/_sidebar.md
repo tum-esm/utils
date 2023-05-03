@@ -6,6 +6,7 @@
 
 -   ⚙️ &nbsp;API Reference
 
+    -   [context](api-reference/context.md)
     -   [datastructures](api-reference/datastructures.md)
     -   [decorators](api-reference/decorators.md)
     -   [files](api-reference/files.md)

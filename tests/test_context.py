@@ -7,7 +7,7 @@ DURATION = 0.75
 def test_ensure_section_duration() -> None:
     times: list[float] = []
     for _ in range(3):
-        with tum_esm_utils.decorators.ensure_section_duration(DURATION):
+        with tum_esm_utils.context.ensure_section_duration(DURATION):
             times.append(time.time())
 
     assert len(times) == 3

@@ -2,6 +2,7 @@
 Sensing and Modeling at the Technical University of Munich"""
 
 from . import (
+    context,
     datastructures,
     decorators,
     files,
