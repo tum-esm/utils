@@ -2,7 +2,7 @@ import hashlib
 import json
 import os
 from typing import Any, Optional
-
+import polars as pl
 import tum_esm_utils
 
 
@@ -56,3 +56,77 @@ def get_file_checksum(path: str) -> str:
     assert os.path.isfile(path), f"{path} is not a file"
     with open(path, "rb") as f:
         return hashlib.md5(f.read()).hexdigest()
+
+
+def load_raw_proffast_output(
+    path: str,
+    selected_columns: list[str] = [
+        "gnd_p",
+        "gnd_t",
+        "app_sza",
+        "azimuth",
+        "xh2o",
+        "xair",
+        "xco2",
+        "xch4",
+        "xco",
+        "xch4_s5p",
+    ],
+) -> pl.DataFrame:
+    """
+    Returns a raw proffast output file as a dataframe.
+
+    you can pass `selected_columns` to only keep some columns - the
+    `utc` column will always be included. Example:
+
+    ```
+    utc                     gnd_p    gnd_t    app_sza   ...
+    2021-10-20 07:00:23     950.91   289.05   78.45     ...
+    2021-10-20 07:00:38     950.91   289.05   78.42     ...
+    2021-10-20 07:01:24     950.91   289.05   78.31     ...
+    ...                     ...      ...      ...       ...
+    [1204 rows x 8 columns]
+    ```
+    """
+
+    assert os.path.isfile(path), f"{path} is not a file"
+
+    data_column_names = {
+        "gnd_p": " gndP",
+        "gnd_t": " gndT",
+        "app_sza": " appSZA",
+        "azimuth": " azimuth",
+        "xh2o": " XH2O",
+        "xair": " XAIR",
+        "xco2": " XCO2",
+        "xch4": " XCH4",
+        "xco": " XCO",
+        "xch4_s5p": " XCH4_S5P",
+    }
+
+    assert len(set(selected_columns)) == len(
+        selected_columns
+    ), "selected_columns cannot contain duplicate items"
+    assert set(selected_columns).issubset(set(data_column_names.keys())), (
+        f"selected_columns contains invalid items, only the "
+        + f"following are allowed: {data_column_names.keys()}"
+    )
+
+    df = pl.read_csv(
+        path,
+        columns=[
+            "UTC",
+            *list(data_column_names.values()),
+        ],
+        new_columns=[
+            "utc",
+            *list(data_column_names.keys()),
+        ],
+        dtypes={
+            "utc": pl.Datetime,
+            **{t: pl.Float32 for t in data_column_names.keys()},
+        },
+    )
+
+    # only keep the selected columns
+    return df.select(["utc", *selected_columns])

@@ -398,6 +398,39 @@ dev = ["pre-commit", "tox"]
 testing = ["pytest", "pytest-benchmark"]
 
 [[package]]
+name = "polars"
+version = "0.17.11"
+description = "Blazingly fast DataFrame library"
+category = "main"
+optional = false
+python-versions = ">=3.7"
+files = [
+    {file = "polars-0.17.11-cp37-abi3-macosx_10_7_x86_64.whl", hash = "sha256:07ecde540830bad035fecadbd07721a0dd3cba5887ba6d49844242de83a9ace8"},
+    {file = "polars-0.17.11-cp37-abi3-macosx_11_0_arm64.whl", hash = "sha256:accf4719953f0e2f27db4c87e3ebac9569ebce8675fe3c6b710af2c313aedb81"},
+    {file = "polars-0.17.11-cp37-abi3-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:38db6e92726c36ffd80fc39c511c725c34391b4b33a1fb1d2866cbe14d7c9c07"},
+    {file = "polars-0.17.11-cp37-abi3-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:54aca5e4cb157cd3d177fe46c6f5b167cd2dd466d2fa4b8a7ff65c3e627a1037"},
+    {file = "polars-0.17.11-cp37-abi3-win_amd64.whl", hash = "sha256:2b8d7055809017f0d1aab122cd5a818d502086f2ed7d57c2e5057f7374aa9831"},
+    {file = "polars-0.17.11.tar.gz", hash = "sha256:103579cf6f1784740f88fc1510c4f349ebdf062d093a4155d87d09a80d40b342"},
+]
+
+[package.dependencies]
+typing_extensions = {version = ">=4.0.1", markers = "python_version < \"3.11\""}
+
+[package.extras]
+all = ["polars[connectorx,deltalake,fsspec,matplotlib,numpy,pandas,pyarrow,sqlalchemy,timezone,xlsx2csv,xlsxwriter]"]
+connectorx = ["connectorx"]
+deltalake = ["deltalake (>=0.8.0)"]
+fsspec = ["fsspec"]
+matplotlib = ["matplotlib"]
+numpy = ["numpy (>=1.16.0)"]
+pandas = ["pandas", "pyarrow (>=7.0.0)"]
+pyarrow = ["pyarrow (>=7.0.0)"]
+sqlalchemy = ["pandas", "sqlalchemy"]
+timezone = ["backports.zoneinfo", "tzdata"]
+xlsx2csv = ["xlsx2csv (>=0.8.0)"]
+xlsxwriter = ["xlsxwriter"]
+
+[[package]]
 name = "psutil"
 version = "5.9.4"
 description = "Cross-platform lib for process and system monitoring in Python."
@@ -630,7 +663,7 @@ files = [
 name = "typing-extensions"
 version = "4.5.0"
 description = "Backported and Experimental Type Hints for Python 3.7+"
-category = "dev"
+category = "main"
 optional = false
 python-versions = ">=3.7"
 files = [
@@ -658,4 +691,4 @@ socks = ["PySocks (>=1.5.6,!=1.5.7,<2.0)"]
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.9"
-content-hash = "efc41f890e8195b08b9c7b6651eefe07db1980056fe3120018f8a72190918f07"
+content-hash = "dcb6962af07ac6dddb8d9e9a096d5a91362a02658f38a72cbd27a6d3d75f4e61"
