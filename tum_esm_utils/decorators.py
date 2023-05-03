@@ -1,6 +1,8 @@
+import time
 import filelock
-from typing import Any, Callable, TypeVar, cast
+from typing import Any, Callable, Generator, TypeVar, cast
 from functools import wraps
+from contextlib import contextmanager
 
 # typing of higher level decorators:
 # https://github.com/python/mypy/issues/1551#issuecomment-253978622
@@ -29,3 +31,22 @@ class with_filelock:
                 return f(*args, **kwargs)
 
         return cast(F, wrapper)
+
+
+@contextmanager
+def ensure_section_duration(duration: float) -> Generator[None, None, None]:
+    """Make sure that the duration of the section is at least the given duration.
+
+    Usage example - do one measurement every 6 seconds:
+
+    ```python
+    with ensure_section_duration(6):
+        do_measurement()
+    ```
+    """
+
+    start_time = time.time()
+    yield
+    remaining_loop_time = start_time + duration - time.time()
+    if remaining_loop_time > 0:
+        time.sleep(remaining_loop_time)
