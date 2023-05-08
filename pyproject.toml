@@ -54,6 +54,13 @@ strict = true
 implicit_reexport = true
 no_warn_unused_ignores = true
 
+[[tool.mypy.overrides]]
+module = [
+    "pendulum",
+    "polars"
+]
+ignore_missing_imports = true
+
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
