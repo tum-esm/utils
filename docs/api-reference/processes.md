@@ -1,16 +1,16 @@
 <!-- markdownlint-disable -->
 
-<a href="https://github.com/tum-esm/utils/tree/main/tum_esm_utils/processes.py#L0"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="https://github.com/tum-esm/utils/tree/main/tum_esm_utils/processes.py#L0"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square" /></a>
 
 # <kbd>module</kbd> `processes`
+Functions to start and terminate background processes. 
 
-
-
+Implements: `get_process_pids`, `start_background_process`, `terminate_process` 
 
 
 ---
 
-<a href="https://github.com/tum-esm/utils/tree/main/tum_esm_utils/processes.py#L6"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="https://github.com/tum-esm/utils/tree/main/tum_esm_utils/processes.py#L11"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square" /></a>
 
 ## <kbd>function</kbd> `get_process_pids`
 
@@ -23,7 +23,7 @@ Return a list of PIDs that have the given script as their entrypoint
 
 ---
 
-<a href="https://github.com/tum-esm/utils/tree/main/tum_esm_utils/processes.py#L24"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="https://github.com/tum-esm/utils/tree/main/tum_esm_utils/processes.py#L29"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square" /></a>
 
 ## <kbd>function</kbd> `start_background_process`
 
@@ -36,7 +36,7 @@ Start a new background process with nohup with a given python interpreter and sc
 
 ---
 
-<a href="https://github.com/tum-esm/utils/tree/main/tum_esm_utils/processes.py#L44"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="https://github.com/tum-esm/utils/tree/main/tum_esm_utils/processes.py#L49"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square" /></a>
 
 ## <kbd>function</kbd> `terminate_process`
 

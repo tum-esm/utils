@@ -1,16 +1,16 @@
 <!-- markdownlint-disable -->
 
-<a href="https://github.com/tum-esm/utils/tree/main/tum_esm_utils/files.py#L0"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="https://github.com/tum-esm/utils/tree/main/tum_esm_utils/files.py#L0"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square" /></a>
 
 # <kbd>module</kbd> `files`
+File-related utility functions. 
 
-
-
+Implements: `load_file`, `dump_file`, `load_json_file`, `dump_json_file`, `get_parent_dir_path`, `get_dir_checksum`, `get_file_checksum`, `load_raw_proffast_output` 
 
 
 ---
 
-<a href="https://github.com/tum-esm/utils/tree/main/tum_esm_utils/files.py#L9"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="https://github.com/tum-esm/utils/tree/main/tum_esm_utils/files.py#L15"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square" /></a>
 
 ## <kbd>function</kbd> `load_file`
 
@@ -25,7 +25,7 @@ load_file(path: str) → str
 
 ---
 
-<a href="https://github.com/tum-esm/utils/tree/main/tum_esm_utils/files.py#L14"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="https://github.com/tum-esm/utils/tree/main/tum_esm_utils/files.py#L20"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square" /></a>
 
 ## <kbd>function</kbd> `dump_file`
 
@@ -40,7 +40,7 @@ dump_file(path: str, content: str) → None
 
 ---
 
-<a href="https://github.com/tum-esm/utils/tree/main/tum_esm_utils/files.py#L19"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="https://github.com/tum-esm/utils/tree/main/tum_esm_utils/files.py#L25"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square" /></a>
 
 ## <kbd>function</kbd> `load_json_file`
 
@@ -55,7 +55,7 @@ load_json_file(path: str) → Any
 
 ---
 
-<a href="https://github.com/tum-esm/utils/tree/main/tum_esm_utils/files.py#L24"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="https://github.com/tum-esm/utils/tree/main/tum_esm_utils/files.py#L30"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square" /></a>
 
 ## <kbd>function</kbd> `dump_json_file`
 
@@ -70,7 +70,7 @@ dump_json_file(path: str, content: Any, indent: Optional[int] = 4) → None
 
 ---
 
-<a href="https://github.com/tum-esm/utils/tree/main/tum_esm_utils/files.py#L29"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="https://github.com/tum-esm/utils/tree/main/tum_esm_utils/files.py#L35"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square" /></a>
 
 ## <kbd>function</kbd> `get_parent_dir_path`
 
@@ -83,7 +83,7 @@ Get the absolute path of a parent directory based on the current script path. Si
 
 ---
 
-<a href="https://github.com/tum-esm/utils/tree/main/tum_esm_utils/files.py#L41"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="https://github.com/tum-esm/utils/tree/main/tum_esm_utils/files.py#L47"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square" /></a>
 
 ## <kbd>function</kbd> `get_dir_checksum`
 
@@ -96,7 +96,7 @@ Get the checksum of a directory using md5deep.
 
 ---
 
-<a href="https://github.com/tum-esm/utils/tree/main/tum_esm_utils/files.py#L50"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="https://github.com/tum-esm/utils/tree/main/tum_esm_utils/files.py#L56"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square" /></a>
 
 ## <kbd>function</kbd> `get_file_checksum`
 
@@ -111,7 +111,7 @@ Significantly faster than `get_dir_checksum` since it does not spawn a new proce
 
 ---
 
-<a href="https://github.com/tum-esm/utils/tree/main/tum_esm_utils/files.py#L61"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="https://github.com/tum-esm/utils/tree/main/tum_esm_utils/files.py#L67"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square" /></a>
 
 ## <kbd>function</kbd> `load_raw_proffast_output`
 
