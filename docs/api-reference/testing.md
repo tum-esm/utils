@@ -1,6 +1,6 @@
 <!-- markdownlint-disable -->
 
-<a href="https://github.com/tum-esm/utils/tree/main/tum_esm_utils/testing.py#L0"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square" /></a>
+<a href="https://github.com/tum-esm/utils/tree/main/tum_esm_utils/testing.py#L0"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 # <kbd>module</kbd> `testing`
 Functions commonly used in testing scripts. 
@@ -10,7 +10,7 @@ Implements: `expect_file_contents`, `wait_for_condition`
 
 ---
 
-<a href="https://github.com/tum-esm/utils/tree/main/tum_esm_utils/testing.py#L9"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square" /></a>
+<a href="https://github.com/tum-esm/utils/tree/main/tum_esm_utils/testing.py#L9"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ## <kbd>function</kbd> `expect_file_contents`
 
@@ -27,7 +27,7 @@ Assert that the given file contains all of the required content blocks, and/or n
 
 ---
 
-<a href="https://github.com/tum-esm/utils/tree/main/tum_esm_utils/testing.py#L27"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square" /></a>
+<a href="https://github.com/tum-esm/utils/tree/main/tum_esm_utils/testing.py#L27"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ## <kbd>function</kbd> `wait_for_condition`
 
