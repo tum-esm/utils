@@ -8,6 +8,8 @@ on:
             - 'tests/**'
             - 'tum_esm_utils/**'
             - '.github/workflows/test.yaml'
+            - 'pyproject.toml'
+            - 'poetry.lock'
     pull_request:
         branches:
             - main
@@ -16,6 +18,8 @@ on:
             - 'tests/**'
             - 'tum_esm_utils/**'
             - '.github/workflows/test.yaml'
+            - 'pyproject.toml'
+            - 'poetry.lock'
 
 jobs:
     test:
