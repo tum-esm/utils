@@ -1,3 +1,9 @@
+"""Functions used for text manipulation/processing.
+
+Implements: `get_random_string`, `pad_string`, `is_date_string`,
+`date_range`, `is_datetime_string`, `is_rfc3339_datetime_string`,
+`date_is_too_recent`, `insert_replacements`."""
+
 from datetime import datetime
 import random
 import string

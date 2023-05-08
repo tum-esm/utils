@@ -1,3 +1,7 @@
+"""Functions for interacting with interferograms.
+
+Implements: `detect_corrupt_ifgs`"""
+
 import os
 import re
 import subprocess
@@ -48,7 +52,14 @@ def detect_corrupt_ifgs(
     fortran_compiler: Literal["gfortran", "gfortran-9"] = "gfortran",
 ) -> dict[str, list[str]]:
     """Returns dict[filename, list[error_messages]] for all
-    corrupt interferograms in the given directory."""
+    corrupt interferograms in the given directory.
+
+    It will compile the fortran code using a given compiler
+    to perform this task. The fortran code is derived from
+    the preprocess source code of Proffast 2
+    (https://www.imk-asf.kit.edu/english/3225.php). We use
+    it because the retrieval using Proffast 2 will fail if
+    there are corrupt interferograms in the input."""
 
     # compiling fortran code
     _compile_fortran_code(silent=silent, fortran_compiler=fortran_compiler)

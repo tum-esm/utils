@@ -1,3 +1,7 @@
+"""Datastructures not in the standard library.
+
+Implements: `RingList`"""
+
 from typing import Any
 
 

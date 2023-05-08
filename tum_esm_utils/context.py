@@ -1,3 +1,7 @@
+"""Context managers for common tasks.
+
+Implements: `ensure_section_duration`"""
+
 from contextlib import contextmanager
 import time
 from typing import Generator

@@ -1,3 +1,8 @@
+"""Common system status related functions.
+
+Implements: `get_cpu_usage`, `get_memory_usage`, `get_disk_space`,
+`get_system_battery`, `get_last_boot_time`, `get_utc_offset`"""
+
 import psutil
 from datetime import datetime
 

@@ -1,3 +1,10 @@
+"""Implements custom logging functionality, because the
+standard logging module is hard to configure for special
+cases.
+
+Implements: `run_shell_command`, `CommandLineException`,
+`get_hostname`, `get_commit_sha`, `change_file_permissions`"""
+
 import os
 import re
 import subprocess

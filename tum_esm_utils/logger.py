@@ -1,3 +1,9 @@
+"""Implements custom logging functionality, because the
+standard logging module is hard to configure for special
+cases.
+
+Implements: `Logger`"""
+
 import os
 import sys
 import traceback

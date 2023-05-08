@@ -1,3 +1,7 @@
+"""Decorators that can be used wrap functions.
+
+Implements: `with_filelock`"""
+
 import filelock
 from typing import Any, Callable, TypeVar, cast
 from functools import wraps

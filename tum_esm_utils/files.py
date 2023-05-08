@@ -1,3 +1,9 @@
+"""File-related utility functions.
+
+Implements: `load_file`, `dump_file`, `load_json_file`,
+`dump_json_file`, `get_parent_dir_path`, `get_dir_checksum`,
+`get_file_checksum`, `load_raw_proffast_output`"""
+
 import hashlib
 import json
 import os

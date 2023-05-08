@@ -1,3 +1,8 @@
+"""Functions to start and terminate background processes.
+
+Implements: `get_process_pids`, `start_background_process`,
+`terminate_process`"""
+
 import os
 import time
 import psutil
