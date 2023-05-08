@@ -1,6 +1,6 @@
 <!-- markdownlint-disable -->
 
-<a href="https://github.com/tum-esm/utils/tree/main/tum_esm_utils/text.py#L0"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square" /></a>
+<a href="https://github.com/tum-esm/utils/tree/main/tum_esm_utils/text.py#L0"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 # <kbd>module</kbd> `text`
 Functions used for text manipulation/processing. 
@@ -10,7 +10,7 @@ Implements: `get_random_string`, `pad_string`, `is_date_string`, `date_range`, `
 
 ---
 
-<a href="https://github.com/tum-esm/utils/tree/main/tum_esm_utils/text.py#L14"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square" /></a>
+<a href="https://github.com/tum-esm/utils/tree/main/tum_esm_utils/text.py#L14"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ## <kbd>function</kbd> `get_random_string`
 
@@ -23,7 +23,7 @@ Return a random string from lowercase letter, the strings from the list passed a
 
 ---
 
-<a href="https://github.com/tum-esm/utils/tree/main/tum_esm_utils/text.py#L25"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square" /></a>
+<a href="https://github.com/tum-esm/utils/tree/main/tum_esm_utils/text.py#L25"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ## <kbd>function</kbd> `pad_string`
 
@@ -43,7 +43,7 @@ pad_string(
 
 ---
 
-<a href="https://github.com/tum-esm/utils/tree/main/tum_esm_utils/text.py#L38"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square" /></a>
+<a href="https://github.com/tum-esm/utils/tree/main/tum_esm_utils/text.py#L38"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ## <kbd>function</kbd> `is_date_string`
 
@@ -56,7 +56,7 @@ Returns `True` if string is in a valid `YYYYMMDD` format
 
 ---
 
-<a href="https://github.com/tum-esm/utils/tree/main/tum_esm_utils/text.py#L47"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square" /></a>
+<a href="https://github.com/tum-esm/utils/tree/main/tum_esm_utils/text.py#L47"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ## <kbd>function</kbd> `date_range`
 
@@ -78,7 +78,7 @@ date_range("20210101", "20210103") == ["20210101", "20210102", "20210103"]
 
 ---
 
-<a href="https://github.com/tum-esm/utils/tree/main/tum_esm_utils/text.py#L70"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square" /></a>
+<a href="https://github.com/tum-esm/utils/tree/main/tum_esm_utils/text.py#L70"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ## <kbd>function</kbd> `is_datetime_string`
 
@@ -91,7 +91,7 @@ Returns `True` if string is in a valid `YYYYMMDD HH:mm:ss` format
 
 ---
 
-<a href="https://github.com/tum-esm/utils/tree/main/tum_esm_utils/text.py#L79"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square" /></a>
+<a href="https://github.com/tum-esm/utils/tree/main/tum_esm_utils/text.py#L79"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ## <kbd>function</kbd> `is_rfc3339_datetime_string`
 
@@ -104,7 +104,7 @@ Returns `True` if string is in a valid `YYYY-MM-DDTHH:mm:ssZ` (RFC3339) format. 
 
 ---
 
-<a href="https://github.com/tum-esm/utils/tree/main/tum_esm_utils/text.py#L89"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square" /></a>
+<a href="https://github.com/tum-esm/utils/tree/main/tum_esm_utils/text.py#L89"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ## <kbd>function</kbd> `date_is_too_recent`
 
@@ -117,7 +117,7 @@ A min delay of two days means 20220101 will be too recent any time before 202201
 
 ---
 
-<a href="https://github.com/tum-esm/utils/tree/main/tum_esm_utils/text.py#L101"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square" /></a>
+<a href="https://github.com/tum-esm/utils/tree/main/tum_esm_utils/text.py#L101"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ## <kbd>function</kbd> `insert_replacements`
 
