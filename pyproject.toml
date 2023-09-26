@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "tum_esm_utils"
-version = "1.5.3"
+version = "1.5.4"
 description = "Python utilities by the Professorship of Environmental Sensing and Modeling at the Technical University of Munich"
 authors = ["Moritz Makowski <moritz.makowski@tum.de>"]
 readme = "README.md"
@@ -15,11 +15,11 @@ repository = "https://github.com/tum-esm/utils"
 
 [tool.poetry.dependencies]
 python = "^3.9"
-filelock = "^3.10.0"
-requests = "^2.28.2"
+filelock = "^3.12.4"
+requests = "^2.31.0"
 psutil = "^5.9.4"
 pendulum = "^2.1.2"
-polars = "^0.18.11"
+polars = "^0.19.3"
 
 [tool.poetry.group.dev]
 optional = true
