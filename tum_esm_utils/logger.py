@@ -43,7 +43,7 @@ def _log_line_has_date(log_line: str) -> bool:
     This is not true for exception tracebacks. This log line time is used
     to determine which file to archive logs lines into"""
     try:
-        datetime.strptime(log_line[:10], "%Y-%m-%d")
+        datetime.strptime(log_line[: 10], "%Y-%m-%d")
         return True
     except:
         return False
@@ -64,13 +64,17 @@ class Logger:
         self.filelock = filelock.FileLock(
             os.path.join(logfile_directory, "logging.lock"), timeout=30
         )
-        self.current_logfile_path = os.path.join(logfile_directory, "current-logs.log")
+        self.current_logfile_path = os.path.join(
+            logfile_directory, "current-logs.log"
+        )
         self.log_archive_path = os.path.join(logfile_directory, "archive")
 
         self.write_to_files = write_to_files
         self.print_to_console = print_to_console
 
-    def horizontal_line(self, fill_char: Literal["-", "=", ".", "_"] = "=") -> None:
+    def horizontal_line(
+        self, fill_char: Literal["-", "=", ".", "_"] = "="
+    ) -> None:
         """writes a horizonal line wiht `-`/`=`/... characters"""
         self._write_log_line("INFO", fill_char * 46)
 
@@ -126,7 +130,8 @@ class Logger:
         ```
         """
         exc_type, exc, exc_traceback = sys.exc_info()
-        exception_name = traceback.format_exception_only(exc_type, exc)[0].strip()
+        exception_name = traceback.format_exception_only(exc_type,
+                                                         exc)[0].strip()
         exception_traceback = "\n".join(
             traceback.format_exception(exc_type, exc, exc_traceback)
         ).strip()
@@ -165,7 +170,8 @@ class Logger:
         if utc_offset % 1 == 0:
             utc_offset = round(utc_offset)
 
-        additional_log_items = [(k, v) for k, v in kwargs.items() if v is not None]
+        additional_log_items = [(k, v)
+                                for k, v in kwargs.items() if v is not None]
         if len(additional_log_items) > 0:
             message += "\n"
             for label, value in additional_log_items:
@@ -180,9 +186,10 @@ class Logger:
 
         log_string = (
             f"{str(now)[:-3]} UTC{'-' if utc_offset < 0 else '+'}{abs(utc_offset)} "
-            + f"- {_pad_string(self.origin, min_width=23, pad_position='right')} "
-            + f"- {_pad_string(level, min_width=13, pad_position='right')} "
-            + f"- {message}"
+            +
+            f"- {_pad_string(self.origin, min_width=23, pad_position='right')} "
+            + f"- {_pad_string(level, min_width=13, pad_position='right')} " +
+            f"- {message}"
         )
         if self.print_to_console:
             print(log_string)
@@ -207,13 +214,13 @@ class Logger:
 
         lines_to_be_kept, lines_to_be_archived = [], []
         latest_time = str(datetime.now() - timedelta(hours=1))
-        line_time = log_lines_in_file[0][:26]
+        line_time = log_lines_in_file[0][: 26]
         for index, line in enumerate(log_lines_in_file):
             if _log_line_has_date(line):
-                line_time = line[:26]
+                line_time = line[: 26]
             if line_time > latest_time:
-                lines_to_be_archived = log_lines_in_file[:index]
-                lines_to_be_kept = log_lines_in_file[index:]
+                lines_to_be_archived = log_lines_in_file[: index]
+                lines_to_be_kept = log_lines_in_file[index :]
                 break
 
         with open(self.current_logfile_path, "w") as f:
@@ -223,10 +230,10 @@ class Logger:
             return
 
         archive_log_date_groups: dict[str, list[str]] = {}
-        line_date = lines_to_be_archived[0][:10].replace("-", "")
+        line_date = lines_to_be_archived[0][: 10].replace("-", "")
         for line in lines_to_be_archived:
             if _log_line_has_date(line):
-                line_date = line[:10].replace("-", "")
+                line_date = line[: 10].replace("-", "")
             if line_date not in archive_log_date_groups.keys():
                 archive_log_date_groups[line_date] = []
             archive_log_date_groups[line_date].append(line)

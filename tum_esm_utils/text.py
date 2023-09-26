@@ -54,7 +54,9 @@ def date_range(from_date_string: str, to_date_string: str) -> list[str]:
     ```
     """
 
-    assert is_date_string(from_date_string), "from_date_string is not a valid date"
+    assert is_date_string(
+        from_date_string
+    ), "from_date_string is not a valid date"
     assert is_date_string(to_date_string), "to_date_string is not a valid date"
     assert (
         from_date_string <= to_date_string
@@ -80,7 +82,9 @@ def is_rfc3339_datetime_string(rfc3339_datetime_string: str) -> bool:
     """Returns `True` if string is in a valid `YYYY-MM-DDTHH:mm:ssZ` (RFC3339)
     format. Caution: The appendix of `+00:00` is required for UTC!"""
     try:
-        pendulum.from_format(rfc3339_datetime_string, fmt="YYYY-MM-DDTHH:mm:ssZ")
+        pendulum.from_format(
+            rfc3339_datetime_string, fmt="YYYY-MM-DDTHH:mm:ssZ"
+        )
         return True
     except ValueError:
         return False

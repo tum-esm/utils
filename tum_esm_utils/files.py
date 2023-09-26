@@ -114,8 +114,8 @@ def load_raw_proffast_output(
         selected_columns
     ), "selected_columns cannot contain duplicate items"
     assert set(selected_columns).issubset(set(data_column_names.keys())), (
-        f"selected_columns contains invalid items, only the "
-        + f"following are allowed: {data_column_names.keys()}"
+        f"selected_columns contains invalid items, only the " +
+        f"following are allowed: {data_column_names.keys()}"
     )
 
     df = pl.read_csv(
@@ -130,7 +130,8 @@ def load_raw_proffast_output(
         ],
         dtypes={
             "utc": pl.Datetime,
-            **{t: pl.Float32 for t in data_column_names.keys()},
+            **{t: pl.Float32
+               for t in data_column_names.keys()},
         },
     )
 

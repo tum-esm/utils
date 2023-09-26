@@ -76,16 +76,24 @@ def test_filelock_with_multiprocessing() -> None:
     """takes quite long because I had to increase `TIMEOUT_UNIT`
     to `3` for it to work on GitHub's CI small runners"""
 
-    t1 = multiprocessing.Process(target=f, kwargs={"delay": 1, "q": res_queue_mp})
-    t2 = multiprocessing.Process(target=f, kwargs={"delay": 1, "q": res_queue_mp})
+    t1 = multiprocessing.Process(
+        target=f, kwargs={"delay": 1, "q": res_queue_mp}
+    )
+    t2 = multiprocessing.Process(
+        target=f, kwargs={"delay": 1, "q": res_queue_mp}
+    )
     t1.start()
     t2.start()
     t1.join()
     t2.join()
     assert count_queue_items(res_queue_mp) == 2
 
-    t3 = multiprocessing.Process(target=f, kwargs={"delay": 3, "q": res_queue_mp})
-    t4 = multiprocessing.Process(target=f, kwargs={"delay": 3, "q": res_queue_mp})
+    t3 = multiprocessing.Process(
+        target=f, kwargs={"delay": 3, "q": res_queue_mp}
+    )
+    t4 = multiprocessing.Process(
+        target=f, kwargs={"delay": 3, "q": res_queue_mp}
+    )
     t3.start()
     t4.start()
     t3.join()

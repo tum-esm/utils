@@ -32,8 +32,8 @@ class RingList:
         if self._current_index >= (self._max_size - 1):
             bounded_current_index = self._current_index % self._max_size
             return (
-                self._data[bounded_current_index + 1 : self._max_size + 1]
-                + self._data[0 : bounded_current_index + 1]
+                self._data[bounded_current_index + 1 : self._max_size + 1] +
+                self._data[0 : bounded_current_index + 1]
             )
 
         # list is not empty but not full

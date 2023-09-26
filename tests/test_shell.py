@@ -18,7 +18,9 @@ def test_change_file_permissions() -> None:
             except AssertionError:
                 pass
 
-        permission_strings = ["---", "--x", "-w-", "-wx", "r--", "r-x", "rw-", "rwx"]
+        permission_strings = [
+            "---", "--x", "-w-", "-wx", "r--", "r-x", "rw-", "rwx"
+        ]
         permission_bits = [0, 1, 2, 3, 4, 5, 6, 7]
 
         for i in range(8):
@@ -26,11 +28,10 @@ def test_change_file_permissions() -> None:
                 for k in range(8):
                     change_file_permissions(
                         f.name,
-                        permission_strings[i]
-                        + permission_strings[j]
-                        + permission_strings[k],
+                        permission_strings[i] + permission_strings[j] +
+                        permission_strings[k],
                     )
                     assert (
-                        oct(os.stat(f.name).st_mode)[5:]
-                        == f"{permission_bits[i]}{permission_bits[j]}{permission_bits[k]}"
+                        oct(os.stat(f.name).st_mode)[5 :] ==
+                        f"{permission_bits[i]}{permission_bits[j]}{permission_bits[k]}"
                     )

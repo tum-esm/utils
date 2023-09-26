@@ -89,18 +89,13 @@ def change_file_permissions(file_path: str, permission_string: str) -> None:
         permission_string
     ), "Invalid permission string"
 
-    permission_str_to_bit: Callable[[str], int] = lambda p: sum(
-        [
-            int(c)
-            for c in p.replace("r", "4")
-            .replace("w", "2")
-            .replace("x", "1")
-            .replace("-", "0")
-        ]
-    )
+    permission_str_to_bit: Callable[[str], int] = lambda p: sum([
+        int(c) for c in p.replace("r", "4").replace("w", "2").replace("x", "1").
+        replace("-", "0")
+    ])
     os.chmod(
         file_path,
-        64 * permission_str_to_bit(permission_string[:3])
-        + 8 * permission_str_to_bit(permission_string[3:6])
-        + permission_str_to_bit(permission_string[6:]),
+        64 * permission_str_to_bit(permission_string[: 3]) +
+        8 * permission_str_to_bit(permission_string[3 : 6]) +
+        permission_str_to_bit(permission_string[6 :]),
     )

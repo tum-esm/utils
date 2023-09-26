@@ -5,7 +5,6 @@ from typing import Any
 import pytest
 import tum_esm_utils
 
-
 SCRIPT_PATH = os.path.join(
     os.path.dirname(os.path.dirname(os.path.abspath(__file__))),
     "scripts",
@@ -28,6 +27,10 @@ def test_processes(_dummy_process_script: Any) -> None:
 
     time.sleep(1)
 
-    assert tum_esm_utils.processes.get_process_pids(SCRIPT_PATH) == [expected_pid]
-    assert tum_esm_utils.processes.terminate_process(SCRIPT_PATH) == [expected_pid]
+    assert tum_esm_utils.processes.get_process_pids(SCRIPT_PATH) == [
+        expected_pid
+    ]
+    assert tum_esm_utils.processes.terminate_process(SCRIPT_PATH) == [
+        expected_pid
+    ]
     assert tum_esm_utils.processes.get_process_pids(SCRIPT_PATH) == []

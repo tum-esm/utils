@@ -6,11 +6,12 @@ import os
 import re
 import subprocess
 from typing import Literal
-
 from filelock import FileLock
 import tum_esm_utils
 
-_PARSER_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "ifg_parser")
+_PARSER_DIR = os.path.join(
+    os.path.dirname(os.path.abspath(__file__)), "ifg_parser"
+)
 
 
 def _compile_fortran_code(
@@ -34,8 +35,8 @@ def _compile_fortran_code(
             stdout = p.stdout.decode("utf-8", errors="replace").strip()
             stderr = p.stderr.decode("utf-8", errors="replace").strip()
             raise Exception(
-                f"command '{command}' failed with exit code {p.returncode}, "
-                + f"stderr: {stderr}, stout:{stdout}",
+                f"command '{command}' failed with exit code {p.returncode}, " +
+                f"stderr: {stderr}, stout:{stdout}",
             )
 
 
@@ -95,11 +96,15 @@ def detect_corrupt_ifgs(
             break
         else:
             # find the filename that caused the error
-            failing_filenames = list(filter(lambda f: f in ifgs, stderr.split("'")))
+            failing_filenames = list(
+                filter(lambda f: f in ifgs, stderr.split("'"))
+            )
             assert (
                 "At line 837 of file ifg_parser.F90" in stderr
             ), f"Unknown error behavior: {stderr}"
-            assert len(failing_filenames) == 1, "invalid filename not found in stderr"
+            assert len(
+                failing_filenames
+            ) == 1, "invalid filename not found in stderr"
             failing_filepath = failing_filenames[0]
 
             # remove the error-causing file from the ifg list and try again
@@ -113,13 +118,15 @@ def detect_corrupt_ifgs(
         f.write(stdout)
 
     file_parsing_block = stdout.split("Done!")[-1]
-    file_parsing_lines = file_parsing_block.split("Read OPUS parms:")[1:]
+    file_parsing_lines = file_parsing_block.split("Read OPUS parms:")[1 :]
 
     # get results from output stream
     for line in file_parsing_lines:
-        filename = line[12:].split("\n")[0].split("/")[-1].replace(")", "")
-        parser_output = line[12:].replace("\n", " ")
-        parser_messages = re.findall('charfilter "[^"]+" is missing', parser_output)
+        filename = line[12 :].split("\n")[0].split("/")[-1].replace(")", "")
+        parser_output = line[12 :].replace("\n", " ")
+        parser_messages = re.findall(
+            'charfilter "[^"]+" is missing', parser_output
+        )
         if len(parser_messages) > 0:
             results[filename] = [
                 ("charfilter '" + x.split('"')[1] + "' is missing")

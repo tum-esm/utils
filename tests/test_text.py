@@ -9,14 +9,12 @@ def test_pad_string() -> None:
     assert (
         tum_esm_utils.text.pad_string(
             "hello", min_width=10, pad_position="left", fill_char="-"
-        )
-        == "-----hello"
+        ) == "-----hello"
     )
     assert (
         tum_esm_utils.text.pad_string(
             "hello", min_width=10, pad_position="right", fill_char="-"
-        )
-        == "hello-----"
+        ) == "hello-----"
     )
 
 
@@ -38,10 +36,18 @@ def test_is_datetime_string() -> None:
 
 
 def test_is_rfc3339_datetime_string() -> None:
-    assert tum_esm_utils.text.is_rfc3339_datetime_string("1990-12-31T23:59:59+00:00")
-    assert tum_esm_utils.text.is_rfc3339_datetime_string("2021-01-01T00:00:00+01:00")
-    assert tum_esm_utils.text.is_rfc3339_datetime_string("2021-01-01T00:00:00-01:00")
-    assert not tum_esm_utils.text.is_rfc3339_datetime_string("2021-01-01T00:00:00")
+    assert tum_esm_utils.text.is_rfc3339_datetime_string(
+        "1990-12-31T23:59:59+00:00"
+    )
+    assert tum_esm_utils.text.is_rfc3339_datetime_string(
+        "2021-01-01T00:00:00+01:00"
+    )
+    assert tum_esm_utils.text.is_rfc3339_datetime_string(
+        "2021-01-01T00:00:00-01:00"
+    )
+    assert not tum_esm_utils.text.is_rfc3339_datetime_string(
+        "2021-01-01T00:00:00"
+    )
     assert not tum_esm_utils.text.is_rfc3339_datetime_string(
         "2021-01-01T00:00:65+01:00"
     )
@@ -49,8 +55,9 @@ def test_is_rfc3339_datetime_string() -> None:
 
 def test_insert_replacements() -> None:
     assert (
-        tum_esm_utils.text.insert_replacements("Hello %YOU%!", {"YOU": "replacement"})
-        == "Hello replacement!"
+        tum_esm_utils.text.insert_replacements(
+            "Hello %YOU%!", {"YOU": "replacement"}
+        ) == "Hello replacement!"
     )
 
 

@@ -3,7 +3,9 @@ import tum_esm_utils
 from tum_esm_utils.interferograms import detect_corrupt_ifgs
 import tempfile
 
-_PROJECT_DIR = tum_esm_utils.files.get_parent_dir_path(__file__, current_depth=2)
+_PROJECT_DIR = tum_esm_utils.files.get_parent_dir_path(
+    __file__, current_depth=2
+)
 
 
 def test_detect_corrupt_ifgs() -> None:

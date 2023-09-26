@@ -32,7 +32,8 @@ def get_system_battery() -> int:
     Returns system battery in percent as an integer (1-100).
     Returns 100 if device has no battery.
     """
-    battery_state: psutil.sbattery | None = psutil.sensors_battery()  # type:ignore
+    battery_state: psutil.sbattery | None = psutil.sensors_battery(
+    )  # type:ignore
     if battery_state is not None:
         return battery_state.percent  # type:ignore
     return 100
@@ -40,7 +41,8 @@ def get_system_battery() -> int:
 
 def get_last_boot_time() -> str:
     """Returns last OS boot time."""
-    return datetime.fromtimestamp(psutil.boot_time()).strftime("%Y-%m-%d %H:%M:%S")
+    return datetime.fromtimestamp(psutil.boot_time()
+                                 ).strftime("%Y-%m-%d %H:%M:%S")
 
 
 def get_utc_offset() -> float:

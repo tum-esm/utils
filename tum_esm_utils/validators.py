@@ -3,11 +3,9 @@
 Implements: `validate_bool`, `validate_float`, `validate_int`,
 `validate_str`, `validate_list`"""
 
-
 import os
 import re
 from typing import Any, Callable, Optional, TypeVar
-
 import pendulum
 
 
@@ -144,9 +142,13 @@ def validate_str(
         if is_date_string and not _is_date_string(v):
             raise ValueError(f'"{v}" is not a date string ("YYYYMMDD")')
         if is_datetime_string and not _is_datetime_string(v):
-            raise ValueError(f'"{v}" is not a datetime string ("YYYYMMDD HH:mm:ss")')
+            raise ValueError(
+                f'"{v}" is not a datetime string ("YYYYMMDD HH:mm:ss")'
+            )
         if is_rfc3339_datetime_string and not _is_rfc3339_datetime_string(v):
-            raise ValueError(f'"{v}" is not a datetime string ("YYYY-MM-DDTHH:mm:ssZ")')
+            raise ValueError(
+                f'"{v}" is not a datetime string ("YYYY-MM-DDTHH:mm:ssZ")'
+            )
 
         # allowed and forbidden values
         if allowed is not None and v not in allowed:

@@ -59,10 +59,9 @@ def test_logger(empty_log_dir: Any) -> None:
 
 def test_log_message_details_format(empty_log_dir: Any) -> None:
     message_block = (
-        "pytests                 - INFO          - some message xy\n"
-        + "--- details: ---------------------------\n"
-        + "somedetails\n"
-        + "----------------------------------------"
+        "pytests                 - INFO          - some message xy\n" +
+        "--- details: ---------------------------\n" + "somedetails\n" +
+        "----------------------------------------"
     )
 
     tum_esm_utils.testing.expect_file_contents(
