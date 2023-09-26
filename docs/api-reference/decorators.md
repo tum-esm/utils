@@ -18,7 +18,7 @@ FileLock = Mark, that a file is being used and other programs should not interfe
 
 See https://en.wikipedia.org/wiki/Semaphore_(programming) 
 
-<a href="https://github.com/tum-esm/utils/tree/main/tum_esm_utils/decorators.py#L24"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="https://github.com/tum-esm/utils/tree/main/tum_esm_utils/decorators.py#L23"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ### <kbd>method</kbd> `__init__`
 

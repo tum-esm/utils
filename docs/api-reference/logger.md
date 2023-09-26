@@ -40,7 +40,7 @@ __init__(
 
 ---
 
-<a href="https://github.com/tum-esm/utils/tree/main/tum_esm_utils/logger.py#L77"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="https://github.com/tum-esm/utils/tree/main/tum_esm_utils/logger.py#L81"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ### <kbd>method</kbd> `debug`
 
@@ -52,7 +52,7 @@ writes a debug log line
 
 ---
 
-<a href="https://github.com/tum-esm/utils/tree/main/tum_esm_utils/logger.py#L101"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="https://github.com/tum-esm/utils/tree/main/tum_esm_utils/logger.py#L105"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ### <kbd>method</kbd> `error`
 
@@ -64,7 +64,7 @@ writes an error log line, sends the message via MQTT when config is passed (requ
 
 ---
 
-<a href="https://github.com/tum-esm/utils/tree/main/tum_esm_utils/logger.py#L111"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="https://github.com/tum-esm/utils/tree/main/tum_esm_utils/logger.py#L115"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ### <kbd>method</kbd> `exception`
 
@@ -88,7 +88,7 @@ logs the traceback of an exception; output will be formatted like this:
 
 ---
 
-<a href="https://github.com/tum-esm/utils/tree/main/tum_esm_utils/logger.py#L73"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="https://github.com/tum-esm/utils/tree/main/tum_esm_utils/logger.py#L75"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ### <kbd>method</kbd> `horizontal_line`
 
@@ -100,7 +100,7 @@ writes a horizonal line wiht `-`/`=`/... characters
 
 ---
 
-<a href="https://github.com/tum-esm/utils/tree/main/tum_esm_utils/logger.py#L85"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="https://github.com/tum-esm/utils/tree/main/tum_esm_utils/logger.py#L89"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ### <kbd>method</kbd> `info`
 
@@ -112,7 +112,7 @@ writes an info log line
 
 ---
 
-<a href="https://github.com/tum-esm/utils/tree/main/tum_esm_utils/logger.py#L93"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="https://github.com/tum-esm/utils/tree/main/tum_esm_utils/logger.py#L97"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ### <kbd>method</kbd> `warning`
 
