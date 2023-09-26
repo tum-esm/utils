@@ -3,6 +3,7 @@
 Implements: `get_cpu_usage`, `get_memory_usage`, `get_disk_space`,
 `get_system_battery`, `get_last_boot_time`, `get_utc_offset`"""
 
+from typing import Any
 import psutil
 from datetime import datetime
 
@@ -28,15 +29,17 @@ def get_disk_space() -> float:
 
 
 def get_system_battery() -> int:
-    """
-    Returns system battery in percent as an integer (1-100).
-    Returns 100 if device has no battery.
-    """
-    battery_state: psutil.sbattery | None = psutil.sensors_battery(
-    )  # type:ignore
-    if battery_state is not None:
-        return battery_state.percent  # type:ignore
-    return 100
+    """Returns system battery in percent as an integer (1-100).
+    Returns 100 if device has no battery. """
+    battery_state: Any = psutil.sensors_battery()  # type:ignore
+    try:
+        assert battery_state is not None
+        percent = battery_state.percent
+        assert isinstance(percent, int)
+        assert 1 <= percent <= 100
+        return percent
+    except AssertionError:
+        return 100
 
 
 def get_last_boot_time() -> str:

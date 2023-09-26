@@ -10,7 +10,7 @@ import tum_esm_utils
 
 TIMEOUT_UNIT = 0.5
 res_queue_th: queue.Queue[int] = queue.Queue()
-res_queue_mp: queue.Queue[int] = multiprocessing.Queue()
+res_queue_mp: queue.Queue[int] = multiprocessing.Queue()  # type: ignore
 lockfile_path = os.path.join(
     os.path.dirname(os.path.abspath(__file__)),
     "pytest_filelock_test.lock",

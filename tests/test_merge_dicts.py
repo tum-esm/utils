@@ -14,6 +14,7 @@ def test_merge_dicts() -> None:
     ) == {
         "a": 3,
         "b": {"c": 50, "e": 80},
+        "c": "test",
     }
 
     assert tum_esm_utils.datastructures.merge_dicts(
