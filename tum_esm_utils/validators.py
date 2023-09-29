@@ -3,17 +3,17 @@
 Implements: `validate_bool`, `validate_float`, `validate_int`,
 `validate_str`, `validate_list`"""
 
+from typing import Any, Callable, Optional, TypeVar
 import os
 import re
-from typing import Any, Callable, Optional, TypeVar
-import pendulum
+import datetime
 
 
 # duplicate method because lazydocs complains when using relative imports
 def _is_date_string(date_string: str) -> bool:
     """Returns true if string is in `YYYYMMDD` format and date exists"""
     try:
-        pendulum.from_format(date_string, "YYYYMMDD")
+        datetime.datetime.strptime(date_string, "%Y%m%d")
         return True
     except (AssertionError, ValueError):
         return False
@@ -23,7 +23,7 @@ def _is_date_string(date_string: str) -> bool:
 def _is_datetime_string(datetime_string: str) -> bool:
     """Returns true if string is in `YYYYMMDD HH:mm:ss` format and date exists"""
     try:
-        pendulum.from_format(datetime_string, "YYYYMMDD HH:mm:ss")
+        datetime.datetime.strptime(datetime_string, "%Y%m%d %H:%M:%S")
         return True
     except (AssertionError, ValueError):
         return False
@@ -34,9 +34,13 @@ def _is_rfc3339_datetime_string(datetime_string: str) -> bool:
     """Returns true if string is in `YYYY-MM-DDTHH:mm:ssZ` (RFC3339)
     format and date exists. Caution: The appendix of `+00:00` is required for UTC!"""
     try:
-        pendulum.from_format(datetime_string, fmt="YYYY-MM-DDTHH:mm:ssZ")
+        assert re.match(
+            r"^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(\+|\-)\d{2}:\d{2}$",
+            datetime_string,
+        )
+        datetime.datetime.fromisoformat(datetime_string)
         return True
-    except (AssertionError, ValueError):
+    except (ValueError, AssertionError):
         return False
 
 

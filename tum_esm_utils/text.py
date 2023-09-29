@@ -4,11 +4,11 @@ Implements: `get_random_string`, `pad_string`, `is_date_string`,
 `date_range`, `is_datetime_string`, `is_rfc3339_datetime_string`,
 `date_is_too_recent`, `insert_replacements`."""
 
-from datetime import datetime
+import re
+from typing import Literal
+import datetime
 import random
 import string
-from typing import Literal
-import pendulum
 
 
 def get_random_string(length: int, forbidden: list[str] = []) -> str:
@@ -38,7 +38,7 @@ def pad_string(
 def is_date_string(date_string: str) -> bool:
     """Returns `True` if string is in a valid `YYYYMMDD` format"""
     try:
-        pendulum.from_format(date_string, "YYYYMMDD")
+        datetime.datetime.strptime(date_string, "%Y%m%d")
         return True
     except ValueError:
         return False
@@ -72,7 +72,7 @@ def date_range(from_date_string: str, to_date_string: str) -> list[str]:
 def is_datetime_string(datetime_string: str) -> bool:
     """Returns `True` if string is in a valid `YYYYMMDD HH:mm:ss` format"""
     try:
-        pendulum.from_format(datetime_string, "YYYYMMDD HH:mm:ss")
+        datetime.datetime.strptime(datetime_string, "%Y%m%d %H:%M:%S")
         return True
     except ValueError:
         return False
@@ -82,11 +82,13 @@ def is_rfc3339_datetime_string(rfc3339_datetime_string: str) -> bool:
     """Returns `True` if string is in a valid `YYYY-MM-DDTHH:mm:ssZ` (RFC3339)
     format. Caution: The appendix of `+00:00` is required for UTC!"""
     try:
-        pendulum.from_format(
-            rfc3339_datetime_string, fmt="YYYY-MM-DDTHH:mm:ssZ"
+        assert re.match(
+            r"^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(\+|\-)\d{2}:\d{2}$",
+            rfc3339_datetime_string,
         )
+        datetime.datetime.fromisoformat(rfc3339_datetime_string)
         return True
-    except ValueError:
+    except (ValueError, AssertionError):
         return False
 
 
@@ -96,10 +98,10 @@ def date_is_too_recent(
 ) -> bool:
     """A min delay of two days means 20220101 will be too recent
     any time before 20220103 00:00 (start of day)"""
-    date_object = datetime.strptime(
+    date_object = datetime.datetime.strptime(
         date_string, "%Y%m%d"
     )  # will have the time 00:00:00
-    return (datetime.now() - date_object).days >= min_days_delay
+    return (datetime.datetime.now() - date_object).days >= min_days_delay
 
 
 def insert_replacements(content: str, replacements: dict[str, str]) -> str:
