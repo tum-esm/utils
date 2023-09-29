@@ -10,7 +10,7 @@ Implements: `validate_bool`, `validate_float`, `validate_int`, `validate_str`, `
 
 ---
 
-<a href="https://github.com/tum-esm/utils/tree/main/tum_esm_utils/validators.py#L43"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="https://github.com/tum-esm/utils/tree/main/tum_esm_utils/validators.py#L52"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ## <kbd>function</kbd> `validate_bool`
 
@@ -25,7 +25,7 @@ validate_bool() → Callable[[Any, bool], bool]
 
 ---
 
-<a href="https://github.com/tum-esm/utils/tree/main/tum_esm_utils/validators.py#L52"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="https://github.com/tum-esm/utils/tree/main/tum_esm_utils/validators.py#L61"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ## <kbd>function</kbd> `validate_float`
 
@@ -44,7 +44,7 @@ validate_float(
 
 ---
 
-<a href="https://github.com/tum-esm/utils/tree/main/tum_esm_utils/validators.py#L74"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="https://github.com/tum-esm/utils/tree/main/tum_esm_utils/validators.py#L83"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ## <kbd>function</kbd> `validate_int`
 
@@ -65,7 +65,7 @@ validate_int(
 
 ---
 
-<a href="https://github.com/tum-esm/utils/tree/main/tum_esm_utils/validators.py#L102"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="https://github.com/tum-esm/utils/tree/main/tum_esm_utils/validators.py#L111"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ## <kbd>function</kbd> `validate_str`
 
@@ -93,7 +93,7 @@ validate_str(
 
 ---
 
-<a href="https://github.com/tum-esm/utils/tree/main/tum_esm_utils/validators.py#L166"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="https://github.com/tum-esm/utils/tree/main/tum_esm_utils/validators.py#L175"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ## <kbd>function</kbd> `validate_list`
 

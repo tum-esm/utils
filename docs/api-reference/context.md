@@ -7,6 +7,9 @@ Context managers for common tasks.
 
 Implements: `ensure_section_duration` 
 
+**Global Variables**
+---------------
+- **contextlib**
 
 ---
 
