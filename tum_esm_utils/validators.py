@@ -7,6 +7,7 @@ from typing import Any, Callable, Optional, TypeVar
 import os
 import re
 import datetime
+import warnings
 
 
 # duplicate method because lazydocs complains when using relative imports
@@ -22,6 +23,10 @@ def _is_date_string(date_string: str) -> bool:
 # duplicate method because lazydocs complains when using relative imports
 def _is_datetime_string(datetime_string: str) -> bool:
     """Returns true if string is in `YYYYMMDD HH:mm:ss` format and date exists"""
+
+    warnings.warn(
+        "Use `is_rfc3339_datetime_string` instead", DeprecationWarning
+    )
     try:
         datetime.datetime.strptime(datetime_string, "%Y%m%d %H:%M:%S")
         return True

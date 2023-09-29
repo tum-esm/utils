@@ -1,3 +1,4 @@
+import pytest
 import tum_esm_utils
 
 
@@ -24,6 +25,7 @@ def test_is_date_string() -> None:
     assert not tum_esm_utils.text.is_date_string("20230132")
 
 
+@pytest.mark.filterwarnings("ignore::DeprecationWarning")
 def test_is_datetime_string() -> None:
     assert tum_esm_utils.text.is_datetime_string("20230101 00:00:00")
     assert not tum_esm_utils.text.is_datetime_string("20231301 00:00:00")
@@ -36,20 +38,23 @@ def test_is_datetime_string() -> None:
 
 
 def test_is_rfc3339_datetime_string() -> None:
-    assert tum_esm_utils.text.is_rfc3339_datetime_string(
-        "1990-12-31T23:59:59+00:00"
+    assert not tum_esm_utils.text.is_rfc3339_datetime_string(
+        "1990-12-31T23:59:59Z",
     )
     assert tum_esm_utils.text.is_rfc3339_datetime_string(
-        "2021-01-01T00:00:00+01:00"
+        "1990-12-31T23:59:59+00:00",
     )
     assert tum_esm_utils.text.is_rfc3339_datetime_string(
-        "2021-01-01T00:00:00-01:00"
+        "2021-01-01T00:00:00+01:00",
+    )
+    assert tum_esm_utils.text.is_rfc3339_datetime_string(
+        "2021-01-01T00:00:00-01:00",
     )
     assert not tum_esm_utils.text.is_rfc3339_datetime_string(
-        "2021-01-01T00:00:00"
+        "2021-01-01T00:00:00",
     )
     assert not tum_esm_utils.text.is_rfc3339_datetime_string(
-        "2021-01-01T00:00:65+01:00"
+        "2021-01-01T00:00:65+01:00",
     )
 
 

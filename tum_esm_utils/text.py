@@ -9,6 +9,7 @@ from typing import Literal
 import datetime
 import random
 import string
+import warnings
 
 
 def get_random_string(length: int, forbidden: list[str] = []) -> str:
@@ -71,6 +72,10 @@ def date_range(from_date_string: str, to_date_string: str) -> list[str]:
 
 def is_datetime_string(datetime_string: str) -> bool:
     """Returns `True` if string is in a valid `YYYYMMDD HH:mm:ss` format"""
+
+    warnings.warn(
+        "Use `is_rfc3339_datetime_string` instead", DeprecationWarning
+    )
     try:
         datetime.datetime.strptime(datetime_string, "%Y%m%d %H:%M:%S")
         return True
