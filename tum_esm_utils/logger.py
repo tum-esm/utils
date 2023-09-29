@@ -4,11 +4,11 @@ cases.
 
 Implements: `Logger`"""
 
+from typing import Literal, Optional
 import os
 import sys
 import traceback
-from datetime import datetime, timedelta
-from typing import Literal, Optional
+import datetime
 import filelock
 
 
@@ -29,7 +29,8 @@ def _pad_string(
 # duplicate method because lazydocs complains when using relative imports
 def _get_utc_offset() -> float:
     """Returns the UTC offset of the system"""
-    return round((datetime.now() - datetime.utcnow()).total_seconds() / 3600, 1)
+    return round((datetime.datetime.now() -
+                  datetime.datetime.utcnow()).total_seconds() / 3600, 1)
 
 
 # The logging module behaved very weird with the setup we have
@@ -43,14 +44,14 @@ def _log_line_has_date(log_line: str) -> bool:
     This is not true for exception tracebacks. This log line time is used
     to determine which file to archive logs lines into"""
     try:
-        datetime.strptime(log_line[: 10], "%Y-%m-%d")
+        datetime.datetime.strptime(log_line[: 10], "%Y-%m-%d")
         return True
     except:
         return False
 
 
 class Logger:
-    last_archive_time = datetime.now()
+    last_archive_time = datetime.datetime.now()
 
     def __init__(
         self,
@@ -165,7 +166,7 @@ class Logger:
         ----------------------------------------
         ```
         """
-        now = datetime.now()
+        now = datetime.datetime.now()
         utc_offset = _get_utc_offset()
         if utc_offset % 1 == 0:
             utc_offset = round(utc_offset)
@@ -213,7 +214,7 @@ class Logger:
             return
 
         lines_to_be_kept, lines_to_be_archived = [], []
-        latest_time = str(datetime.now() - timedelta(hours=1))
+        latest_time = str(datetime.datetime.now() - datetime.timedelta(hours=1))
         line_time = log_lines_in_file[0][: 26]
         for index, line in enumerate(log_lines_in_file):
             if _log_line_has_date(line):
@@ -243,4 +244,4 @@ class Logger:
             with open(filename, "a") as f:
                 f.writelines(archive_log_date_groups[date] + [""])
 
-        Logger.last_archive_time = datetime.now()
+        Logger.last_archive_time = datetime.datetime.now()

@@ -1,15 +1,19 @@
 import os
 import polars as pl
-from tum_esm_utils.files import get_parent_dir_path, load_raw_proffast_output
+import tum_esm_utils
 
-PROJECT_DIR = get_parent_dir_path(__file__, current_depth=2)
+PROJECT_DIR = tum_esm_utils.files.get_parent_dir_path(__file__, current_depth=2)
 
 
 def test_get_parent_dir_path() -> None:
-    parent_dir = get_parent_dir_path(__file__, current_depth=1)
+    parent_dir = tum_esm_utils.files.get_parent_dir_path(
+        __file__, current_depth=1
+    )
     assert parent_dir == os.path.dirname(os.path.abspath(__file__))
 
-    parent_parent_dir = get_parent_dir_path(__file__, current_depth=2)
+    parent_parent_dir = tum_esm_utils.files.get_parent_dir_path(
+        __file__, current_depth=2
+    )
     assert parent_parent_dir == os.path.dirname(parent_dir)
 
 
@@ -38,13 +42,13 @@ def test_load_raw_proffast_output() -> None:
     )
 
     # load the temporary file
-    df = load_raw_proffast_output(path)
+    df = tum_esm_utils.files.load_raw_proffast_output(path)
     assert isinstance(df, pl.DataFrame)
     assert df.shape == (5, 11)  # 5 rows, 11 columns
     assert df.columns == ["utc"] + list(data_column_names.keys())
 
     # load the temporary file with a subset of columns
-    df = load_raw_proffast_output(
+    df = tum_esm_utils.files.load_raw_proffast_output(
         path, selected_columns=["gnd_p", "gnd_t", "xair", "xch4_s5p"]
     )
     assert isinstance(df, pl.DataFrame)

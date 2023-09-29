@@ -5,7 +5,7 @@ Implements: `get_cpu_usage`, `get_memory_usage`, `get_disk_space`,
 
 from typing import Any
 import psutil
-from datetime import datetime
+import datetime
 
 
 def get_cpu_usage() -> list[float]:
@@ -44,10 +44,11 @@ def get_system_battery() -> int:
 
 def get_last_boot_time() -> str:
     """Returns last OS boot time."""
-    return datetime.fromtimestamp(psutil.boot_time()
-                                 ).strftime("%Y-%m-%d %H:%M:%S")
+    return datetime.datetime.fromtimestamp(psutil.boot_time()
+                                          ).strftime("%Y-%m-%d %H:%M:%S")
 
 
 def get_utc_offset() -> float:
     """Returns the UTC offset of the system"""
-    return round((datetime.now() - datetime.utcnow()).total_seconds() / 3600, 1)
+    return round((datetime.datetime.now() -
+                  datetime.datetime.utcnow()).total_seconds() / 3600, 1)

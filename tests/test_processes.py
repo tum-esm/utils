@@ -1,7 +1,7 @@
+from typing import Any
 import os
 import sys
 import time
-from typing import Any
 import pytest
 import tum_esm_utils
 

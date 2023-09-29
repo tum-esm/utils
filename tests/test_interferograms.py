@@ -1,7 +1,6 @@
 import os
-import tum_esm_utils
-from tum_esm_utils.interferograms import detect_corrupt_ifgs
 import tempfile
+import tum_esm_utils
 
 _PROJECT_DIR = tum_esm_utils.files.get_parent_dir_path(
     __file__, current_depth=2
@@ -14,10 +13,14 @@ def test_detect_corrupt_ifgs() -> None:
     with tempfile.TemporaryDirectory() as tmpdir:
         with open(os.path.join(tmpdir, "test_ifg"), "w") as f:
             f.write("corrupt interferogram")
-        assert len(detect_corrupt_ifgs(tmpdir)) == 0
+        assert len(
+            tum_esm_utils.interferograms.detect_corrupt_ifgs(tmpdir)
+        ) == 0
 
     test_data_path = os.path.join(_PROJECT_DIR, "tests", "data")
-    detection_results = detect_corrupt_ifgs(test_data_path)
+    detection_results = tum_esm_utils.interferograms.detect_corrupt_ifgs(
+        test_data_path
+    )
     assert detection_results == {
         "md20220409s0e00a.0199": [
             "charfilter 'GFW' is missing",

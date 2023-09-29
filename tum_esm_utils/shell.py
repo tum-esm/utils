@@ -5,10 +5,10 @@ cases.
 Implements: `run_shell_command`, `CommandLineException`,
 `get_hostname`, `get_commit_sha`, `change_file_permissions`"""
 
+from typing import Callable, Optional
 import os
 import re
 import subprocess
-from typing import Callable, Optional
 
 
 class CommandLineException(Exception):

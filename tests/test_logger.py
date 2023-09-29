@@ -1,6 +1,6 @@
+from typing import Any
 import os
 import shutil
-from typing import Any
 import pytest
 import tum_esm_utils
 

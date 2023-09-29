@@ -2,8 +2,8 @@
 
 Implements: `expect_file_contents`, `wait_for_condition`"""
 
-import time
 from typing import Callable
+import time
 
 
 def expect_file_contents(

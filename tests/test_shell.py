@@ -1,6 +1,6 @@
 import os
 import tempfile
-from tum_esm_utils.shell import change_file_permissions
+import tum_esm_utils
 
 
 def test_change_file_permissions() -> None:
@@ -11,7 +11,9 @@ def test_change_file_permissions() -> None:
         # raises and AssertionError
         for invalid_permission_string in ["", "r", "rw", "rwxrwxrww"]:
             try:
-                change_file_permissions(f.name, invalid_permission_string)
+                tum_esm_utils.shell.change_file_permissions(
+                    f.name, invalid_permission_string
+                )
                 raise Exception(
                     "change_file_permissions did not raise an AssertionError"
                 )
@@ -26,7 +28,7 @@ def test_change_file_permissions() -> None:
         for i in range(8):
             for j in range(8):
                 for k in range(8):
-                    change_file_permissions(
+                    tum_esm_utils.shell.change_file_permissions(
                         f.name,
                         permission_strings[i] + permission_strings[j] +
                         permission_strings[k],

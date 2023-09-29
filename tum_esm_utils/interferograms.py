@@ -2,11 +2,11 @@
 
 Implements: `detect_corrupt_ifgs`"""
 
+from typing import Literal
 import os
 import re
 import subprocess
-from typing import Literal
-from filelock import FileLock
+import filelock
 import tum_esm_utils
 
 _PARSER_DIR = os.path.join(
@@ -73,7 +73,7 @@ def detect_corrupt_ifgs(
     results: dict[str, list[str]] = {}
     stdout: str = ""
     while True:
-        with FileLock(f"{_PARSER_DIR}/ifg_parser.inp.lock"):
+        with filelock.FileLock(f"{_PARSER_DIR}/ifg_parser.inp.lock"):
             random_id = tum_esm_utils.text.get_random_string(
                 10,
                 forbidden=[

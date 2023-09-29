@@ -2,9 +2,9 @@
 
 Implements: `with_filelock`"""
 
-import filelock
 from typing import Any, Callable, TypeVar, cast
-from functools import wraps
+import filelock
+import functools
 
 # typing of higher level decorators:
 # https://github.com/python/mypy/issues/1551#issuecomment-253978622
@@ -26,7 +26,7 @@ class with_filelock:
         self.timeout: float = timeout
 
     def __call__(self, f: F) -> F:
-        @wraps(f)
+        @functools.wraps(f)
         def wrapper(*args: tuple[Any], **kwargs: dict[str, Any]) -> Any:
             with filelock.FileLock(self.lockfile_path, timeout=self.timeout):
                 return f(*args, **kwargs)
