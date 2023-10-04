@@ -1,4 +1,4 @@
-# 🔬 &nbsp;TUM ESM Python Utilities
+# 📦 &nbsp;TUM ESM Python Utilities
 
 This library is a collection of small functions used in our research projects. Here, we can test and document the functions properly instead of every project dealing with this overhead which allows us to reduce the size of the utility directories of individual projects.
 

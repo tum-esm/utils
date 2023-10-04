@@ -17,7 +17,7 @@ export default {
     </div>
   ),
   project: {
-    link: "https://github.com/tum-esm/tenta-client",
+    link: "https://github.com/tum-esm/utils",
     icon: (
       <svg
         xmlns="http://www.w3.org/2000/svg"
@@ -40,21 +40,21 @@ export default {
       </svg>
     ),
   },
-  docsRepositoryBase: "https://github.com/tum-esm/tenta-client/blob/main/docs",
+  docsRepositoryBase: "https://github.com/tum-esm/utils/blob/main/docs",
   //primaryHue: 43,
   navigation: true,
   useNextSeoProps() {
     return {
-      titleTemplate: "%s – Tenta Python Client",
+      titleTemplate: "%s | TUM ESM Python Utilities",
     };
   },
   head: (
     <>
       <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-      <meta property="og:title" content="Tenta Python Client" />
+      <meta property="og:title" content="TUM ESM Python Utilities" />
       <meta
         property="og:description"
-        content="Python client library for Tenta, a sensor network management tool"
+        content="Python utilities by the Professorship of Environmental Sensing and Modeling at the Technical University of Munich"
       />
     </>
   ),
@@ -66,7 +66,7 @@ export default {
       </span>
     ),
   },
-  faviconGlyph: "🏔️",
+  faviconGlyph: "📦",
   toc: {
     float: true,
   },

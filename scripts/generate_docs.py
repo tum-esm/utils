@@ -32,7 +32,7 @@ with tempfile.NamedTemporaryFile() as f:
             assert line_segments[0] == "#" * len(line_segments[0])
             if len(line_segments) == 2:
                 parsed_api_reference_content_lines.append(
-                    line_segments[0] + " `" +
+                    line_segments[0] + "# `" +
                     line_segments[1].replace("\\_", "_") + "`"
                 )
             elif len(line_segments) == 3:
@@ -47,11 +47,8 @@ with tempfile.NamedTemporaryFile() as f:
             parsed_api_reference_content_lines.append(line)
 
     parsed_api_reference_content = "\n".join(
-        parsed_api_reference_content_lines[1 :]
+        parsed_api_reference_content_lines[2 :]
     )
 
 with open(API_DST, "w") as f:
-    f.write(
-        "# API Reference of the `tum_esm_utils` package\n\n" +
-        parsed_api_reference_content
-    )
+    f.write("# API Reference \n\n" + parsed_api_reference_content)

@@ -1,16 +1,15 @@
-# API Reference of the `tum_esm_utils` package
+# API Reference 
 
-# `tum_esm_utils`
 
 Python utilities by the Professorship of Environmental
 Sensing and Modeling at the Technical University of Munich.
 
 GitHub Repository https://github.com/tum-esm/utils
-Documentation: https://tum-esm.github.io/utils/
+Documentation: https://tum-esm-utils.netlify.app/
 PyPI: https://pypi.org/project/tum-esm-utils/
 
 
-# `tum_esm_utils.files`
+## `tum_esm_utils.files`
 
 File-related utility functions.
 
@@ -19,7 +18,7 @@ Implements: `load_file`, `dump_file`, `load_json_file`,
 `get_file_checksum`, `load_raw_proffast_output`
 
 
-#### `get_parent_dir_path`
+##### `get_parent_dir_path`
 
 ```python
 def get_parent_dir_path(script_path: str, current_depth: int = 1) -> str
@@ -31,7 +30,7 @@ the current script to this function. Depth of 1 will return
 the direct parent directory of the current script.
 
 
-#### `get_dir_checksum`
+##### `get_dir_checksum`
 
 ```python
 def get_dir_checksum(path: str) -> str
@@ -40,7 +39,7 @@ def get_dir_checksum(path: str) -> str
 Get the checksum of a directory using md5deep.
 
 
-#### `get_file_checksum`
+##### `get_file_checksum`
 
 ```python
 def get_file_checksum(path: str) -> str
@@ -52,7 +51,7 @@ Significantly faster than `get_dir_checksum` since it does
 not spawn a new process.
 
 
-#### `load_raw_proffast_output`
+##### `load_raw_proffast_output`
 
 ```python
 def load_raw_proffast_output(
@@ -87,7 +86,7 @@ utc                     gnd_p    gnd_t    app_sza   ...
 ```
 
 
-# `tum_esm_utils.system`
+## `tum_esm_utils.system`
 
 Common system status related functions.
 
@@ -95,7 +94,7 @@ Implements: `get_cpu_usage`, `get_memory_usage`, `get_disk_space`,
 `get_system_battery`, `get_last_boot_time`, `get_utc_offset`
 
 
-#### `get_cpu_usage`
+##### `get_cpu_usage`
 
 ```python
 def get_cpu_usage() -> list[float]
@@ -104,7 +103,7 @@ def get_cpu_usage() -> list[float]
 returns cpu_percent for all cores -> list [cpu1%, cpu2%,...]
 
 
-#### `get_memory_usage`
+##### `get_memory_usage`
 
 ```python
 def get_memory_usage() -> float
@@ -114,7 +113,7 @@ returns -> tuple (total, available, percent, used, free, active, inactive,
 buffers, cached, shared, slab)
 
 
-#### `get_disk_space`
+##### `get_disk_space`
 
 ```python
 def get_disk_space() -> float
@@ -124,7 +123,7 @@ Returns disk space used in % as float.
 -> tuple (total, used, free, percent)
 
 
-#### `get_system_battery`
+##### `get_system_battery`
 
 ```python
 def get_system_battery() -> int
@@ -134,7 +133,7 @@ Returns system battery in percent as an integer (1-100).
 Returns 100 if device has no battery.
 
 
-#### `get_last_boot_time`
+##### `get_last_boot_time`
 
 ```python
 def get_last_boot_time() -> str
@@ -143,7 +142,7 @@ def get_last_boot_time() -> str
 Returns last OS boot time.
 
 
-#### `get_utc_offset`
+##### `get_utc_offset`
 
 ```python
 def get_utc_offset() -> float
@@ -152,14 +151,14 @@ def get_utc_offset() -> float
 Returns the UTC offset of the system
 
 
-# `tum_esm_utils.mathematics`
+## `tum_esm_utils.mathematics`
 
 Mathematical functions.
 
 Implements: `distance_between_angles`
 
 
-#### `distance_between_angles`
+##### `distance_between_angles`
 
 ```python
 def distance_between_angles(angle_1: float, angle_2: float) -> float
@@ -168,7 +167,7 @@ def distance_between_angles(angle_1: float, angle_2: float) -> float
 calculate the directional distance (in degrees) between two angles
 
 
-# `tum_esm_utils.validators`
+## `tum_esm_utils.validators`
 
 Implements validator functions for use with pydantic models.
 
@@ -176,7 +175,7 @@ Implements: `validate_bool`, `validate_float`, `validate_int`,
 `validate_str`, `validate_list`
 
 
-# `tum_esm_utils.shell`
+## `tum_esm_utils.shell`
 
 Implements custom logging functionality, because the
 standard logging module is hard to configure for special
@@ -186,7 +185,7 @@ Implements: `run_shell_command`, `CommandLineException`,
 `get_hostname`, `get_commit_sha`, `change_file_permissions`
 
 
-#### `run_shell_command`
+##### `run_shell_command`
 
 ```python
 def run_shell_command(command: str,
@@ -199,7 +198,7 @@ if the return code is not zero, returns the stdout. Uses
 `/bin/bash` by default.
 
 
-#### `get_hostname`
+##### `get_hostname`
 
 ```python
 def get_hostname() -> str
@@ -210,7 +209,7 @@ postfix (`somename.local`) if present. Only works reliably,
 when the hostname doesn't contain a dot.
 
 
-#### `get_commit_sha`
+##### `get_commit_sha`
 
 ```python
 def get_commit_sha() -> Optional[str]
@@ -220,7 +219,7 @@ Get the current commit sha of the repository. Returns
 `None` if there is not git repository in any parent directory.
 
 
-#### `change_file_permissions`
+##### `change_file_permissions`
 
 ```python
 def change_file_permissions(file_path: str, permission_string: str) -> None
@@ -231,7 +230,7 @@ Change a file's system permissions.
 Example permission_strings: `--x------`, `rwxr-xr-x`, `rw-r--r--`.
 
 
-# `tum_esm_utils.logger`
+## `tum_esm_utils.logger`
 
 Implements custom logging functionality, because the
 standard logging module is hard to configure for special
@@ -247,7 +246,7 @@ class Logger()
 ```
 
 
-#### `horizontal_line`
+##### `horizontal_line`
 
 ```python
 def horizontal_line(fill_char: Literal["-", "=", ".", "_"] = "=") -> None
@@ -256,7 +255,7 @@ def horizontal_line(fill_char: Literal["-", "=", ".", "_"] = "=") -> None
 writes a horizonal line wiht `-`/`=`/... characters
 
 
-#### `debug`
+##### `debug`
 
 ```python
 def debug(message: str, details: Optional[str] = None) -> None
@@ -265,7 +264,7 @@ def debug(message: str, details: Optional[str] = None) -> None
 writes a debug log line
 
 
-#### `info`
+##### `info`
 
 ```python
 def info(message: str, details: Optional[str] = None) -> None
@@ -274,7 +273,7 @@ def info(message: str, details: Optional[str] = None) -> None
 writes an info log line
 
 
-#### `warning`
+##### `warning`
 
 ```python
 def warning(message: str, details: Optional[str] = None) -> None
@@ -283,7 +282,7 @@ def warning(message: str, details: Optional[str] = None) -> None
 writes a warning log line
 
 
-#### `error`
+##### `error`
 
 ```python
 def error(message: str, details: Optional[str] = None) -> None
@@ -293,7 +292,7 @@ writes an error log line, sends the message via
 MQTT when config is passed (required for revision number)
 
 
-#### `exception`
+##### `exception`
 
 ```python
 def exception(label: Optional[str] = None,
@@ -313,7 +312,7 @@ formatted like this:
 ```
 
 
-# `tum_esm_utils.processes`
+## `tum_esm_utils.processes`
 
 Functions to start and terminate background processes.
 
@@ -321,7 +320,7 @@ Implements: `get_process_pids`, `start_background_process`,
 `terminate_process`
 
 
-#### `get_process_pids`
+##### `get_process_pids`
 
 ```python
 def get_process_pids(script_path: str) -> list[int]
@@ -330,7 +329,7 @@ def get_process_pids(script_path: str) -> list[int]
 Return a list of PIDs that have the given script as their entrypoint
 
 
-#### `start_background_process`
+##### `start_background_process`
 
 ```python
 def start_background_process(interpreter_path: str, script_path: str) -> int
@@ -341,7 +340,7 @@ interpreter and script path. The script paths parent directory
 will be used as the working directory for the process.
 
 
-#### `terminate_process`
+##### `terminate_process`
 
 ```python
 def terminate_process(script_path: str) -> list[int]
@@ -351,14 +350,14 @@ Terminate all processes that have the given script as their
 entrypoint. Returns the list of terminated PIDs.
 
 
-# `tum_esm_utils.context`
+## `tum_esm_utils.context`
 
 Context managers for common tasks.
 
 Implements: `ensure_section_duration`
 
 
-#### `ensure_section_duration`
+##### `ensure_section_duration`
 
 ```python
 @contextlib.contextmanager
@@ -375,7 +374,7 @@ with ensure_section_duration(6):
 ```
 
 
-# `tum_esm_utils.text`
+## `tum_esm_utils.text`
 
 Functions used for text manipulation/processing.
 
@@ -384,7 +383,7 @@ Implements: `get_random_string`, `pad_string`, `is_date_string`,
 `date_is_too_recent`, `insert_replacements`.
 
 
-#### `get_random_string`
+##### `get_random_string`
 
 ```python
 def get_random_string(length: int, forbidden: list[str] = []) -> str
@@ -394,7 +393,7 @@ Return a random string from lowercase letter, the strings
 from the list passed as `forbidden` will not be generated
 
 
-#### `is_date_string`
+##### `is_date_string`
 
 ```python
 def is_date_string(date_string: str) -> bool
@@ -403,7 +402,7 @@ def is_date_string(date_string: str) -> bool
 Returns `True` if string is in a valid `YYYYMMDD` format
 
 
-#### `date_range`
+##### `date_range`
 
 ```python
 def date_range(from_date_string: str, to_date_string: str) -> list[str]
@@ -419,7 +418,7 @@ date_range("20210101", "20210103") == ["20210101", "20210102", "20210103"]
 ```
 
 
-#### `is_datetime_string`
+##### `is_datetime_string`
 
 ```python
 def is_datetime_string(datetime_string: str) -> bool
@@ -428,7 +427,7 @@ def is_datetime_string(datetime_string: str) -> bool
 Returns `True` if string is in a valid `YYYYMMDD HH:mm:ss` format
 
 
-#### `is_rfc3339_datetime_string`
+##### `is_rfc3339_datetime_string`
 
 ```python
 def is_rfc3339_datetime_string(rfc3339_datetime_string: str) -> bool
@@ -438,7 +437,7 @@ Returns `True` if string is in a valid `YYYY-MM-DDTHH:mm:ssZ` (RFC3339)
 format. Caution: The appendix of `+00:00` is required for UTC!
 
 
-#### `date_is_too_recent`
+##### `date_is_too_recent`
 
 ```python
 def date_is_too_recent(date_string: str, min_days_delay: int = 1) -> bool
@@ -448,7 +447,7 @@ A min delay of two days means 20220101 will be too recent
 any time before 20220103 00:00 (start of day)
 
 
-#### `insert_replacements`
+##### `insert_replacements`
 
 ```python
 def insert_replacements(content: str, replacements: dict[str, str]) -> str
@@ -458,14 +457,14 @@ For every key in replacements, replaces `%key$` in the
 content with its value.
 
 
-# `tum_esm_utils.github`
+## `tum_esm_utils.github`
 
 Functions for interacting with GitHub.
 
 Implements: `request_github_file`
 
 
-#### `request_github_file`
+##### `request_github_file`
 
 ```python
 def request_github_file(github_repository: str,
@@ -478,7 +477,7 @@ as a string. Raises an HTTPError if the response status code
 is not 200.
 
 
-# `tum_esm_utils.datastructures`
+## `tum_esm_utils.datastructures`
 
 Datastructures not in the standard library.
 
@@ -492,7 +491,7 @@ class RingList()
 ```
 
 
-#### `clear`
+##### `clear`
 
 ```python
 def clear() -> None
@@ -501,7 +500,7 @@ def clear() -> None
 removes all elements
 
 
-#### `is_full`
+##### `is_full`
 
 ```python
 def is_full() -> bool
@@ -510,7 +509,7 @@ def is_full() -> bool
 returns true if list is full
 
 
-#### `append`
+##### `append`
 
 ```python
 def append(x: float) -> None
@@ -519,7 +518,7 @@ def append(x: float) -> None
 appends an element to the list
 
 
-#### `get`
+##### `get`
 
 ```python
 def get() -> list[float]
@@ -528,7 +527,7 @@ def get() -> list[float]
 returns the list of elements
 
 
-#### `sum`
+##### `sum`
 
 ```python
 def sum() -> float
@@ -537,7 +536,7 @@ def sum() -> float
 returns the max size of the list
 
 
-#### `set_max_size`
+##### `set_max_size`
 
 ```python
 def set_max_size(new_max_size: int) -> None
@@ -546,7 +545,7 @@ def set_max_size(new_max_size: int) -> None
 sets a new max size
 
 
-#### `merge_dicts`
+##### `merge_dicts`
 
 ```python
 def merge_dicts(old_object: Any, new_object: Any) -> Any
@@ -566,14 +565,14 @@ merge_dicts(
 ```
 
 
-# `tum_esm_utils.testing`
+## `tum_esm_utils.testing`
 
 Functions commonly used in testing scripts.
 
 Implements: `expect_file_contents`, `wait_for_condition`
 
 
-#### `expect_file_contents`
+##### `expect_file_contents`
 
 ```python
 def expect_file_contents(filepath: str,
@@ -585,7 +584,7 @@ Assert that the given file contains all of the required content
 blocks, and/or none of the forbidden content blocks.
 
 
-#### `wait_for_condition`
+##### `wait_for_condition`
 
 ```python
 def wait_for_condition(is_successful: Callable[[], bool],
@@ -599,14 +598,14 @@ if the condition is not met within the given timeout.
 The condition is checked every 0.25 seconds.
 
 
-# `tum_esm_utils.interferograms`
+## `tum_esm_utils.interferograms`
 
 Functions for interacting with interferograms.
 
 Implements: `detect_corrupt_ifgs`
 
 
-#### `detect_corrupt_ifgs`
+##### `detect_corrupt_ifgs`
 
 ```python
 def detect_corrupt_ifgs(
@@ -627,7 +626,7 @@ it because the retrieval using Proffast 2 will fail if
 there are corrupt interferograms in the input.
 
 
-# `tum_esm_utils.decorators`
+## `tum_esm_utils.decorators`
 
 Decorators that can be used wrap functions.
 
@@ -648,7 +647,7 @@ wait until other programs are done using it.
 See https://en.wikipedia.org/wiki/Semaphore_(programming)
 
 
-#### `__init__`
+##### `__init__`
 
 ```python
 def __init__(lockfile_path: str, timeout: float = -1) -> None
