@@ -16,9 +16,18 @@ with open(INDEX_DST, "w") as f:
 
 # generate automatic API reference and prettify output
 
+module_names = list(
+    sorted([
+        f[:-3] for f in os.listdir(os.path.join(PROJECT_DIR, "tum_esm_utils"))
+        if (f.endswith(".py") and (f != "__init__.py"))
+    ])
+)
+
 with tempfile.NamedTemporaryFile() as f:
     os.system(
-        f"cd {PROJECT_DIR} && pydoc-markdown --package=tum_esm_utils > {f.name}"
+        f"cd {PROJECT_DIR} && pydoc-markdown --module=tum_esm_utils " +
+        (" ").join([f"--module=tum_esm_utils.{m}"
+                    for m in module_names]) + f" > {f.name}"
     )
     with open(f.name, "r") as f2:
         raw_api_reference_content = f2.read()
