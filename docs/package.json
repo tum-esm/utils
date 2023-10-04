@@ -1,0 +1,33 @@
+{
+  "name": "tum-esm-utils-docs",
+  "description": "Python utilities by the Professorship of Environmental Sensing and Modeling at the Technical University of Munich",
+  "contributors": [
+    {
+      "name": "Moritz Makowski",
+      "email": "moritz.makowski@tum.de"
+    }
+  ],
+  "license": "AGPL-3.0-only",
+  "repository": "https://github.com/iterize/tenta",
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build"
+  },
+  "dependencies": {
+    "autoprefixer": "^10.4.16",
+    "next": "^13.5.4",
+    "nextra": "^2.13.1",
+    "nextra-theme-docs": "^2.13.1",
+    "postcss": "^8.4.31",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "tailwindcss": "^3.3.3"
+  },
+  "engines": {
+    "node": ">=16"
+  },
+  "devDependencies": {
+    "@types/node": "20.8.2",
+    "typescript": "5.2.2"
+  }
+}
