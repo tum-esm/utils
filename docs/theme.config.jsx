@@ -45,7 +45,7 @@ export default {
   navigation: true,
   useNextSeoProps() {
     return {
-      titleTemplate: "%s | TUM ESM Python Utilities",
+      titleTemplate: "TUM ESM Python Utilities",
     };
   },
   head: (
