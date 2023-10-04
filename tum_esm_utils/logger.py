@@ -122,7 +122,7 @@ class Logger:
         formatted like this:
 
         ```
-        (label, )ZeroDivisionError: division by zer
+        (label, )ZeroDivisionError: division by zero
         --- details: -----------------
         ...
         --- traceback: ---------------

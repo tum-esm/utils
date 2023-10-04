@@ -25,9 +25,9 @@ assert terminated_pids == [new_pid]
 assert get_process_pids(SCRIPT_PATH) == []
 ```
 
-## Test Which Interferograms Cannot Be Processed by Proffast `2.\*`
+## Test Which Interferograms Cannot Be Processed by Proffast 2
 
-The following code will run a modified code of the Proffast 2.\* preprocessor that now only does the parsing of interferograms to check whether it can read them. This is useful because Proffast itself will fail for the whole day of measurements if there is a single interferogram it cannot read.
+The following code will run a modified code of the [Proffast 2](https://www.imk-asf.kit.edu/english/3225.php) preprocessor that now only does the parsing of interferograms to check whether it can read them. This is useful because Proffast itself will fail for the whole day of measurements if there is a single interferogram it cannot read.
 
 ```python
 import tum_esm_utils
@@ -47,11 +47,11 @@ assert detection_results == {
 }
 ```
 
-The detection result means that the file `/path/to/a/folder/with/interferograms/md20220409s0e00a.0199` could not be read.
+The detection result means the file `/path/to/a/folder/with/interferograms/md20220409s0e00a.0199` could not be read.
 
 ## Ring List
 
-We did not find a simple python implementation of a ring list - also called ring buffer - yet. Hence, we implemented one ourselves which is well tested.
+We have yet to find a simple Python implementation of a ring list - also called [circular buffer](https://en.wikipedia.org/wiki/Circular_buffer). Hence, we implemented a well-tested one ourselves.
 
 ```python
 import tum_esm_utils
@@ -74,8 +74,8 @@ print(ring_list.get())      # [23.5, 3, 4, 18]
 print(ring_list.is_full())  # True
 
 # the ring list will always discard the oldest element once
-# you append new elements to a full list. Of course it does
-# not copy all elements but only modifies the internal pointers
+# you append new elements to a full list. Of course, it does
+# not copy all elements but only modifies the internal pointers.
 
 ring_list.append(4)
 print(ring_list.get())      # [3, 4, 18, 4]
@@ -111,7 +111,7 @@ filled_template = insert_replacements(template, replacements)
 
 ## Custom Logger
 
-The `logging` module from the standard Python library is kind of annoying to configure when other subprojects or libraries are using it as well. Additionally, we wanted to have an automatic archiving functionality.
+We found the `logging` module from the standard Python library hard to configure when other subprojects or libraries also use it. Additionally, we wanted to have an automatic archiving functionality.
 
 Hence, this class is a simple reimplementation of the logging module's core features.
 
@@ -122,14 +122,53 @@ my_logger = Logger(
     origin = "my_logger",
     logfile_directory = "/tmp/logs"
 )
+```
 
+The log lines of the last hour can be found in `/tmp/logs/current-logs.log`. All older log lines can be found in `/tmp/logs/archive/YYYYMMDD.log` (`/tmp ...` is used in the example code above).
+
+Regular log lines (debug, info, warning, error):
+
+```python
 my_logger.debug("hello")
 my_logger.info("hello")
 my_logger.warning("hello")
 my_logger.error("hello")
+```
 
+```log
+time UTC±X - origin - level - message
+```
+
+You can give the more details to each log type:
+
+```python
+my_logger.debug("hello", details="some elaborate details on what happened")
+```
+
+```log
+time UTC±X - origin - DEBUG - hello
+--- details: ---------------------------
+some elaborate details on what happened
+----------------------------------------
+```
+
+Exception logging:
+
+```python
 try:
     30 / 0
 except Exception:
-    logger.exception(label="customlabel")
+    my_logger.exception(
+        label="custom label",
+        details="some elaborate details on what happened"
+    )
+```
+
+```log
+time UTC±X - origin - EXCEPTION - custom label, ZeroDivisionError: division by zero
+--- details: ---------------------------
+some elaborate details on what happened
+--- traceback: -------------------------
+...
+----------------------------------------
 ```
