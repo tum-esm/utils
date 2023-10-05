@@ -27,7 +27,7 @@ jobs:
 
       # try to load cached venv
       - name: Load cached venv
-        id: cached-poetry-dependencies
+        id: cached-venv
         uses: actions/cache@v3
         with:
           path: .venv
