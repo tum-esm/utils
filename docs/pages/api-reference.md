@@ -481,7 +481,7 @@ Implements: `get_cpu_usage`, `get_memory_usage`, `get_disk_space`,
 def get_cpu_usage() -> list[float]
 ```
 
-returns cpu_percent for all cores -> list [cpu1%, cpu2%,...]
+Returns cpu_percent for all cores as `list[cpu1%, cpu2%,...]`
 
 
 ##### `get_memory_usage`
@@ -490,8 +490,7 @@ returns cpu_percent for all cores -> list [cpu1%, cpu2%,...]
 def get_memory_usage() -> float
 ```
 
-returns -> tuple (total, available, percent, used, free, active, inactive,
-buffers, cached, shared, slab)
+Returns the memory usage in %
 
 
 ##### `get_disk_space`
@@ -500,8 +499,7 @@ buffers, cached, shared, slab)
 def get_disk_space() -> float
 ```
 
-Returns disk space used in % as float.
--> tuple (total, used, free, percent)
+Returns disk space used in % as float
 
 
 ##### `get_system_battery`
@@ -510,7 +508,7 @@ Returns disk space used in % as float.
 def get_system_battery() -> int
 ```
 
-Returns system battery in percent as an integer (1-100).
+Returns system battery in percent in percent.
 Returns 100 if device has no battery.
 
 
@@ -529,7 +527,12 @@ Returns last OS boot time.
 def get_utc_offset() -> float
 ```
 
-Returns the UTC offset of the system
+Returns the UTC offset of the system.
+
+```python
+x = get_utc_offset()
+local time == utc time + x
+```
 
 
 ## `tum_esm_utils.testing`

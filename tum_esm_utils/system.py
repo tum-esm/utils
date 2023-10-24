@@ -9,29 +9,29 @@ import datetime
 
 
 def get_cpu_usage() -> list[float]:
-    """returns cpu_percent for all cores -> list [cpu1%, cpu2%,...]"""
-    return psutil.cpu_percent(interval=1, percpu=True)  # type: ignore
+    """Returns cpu_percent for all cores as `list[cpu1%, cpu2%,...]`"""
+    return psutil.cpu_percent(interval=1, percpu=True)
 
 
 def get_memory_usage() -> float:
-    """returns -> tuple (total, available, percent, used, free, active, inactive,
-    buffers, cached, shared, slab)
-    """
-    v_memory = psutil.virtual_memory()
-    return v_memory.percent
+    """Returns the memory usage in %"""
+    p = psutil.virtual_memory().percent
+    assert isinstance(p, float)
+    return p
 
 
 def get_disk_space() -> float:
-    """Returns disk space used in % as float.
-    -> tuple (total, used, free, percent)"""
-    disk = psutil.disk_usage("/")
-    return disk.percent
+    """Returns disk space used in % as float"""
+    return psutil.disk_usage("/").percent
 
 
 def get_system_battery() -> int:
-    """Returns system battery in percent as an integer (1-100).
-    Returns 100 if device has no battery. """
-    battery_state: Any = psutil.sensors_battery()  # type:ignore
+    """Returns system battery in percent in percent.
+    Returns 100 if device has no battery."""
+
+    # FIXME: In the next breaking release, return None if device has no battery
+
+    battery_state: Any = psutil.sensors_battery()  # type: ignore
     try:
         assert battery_state is not None
         percent = battery_state.percent
@@ -44,11 +44,20 @@ def get_system_battery() -> int:
 
 def get_last_boot_time() -> str:
     """Returns last OS boot time."""
+
+    # FIXME: In the next breaking release, convert this to a return a datetime
+
     return datetime.datetime.fromtimestamp(psutil.boot_time()
                                           ).strftime("%Y-%m-%d %H:%M:%S")
 
 
 def get_utc_offset() -> float:
-    """Returns the UTC offset of the system"""
+    """Returns the UTC offset of the system.
+
+    ```python
+    x = get_utc_offset()
+    local time == utc time + x
+    ```
+    """
     return round((datetime.datetime.now() -
                   datetime.datetime.utcnow()).total_seconds() / 3600, 1)
