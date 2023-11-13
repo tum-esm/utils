@@ -14,7 +14,7 @@ documentation = "https://tum-esm-utils.netlify.app"
 repository = "https://github.com/tum-esm/utils"
 
 [tool.poetry.dependencies]
-python = "^3.9"
+python = "^3.8"
 filelock = "^3.12.4"
 requests = "^2.31.0"
 psutil = "^5.9.4"
