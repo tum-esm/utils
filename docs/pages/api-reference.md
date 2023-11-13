@@ -405,11 +405,15 @@ will be used as the working directory for the process.
 ##### `terminate_process`
 
 ```python
-def terminate_process(script_path: str) -> list[int]
+def terminate_process(script_path: str,
+                      termination_timeout: Optional[int] = None) -> list[int]
 ```
 
 Terminate all processes that have the given script as their
 entrypoint. Returns the list of terminated PIDs.
+
+If `termination_timeout` is not None, the processes will be
+terminated forcefully after the given timeout (in seconds).
 
 
 ## `tum_esm_utils.shell`
