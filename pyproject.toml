@@ -31,6 +31,7 @@ pydocstyle = "^6.3.0"
 yapf = "^0.40.2"
 mypy = "^1.5.1"
 pydoc-markdown = "^4.8.2"
+setuptools = "^68.2.2"
 
 [tool.pytest.ini_options]
 filterwarnings = ["ignore::pytest.PytestUnhandledThreadExceptionWarning"]
