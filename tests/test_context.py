@@ -1,3 +1,4 @@
+from __future__ import annotations
 import time
 import tum_esm_utils
 

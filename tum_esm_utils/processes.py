@@ -3,6 +3,7 @@
 Implements: `get_process_pids`, `start_background_process`,
 `terminate_process`"""
 
+from __future__ import annotations
 import os
 import time
 import psutil

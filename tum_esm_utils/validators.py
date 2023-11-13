@@ -3,6 +3,7 @@
 Implements: `validate_bool`, `validate_float`, `validate_int`,
 `validate_str`, `validate_list`"""
 
+from __future__ import annotations
 from typing import Any, Callable, Optional, TypeVar
 import os
 import re

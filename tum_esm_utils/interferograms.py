@@ -2,6 +2,7 @@
 
 Implements: `detect_corrupt_ifgs`"""
 
+from __future__ import annotations
 from typing import Literal
 import os
 import re

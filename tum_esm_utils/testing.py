@@ -2,6 +2,7 @@
 
 Implements: `expect_file_contents`, `wait_for_condition`"""
 
+from __future__ import annotations
 from typing import Callable
 import time
 

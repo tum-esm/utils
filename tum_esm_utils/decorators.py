@@ -2,6 +2,7 @@
 
 Implements: `with_filelock`"""
 
+from __future__ import annotations
 from typing import Any, Callable, TypeVar, cast
 import filelock
 import functools

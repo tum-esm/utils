@@ -3,6 +3,7 @@
 Implements: `get_cpu_usage`, `get_memory_usage`, `get_disk_space`,
 `get_system_battery`, `get_last_boot_time`, `get_utc_offset`"""
 
+from __future__ import annotations
 from typing import Any
 import psutil
 import datetime

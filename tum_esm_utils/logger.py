@@ -4,6 +4,7 @@ cases.
 
 Implements: `Logger`"""
 
+from __future__ import annotations
 from typing import Literal, Optional
 import os
 import sys
