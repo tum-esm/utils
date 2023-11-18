@@ -29,11 +29,13 @@ def wait_for_condition(
     is_successful: Callable[[], bool],
     timeout_message: str,
     timeout_seconds: float = 5,
+    check_interval_seconds: float = 0.25,
 ) -> None:
     """Wait for the given condition to be true, or raise a TimeoutError
     if the condition is not met within the given timeout.
 
-    The condition is checked every 0.25 seconds."""
+    `check_interval_seconds` controls, how long to wait inbetween
+    `is_successful()` calls."""
 
     start_time = time.time()
     while True:
@@ -41,4 +43,4 @@ def wait_for_condition(
             break
         if (time.time() - start_time) > timeout_seconds:
             raise TimeoutError(timeout_message)
-        time.sleep(0.25)
+        time.sleep(check_interval_seconds)

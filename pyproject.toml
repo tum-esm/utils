@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "tum_esm_utils"
-version = "1.6.3"
+version = "1.6.4"
 description = "Python utilities by the Professorship of Environmental Sensing and Modeling at the Technical University of Munich"
 authors = ["Moritz Makowski <moritz.makowski@tum.de>"]
 readme = "README.md"

@@ -563,13 +563,15 @@ blocks, and/or none of the forbidden content blocks.
 ```python
 def wait_for_condition(is_successful: Callable[[], bool],
                        timeout_message: str,
-                       timeout_seconds: float = 5) -> None
+                       timeout_seconds: float = 5,
+                       check_interval_seconds: float = 0.25) -> None
 ```
 
 Wait for the given condition to be true, or raise a TimeoutError
 if the condition is not met within the given timeout.
 
-The condition is checked every 0.25 seconds.
+`check_interval_seconds` controls, how long to wait inbetween
+`is_successful()` calls.
 
 
 ## `tum_esm_utils.text`
