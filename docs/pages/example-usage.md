@@ -172,3 +172,70 @@ some elaborate details on what happened
 ...
 ----------------------------------------
 ```
+
+## Strict Path Validation with Pydantic
+
+Pydantic has a lot of field validators (number must be greater equal, etc.),
+but on string fields it does not have a validator "should be existing file/dir
+path". One would have to add a `@field_validator("path field 1", ...)` validator
+function to each model that uses file paths to be validated on model loading.
+
+```python
+from tum_esm_utils.validators import StrictFilePath, StrictDirectoryPath
+
+class Config(pydantic.BaseModel):
+    f: StrictFilePath
+    d: StrictDirectoryPath
+
+# it can be parsed just like a string
+c = Config.model_validate({"f": "pyproject.toml", "d": "packages"})
+alternative_c = Config(f="netlify.toml", d="packages")
+
+# the value now has to be accessed by `<field>.root`
+print(type(c.f))       # <class '__main__.StrictFilePath'>
+print(type(c.f.root))  # <class 'str'>
+
+# but the exported dicts do not show any sign that the
+# respective fields are anything more than a regular string
+print(c.model_dump_json())  # {"f": "netlify.toml", "d": "src"}
+
+# you can turn off the file path validation at validation time if you want
+c = Config.model_validate(
+    {"f": "netlify.tom", "d": "package"},
+    context={"ignore-path-existence": True},
+)
+```
+
+## Get Absolute Paths
+
+The following code snippet only work, when calling the script from the
+same directory:
+
+```python
+with open("./somedir/some_file.txt", "r") as f:
+    print(f.read())
+```
+
+But when you call this script from another directory, it will fail because
+the path is relative to the current working directory.
+
+Converting the relative path to an absolute path will fix this. The directory
+which this path is relative to is always the directory of the script that calls
+this function.
+
+```python
+from tum_esm_utils.files import rel_to_abs_path
+
+with open(rel_to_abs_path("./somedir/some_file.txt"), "r") as f:
+    print(f.read())
+
+# or
+
+with open(rel_to_abs_path("somedir/some_file.txt"), "r") as f:
+    print(f.read())
+
+# or
+
+with open(rel_to_abs_path("somedir", "some_file.txt"), "r") as f:
+    print(f.read())
+```
