@@ -2,7 +2,9 @@ from __future__ import annotations
 import os
 import tempfile
 
-PROJECT_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+PROJECT_DIR = os.path.dirname(
+    os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+)
 INDEX_SRC = os.path.join(PROJECT_DIR, "README.md")
 INDEX_DST = os.path.join(PROJECT_DIR, "docs", "pages", "index.md")
 API_DST = os.path.join(PROJECT_DIR, "docs", "pages", "api-reference.md")
