@@ -1,6 +1,6 @@
 """Context managers for common tasks.
 
-Implements: `ensure_section_duration`"""
+Implements: `ensure_section_duration`, `set_alarm`, `clear_alarm`."""
 
 import signal
 from typing import Any, Generator
@@ -38,3 +38,9 @@ def set_alarm(timeout: int, label: str) -> None:
 
     signal.signal(signal.SIGALRM, alarm_handler)
     signal.alarm(timeout)
+
+
+def clear_alarm() -> None:
+    """Clear the alarm set by `set_alarm`."""
+
+    signal.alarm(0)

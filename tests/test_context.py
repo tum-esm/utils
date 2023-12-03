@@ -27,3 +27,12 @@ def test_set_alarm() -> None:
         assert str(e) == "test took too long (timed out after 1 seconds)"
     else:
         raise AssertionError("TimeoutError not raised")
+
+
+def test_clear_alarm() -> None:
+    def func() -> None:
+        time.sleep(1.5)
+
+    tum_esm_utils.context.set_alarm(1, "test")
+    tum_esm_utils.context.clear_alarm()
+    func()
