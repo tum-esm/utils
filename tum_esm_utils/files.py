@@ -5,6 +5,7 @@ Implements: `load_file`, `dump_file`, `load_json_file`,
 `get_file_checksum`, `load_raw_proffast_output`"""
 
 from __future__ import annotations
+import traceback
 from typing import Any, Optional
 import hashlib
 import json
@@ -138,3 +139,16 @@ def load_raw_proffast_output(
 
     # only keep the selected columns
     return df.select(["utc", *selected_columns])
+
+
+def rel_to_abs_path(*path: str) -> str:
+    """Convert a path relative to the caller's file to an absolute path.
+    
+    Example: Inside file `/home/somedir/somepath/somefile.py`, calling `rel_to_abs_path("..", "config", "config.json")` will return `/home/somedir/config/config.json`."""
+
+    return os.path.normpath(
+        os.path.join(
+            os.path.dirname(traceback.extract_stack()[-2].filename),
+            *path,
+        )
+    )

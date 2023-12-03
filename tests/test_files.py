@@ -1,4 +1,5 @@
 import os
+import shutil
 import polars as pl
 import tum_esm_utils
 
@@ -54,3 +55,23 @@ def test_load_raw_proffast_output() -> None:
     assert isinstance(df, pl.DataFrame)
     assert df.shape == (5, 5)  # 5 rows, 5 columns
     assert df.columns == ["utc", "gnd_p", "gnd_t", "xair", "xch4_s5p"]
+
+
+def test_rel_to_abs_path() -> None:
+    a1 = tum_esm_utils.files.rel_to_abs_path("tests/data/some.csv")
+    a2 = tum_esm_utils.files.rel_to_abs_path("tests", "data", "some.csv")
+    a3 = tum_esm_utils.files.rel_to_abs_path("tests", "data/some.csv")
+    a4 = tum_esm_utils.files.rel_to_abs_path("tests/data", "some.csv")
+    a5 = tum_esm_utils.files.rel_to_abs_path("tests/data/", "some.csv")
+    a6 = tum_esm_utils.files.rel_to_abs_path(
+        "..", "tests", "tests", "data", "some.csv"
+    )
+    a7 = tum_esm_utils.files.rel_to_abs_path(
+        "..", "tests", "tests", "data", "..", "data", "some.csv"
+    )
+    assert a1 == a2 == a3 == a4 == a5 == a6 == a7
+
+    expected = os.path.join(
+        os.path.dirname(os.path.abspath(__file__)), "tests", "data", "some.csv"
+    )
+    assert a1 == expected
