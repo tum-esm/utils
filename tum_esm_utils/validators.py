@@ -9,6 +9,7 @@ import os
 import re
 import datetime
 import warnings
+import pydantic
 
 
 # duplicate method because lazydocs complains when using relative imports
@@ -202,3 +203,31 @@ def validate_list(
         return v
 
     return f
+
+
+class StrictFilePath(pydantic.RootModel[str]):
+    root: str
+
+    @pydantic.field_validator('root')
+    @classmethod
+    def path_should_exist(cls, v: str, info: pydantic.ValidationInfo) -> str:
+        ignore_path_existence = (
+            info.context.get('ignore-path-existence') == True
+        ) if isinstance(info.context, dict) else False
+        if (not ignore_path_existence) and (not os.path.isfile(v)):
+            raise ValueError('File does not exist')
+        return v
+
+
+class StrictDirectoryPath(pydantic.RootModel[str]):
+    root: str
+
+    @pydantic.field_validator('root')
+    @classmethod
+    def path_should_exist(cls, v: str, info: pydantic.ValidationInfo) -> str:
+        ignore_path_existence = (
+            info.context.get('ignore-path-existence') == True
+        ) if isinstance(info.context, dict) else False
+        if (not ignore_path_existence) and (not os.path.isdir(v)):
+            raise ValueError('Directory does not exist')
+        return v
