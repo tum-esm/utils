@@ -22,7 +22,7 @@ poetry add tum_esm_utils
 pip install tum_esm_utils
 ```
 
-Use the API reference at https://tum-esm.github.io/utils.
+Use the API reference at [tum-esm-utils.netlify.app](https://tum-esm-utils.netlify.app).
 
 <br/>
 
