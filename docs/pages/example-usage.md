@@ -239,3 +239,19 @@ with open(rel_to_abs_path("somedir/some_file.txt"), "r") as f:
 with open(rel_to_abs_path("somedir", "some_file.txt"), "r") as f:
     print(f.read())
 ```
+
+## Set alarms to catch infinite loops
+
+The following code will raise a `TimeoutError` if the function `my_function`
+takes longer than 10 seconds to execute:
+
+```python
+from tum_esm_utils.context import set_alarm, clear_alarm
+
+set_alarm(10, "some section name")
+my_function()
+clear_alarm()
+
+# if my_function takes longer than 10 seconds, raises:
+# TimeoutError("some section name took too long (timed out after 10 seconds)")
+```
