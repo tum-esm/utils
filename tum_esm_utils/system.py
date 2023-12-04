@@ -4,6 +4,7 @@ Implements: `get_cpu_usage`, `get_memory_usage`, `get_disk_space`,
 `get_system_battery`, `get_last_boot_time`, `get_utc_offset`"""
 
 from __future__ import annotations
+import time
 from typing import Any
 import psutil
 import datetime
@@ -59,6 +60,6 @@ def get_utc_offset() -> float:
     x = get_utc_offset()
     local time == utc time + x
     ```
-    """
-    return round((datetime.datetime.now() -
-                  datetime.datetime.utcnow()).total_seconds() / 3600, 1)
+    
+    Credits to https://stackoverflow.com/a/35058476/8255842"""
+    return round((-time.timezone) / 3600, 3)

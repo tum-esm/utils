@@ -256,7 +256,11 @@ def rel_to_abs_path(*path: str) -> str
 
 Convert a path relative to the caller's file to an absolute path.
 
-Example: Inside file `/home/somedir/somepath/somefile.py`, calling `rel_to_abs_path("..", "config", "config.json")` will return `/home/somedir/config/config.json`.
+Inside file `/home/somedir/somepath/somefile.py`, calling
+`rel_to_abs_path("..", "config", "config.json")` will
+return `/home/somedir/config/config.json`.
+
+Credits to https://stackoverflow.com/a/59004672/8255842
 
 
 ## `tum_esm_utils.github`
@@ -568,6 +572,8 @@ Returns the UTC offset of the system.
 x = get_utc_offset()
 local time == utc time + x
 ```
+
+Credits to https://stackoverflow.com/a/35058476/8255842
 
 
 ## `tum_esm_utils.testing`
