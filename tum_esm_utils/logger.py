@@ -5,6 +5,7 @@ cases.
 Implements: `Logger`"""
 
 from __future__ import annotations
+import time
 from typing import Literal, Optional
 import os
 import sys
@@ -30,8 +31,7 @@ def _pad_string(
 # duplicate method because lazydocs complains when using relative imports
 def _get_utc_offset() -> float:
     """Returns the UTC offset of the system"""
-    return round((datetime.datetime.now() -
-                  datetime.datetime.utcnow()).total_seconds() / 3600, 1)
+    return round((-time.timezone) / 3600, 3)
 
 
 # The logging module behaved very weird with the setup we have
