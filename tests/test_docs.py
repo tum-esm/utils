@@ -23,7 +23,7 @@ def test_documentation_sync() -> None:
 
     assert (
         os.system(
-            f"python {os.path.join(PROJECT_DIR, 'scripts', 'generate_docs.py')}"
+            f"python {os.path.join(PROJECT_DIR, 'docs', 'scripts', 'sync-docs.py')}"
         ) == 0
     )
 

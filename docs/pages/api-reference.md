@@ -13,7 +13,7 @@ PyPI: https://pypi.org/project/tum-esm-utils
 
 Context managers for common tasks.
 
-Implements: `ensure_section_duration`
+Implements: `ensure_section_duration`, `set_alarm`, `clear_alarm`.
 
 
 ##### `ensure_section_duration`
@@ -31,6 +31,26 @@ Usage example - do one measurement every 6 seconds:
 with ensure_section_duration(6):
     do_measurement()
 ```
+
+
+##### `set_alarm`
+
+```python
+def set_alarm(timeout: int, label: str) -> None
+```
+
+Set an alarm that will raise a `TimeoutError` after
+`timeout` seconds. The message will be formatted as
+`{label} took too long (timed out after {timeout} seconds)`.
+
+
+##### `clear_alarm`
+
+```python
+def clear_alarm() -> None
+```
+
+Clear the alarm set by `set_alarm`.
 
 
 ## `tum_esm_utils.datastructures`
@@ -226,6 +246,17 @@ utc                     gnd_p    gnd_t    app_sza   ...
 ...                     ...      ...      ...       ...
 [1204 rows x 8 columns]
 ```
+
+
+##### `rel_to_abs_path`
+
+```python
+def rel_to_abs_path(*path: str) -> str
+```
+
+Convert a path relative to the caller's file to an absolute path.
+
+Example: Inside file `/home/somedir/somepath/somefile.py`, calling `rel_to_abs_path("..", "config", "config.json")` will return `/home/somedir/config/config.json`.
 
 
 ## `tum_esm_utils.github`
@@ -662,5 +693,60 @@ content with its value.
 Implements validator functions for use with pydantic models.
 
 Implements: `validate_bool`, `validate_float`, `validate_int`,
-`validate_str`, `validate_list`
+`validate_str`, `validate_list`, `StrictFilePath`,
+`StrictDirectoryPath`.
+
+
+## `StrictFilePath` Objects
+
+```python
+class StrictFilePath(pydantic.RootModel[str])
+```
+
+A pydantic model that validates a file path.
+
+Example usage:
+
+```python
+class MyModel(pyndatic.BaseModel):
+    path: StrictFilePath
+
+m = MyModel(path='/path/to/file') # validates that the file exists
+```
+
+The validation can be ignored by setting the context variable:
+
+```python
+m = MyModel.model_validate(
+    {"path": "somenonexistingpath"},
+    context={"ignore-path-existence": True},
+) # does not raise an error
+```
+
+
+## `StrictDirectoryPath` Objects
+
+```python
+class StrictDirectoryPath(pydantic.RootModel[str])
+```
+
+A pydantic model that validates a directory path.
+
+Example usage:
+
+```python
+class MyModel(pyndatic.BaseModel):
+    path: StrictDirectoryPath
+
+m = MyModel(path='/path/to/directory') # validates that the directory exists
+```
+
+The validation can be ignored by setting the context variable:
+
+```python
+m = MyModel.model_validate(
+    {"path": "somenonexistingpath"},
+    context={"ignore-path-existence": True},
+) # does not raise an error
+```
 
