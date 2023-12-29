@@ -694,6 +694,56 @@ For every key in replacements, replaces `%key$` in the
 content with its value.
 
 
+## `tum_esm_utils.timing`
+
+
+##### `date_range`
+
+```python
+def date_range(from_date: datetime.date,
+               to_date: datetime.date) -> list[datetime.date]
+```
+
+Returns a list of dates between from_date and to_date (inclusive).
+
+
+##### `ensure_section_duration`
+
+```python
+@contextlib.contextmanager
+def ensure_section_duration(duration: float) -> Generator[None, None, None]
+```
+
+Make sure that the duration of the section is at least the given duration.
+
+Usage example - do one measurement every 6 seconds:
+
+```python
+with ensure_section_duration(6):
+    do_measurement()
+```
+
+
+##### `set_alarm`
+
+```python
+def set_alarm(timeout: int, label: str) -> None
+```
+
+Set an alarm that will raise a `TimeoutError` after
+`timeout` seconds. The message will be formatted as
+`{label} took too long (timed out after {timeout} seconds)`.
+
+
+##### `clear_alarm`
+
+```python
+def clear_alarm() -> None
+```
+
+Clear the alarm set by `set_alarm`.
+
+
 ## `tum_esm_utils.validators`
 
 Implements validator functions for use with pydantic models.
