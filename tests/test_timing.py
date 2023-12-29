@@ -8,7 +8,7 @@ DURATION = 0.75
 def test_ensure_section_duration() -> None:
     times: list[float] = []
     for _ in range(3):
-        with tum_esm_utils.context.ensure_section_duration(DURATION):
+        with tum_esm_utils.timing.ensure_section_duration(DURATION):
             times.append(time.time())
 
     assert len(times) == 3
@@ -20,7 +20,7 @@ def test_set_alarm() -> None:
     def func() -> None:
         time.sleep(1.5)
 
-    tum_esm_utils.context.set_alarm(1, "test")
+    tum_esm_utils.timing.set_alarm(1, "test")
     try:
         func()
     except TimeoutError as e:
@@ -33,6 +33,6 @@ def test_clear_alarm() -> None:
     def func() -> None:
         time.sleep(1.5)
 
-    tum_esm_utils.context.set_alarm(1, "test")
-    tum_esm_utils.context.clear_alarm()
+    tum_esm_utils.timing.set_alarm(1, "test")
+    tum_esm_utils.timing.clear_alarm()
     func()
