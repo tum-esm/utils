@@ -19,5 +19,6 @@ from . import (
     system,
     testing,
     text,
+    timing,
     validators,
 )
