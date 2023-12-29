@@ -11,6 +11,7 @@ import datetime
 import random
 import string
 import warnings
+from . import timing
 
 
 def get_random_string(length: int, forbidden: list[str] = []) -> str:
@@ -60,15 +61,14 @@ def date_range(from_date_string: str, to_date_string: str) -> list[str]:
         from_date_string
     ), "from_date_string is not a valid date"
     assert is_date_string(to_date_string), "to_date_string is not a valid date"
+
+    from_date = datetime.datetime.strptime(from_date_string, "%Y%m%d").date()
+    to_date = datetime.datetime.strptime(to_date_string, "%Y%m%d").date()
     assert (
-        from_date_string <= to_date_string
+        from_date <= to_date
     ), "from_date_string cannot be after to_date_string"
 
-    output = []
-    for date in range(int(from_date_string), int(to_date_string) + 1):
-        if is_date_string(str(date)):
-            output.append(str(date))
-    return output
+    return [d.strftime("%Y%m%d") for d in timing.date_range(from_date, to_date)]
 
 
 def is_datetime_string(datetime_string: str) -> bool:
