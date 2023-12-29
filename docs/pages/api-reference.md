@@ -701,7 +701,7 @@ content with its value.
 
 ```python
 def date_range(from_date: datetime.date,
-               to_date: datetime.date) -> list[datetime.date]
+               to_date: datetime.date) -> List[datetime.date]
 ```
 
 Returns a list of dates between from_date and to_date (inclusive).

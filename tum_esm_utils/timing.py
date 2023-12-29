@@ -2,13 +2,13 @@ import contextlib
 import datetime
 import signal
 import time
-from typing import Any, Generator
+from typing import Any, Generator, List
 
 
 def date_range(
     from_date: datetime.date,
     to_date: datetime.date,
-) -> list[datetime.date]:
+) -> List[datetime.date]:
     """Returns a list of dates between from_date and to_date (inclusive)."""
     delta = to_date - from_date
     assert delta.days >= 0, "from_date must be before to_date"
