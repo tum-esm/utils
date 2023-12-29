@@ -2,10 +2,10 @@
 
 Implements: `ensure_section_duration`, `set_alarm`, `clear_alarm`."""
 
-import signal
-from typing import Any, Generator
+from typing import Generator
 import contextlib
-import time
+import warnings
+from . import timing
 
 
 @contextlib.contextmanager
@@ -20,27 +20,34 @@ def ensure_section_duration(duration: float) -> Generator[None, None, None]:
     ```
     """
 
-    start_time = time.time()
-    yield
-    remaining_loop_time = start_time + duration - time.time()
-    if remaining_loop_time > 0:
-        time.sleep(remaining_loop_time)
+    warnings.warn(
+        "`context.ensure_section_duration` is deprecated, " +
+        "use `timing.ensure_section_duration` instead",
+        DeprecationWarning,
+    )
+    with timing.ensure_section_duration(duration):
+        yield
 
 
 def set_alarm(timeout: int, label: str) -> None:
     """Set an alarm that will raise a `TimeoutError` after
     `timeout` seconds. The message will be formatted as
     `{label} took too long (timed out after {timeout} seconds)`."""
-    def alarm_handler(*args: Any) -> None:
-        raise TimeoutError(
-            f"{label} took too long (timed out after {timeout} seconds)"
-        )
 
-    signal.signal(signal.SIGALRM, alarm_handler)
-    signal.alarm(timeout)
+    warnings.warn(
+        "`context.set_alarm` is deprecated, " +
+        "use `timing.set_alarm` instead",
+        DeprecationWarning,
+    )
+    timing.set_alarm(timeout, label)
 
 
 def clear_alarm() -> None:
     """Clear the alarm set by `set_alarm`."""
 
-    signal.alarm(0)
+    warnings.warn(
+        "`context.clear_alarm` is deprecated, " +
+        "use `timing.clear_alarm` instead",
+        DeprecationWarning,
+    )
+    timing.clear_alarm()
