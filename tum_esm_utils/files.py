@@ -2,7 +2,7 @@
 
 Implements: `load_file`, `dump_file`, `load_json_file`,
 `dump_json_file`, `get_parent_dir_path`, `get_dir_checksum`,
-`get_file_checksum`, `load_raw_proffast_output`"""
+`get_file_checksum`, `load_raw_proffast_output`, `rel_to_abs_path`"""
 
 from __future__ import annotations
 import traceback

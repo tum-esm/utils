@@ -1,3 +1,13 @@
+"""Functions used for timing or time calculations.
+
+Implements: `date_range`, `ensure_section_duration`, `set_alarm`,
+`clear_alarm`.
+
+Some of the functions in here are duplicate as in the `context`
+module because they fit better here. The functions in `context`
+have been deprecated and will be removed in the next breaking
+release."""
+
 import contextlib
 import datetime
 import signal

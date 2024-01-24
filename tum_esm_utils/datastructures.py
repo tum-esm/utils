@@ -1,6 +1,6 @@
 """Datastructures not in the standard library.
 
-Implements: `RingList`"""
+Implements: `RingList`, `merge_dicts`"""
 
 from __future__ import annotations
 from typing import Any
