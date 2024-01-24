@@ -17,7 +17,7 @@ Feel free to use it in any other project ✨
 Install the Python library with:
 
 ```bash
-poetry add tum_esm_utils
+pdm add tum_esm_utils
 # or
 pip install tum_esm_utils
 ```
@@ -31,8 +31,8 @@ Use the API reference at [tum-esm-utils.netlify.app](https://tum-esm-utils.netli
 Publish the Package to PyPI:
 
 ```bash
-poetry build
-poetry publish
+pdm build
+pdm publish
 ```
 
 Open documentation page in dev mode

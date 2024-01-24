@@ -1,5 +1,6 @@
 import os
 import shutil
+import sys
 
 PROJECT_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -17,5 +18,5 @@ def test_static_types() -> None:
     for path in ["tests/", "tum_esm_utils/"]:
         print(f"Checking {path} ...")
         assert os.system(
-            f"cd {PROJECT_DIR} && .venv/bin/python -m mypy {path}"
+            f"cd {PROJECT_DIR} && {sys.executable} -m mypy {path}"
         ) == 0
