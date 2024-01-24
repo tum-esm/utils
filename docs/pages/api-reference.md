@@ -57,7 +57,7 @@ Clear the alarm set by `set_alarm`.
 
 Datastructures not in the standard library.
 
-Implements: `RingList`
+Implements: `RingList`, `merge_dicts`
 
 
 ## `RingList` Objects
@@ -177,7 +177,7 @@ File-related utility functions.
 
 Implements: `load_file`, `dump_file`, `load_json_file`,
 `dump_json_file`, `get_parent_dir_path`, `get_dir_checksum`,
-`get_file_checksum`, `load_raw_proffast_output`
+`get_file_checksum`, `load_raw_proffast_output`, `rel_to_abs_path`
 
 
 ##### `get_parent_dir_path`
@@ -695,6 +695,16 @@ content with its value.
 
 
 ## `tum_esm_utils.timing`
+
+Functions used for timing or time calculations.
+
+Implements: `date_range`, `ensure_section_duration`, `set_alarm`,
+`clear_alarm`.
+
+Some of the functions in here are duplicate as in the `context`
+module because they fit better here. The functions in `context`
+have been deprecated and will be removed in the next breaking
+release.
 
 
 ##### `date_range`

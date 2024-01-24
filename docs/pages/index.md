@@ -35,8 +35,10 @@ poetry build
 poetry publish
 ```
 
-Serve documentation page:
+Open documentation page in dev mode
 
 ```bash
-docsify serve ./docs
+cd docs
+npm install
+npm run dev
 ```
