@@ -3,6 +3,7 @@
 Implements: `detect_corrupt_ifgs`"""
 
 from __future__ import annotations
+import time
 from typing import Literal
 import os
 import re
@@ -12,10 +13,6 @@ import tum_esm_utils
 
 _PARSER_DIR = os.path.join(
     os.path.dirname(os.path.abspath(__file__)), "ifg_parser"
-)
-_PARSER_COMPILE_FILELOCK = filelock.FileLock(
-    os.path.join(_PARSER_DIR, "ifg_parser.compile.lock"),
-    timeout=30,
 )
 
 
@@ -68,8 +65,16 @@ def detect_corrupt_ifgs(
     there are corrupt interferograms in the input."""
 
     # compiling fortran code
-    with _PARSER_COMPILE_FILELOCK:
+    with filelock.FileLock(
+        os.path.join(_PARSER_DIR, "ifg_parser.compile.lock"),
+        timeout=30,
+    ):
+        # these sleeps are sadly necessary to eliminate race conditions between
+        # two parallel processes. I don't knwo why, but now it works. Don't spend
+        # more hours here.
+        time.sleep(1)
         _compile_fortran_code(silent=silent, fortran_compiler=fortran_compiler)
+        time.sleep(1)
 
     # generate input file
     ifgs = [f"{ifg_directory}/{x}" for x in os.listdir(ifg_directory)]
