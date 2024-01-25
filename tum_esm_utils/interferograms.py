@@ -13,6 +13,10 @@ import tum_esm_utils
 _PARSER_DIR = os.path.join(
     os.path.dirname(os.path.abspath(__file__)), "ifg_parser"
 )
+_PARSER_COMPILE_FILELOCK = filelock.FileLock(
+    os.path.join(_PARSER_DIR, "ifg_parser.compile.lock"),
+    timeout=30,
+)
 
 
 def _compile_fortran_code(
@@ -64,7 +68,8 @@ def detect_corrupt_ifgs(
     there are corrupt interferograms in the input."""
 
     # compiling fortran code
-    _compile_fortran_code(silent=silent, fortran_compiler=fortran_compiler)
+    with _PARSER_COMPILE_FILELOCK:
+        _compile_fortran_code(silent=silent, fortran_compiler=fortran_compiler)
 
     # generate input file
     ifgs = [f"{ifg_directory}/{x}" for x in os.listdir(ifg_directory)]
