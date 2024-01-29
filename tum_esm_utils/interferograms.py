@@ -19,8 +19,11 @@ _PARSER_DIR = os.path.join(
 def _compile_fortran_code(
     silent: bool = True,
     fortran_compiler: Literal["gfortran", "gfortran-9"] = "gfortran",
+    force_recompile: bool = False,
 ) -> None:
-    if not os.path.isfile(os.path.join(_PARSER_DIR, "ifg_parser")):
+    if force_recompile or (
+        not os.path.isfile(os.path.join(_PARSER_DIR, "ifg_parser"))
+    ):
         if not silent:
             print("compiling fortran code")
 
@@ -53,6 +56,7 @@ def detect_corrupt_ifgs(
     ifg_directory: str,
     silent: bool = True,
     fortran_compiler: Literal["gfortran", "gfortran-9"] = "gfortran",
+    force_recompile: bool = False,
 ) -> dict[str, list[str]]:
     """Returns dict[filename, list[error_messages]] for all
     corrupt interferograms in the given directory.
@@ -73,7 +77,11 @@ def detect_corrupt_ifgs(
         # two parallel processes. I don't knwo why, but now it works. Don't spend
         # more hours here.
         time.sleep(1)
-        _compile_fortran_code(silent=silent, fortran_compiler=fortran_compiler)
+        _compile_fortran_code(
+            silent=silent,
+            fortran_compiler=fortran_compiler,
+            force_recompile=force_recompile
+        )
         time.sleep(1)
 
     # generate input file
