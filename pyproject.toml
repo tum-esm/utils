@@ -67,4 +67,10 @@ spaces_around_subscript_colon = true
 [tool.pdm]
 distribution = true
 build.includes = ["tum_esm_utils"]
-build.excludes = ["tests"]
+build.excludes = [
+    "tests",
+    "tum_esm_utils/ifg_parser/*.mod",
+    "tum_esm_utils/ifg_parser/*.lock",
+    "tum_esm_utils/ifg_parser/*.txt",
+    "tum_esm_utils/ifg_parser/ifg_parser",
+]
