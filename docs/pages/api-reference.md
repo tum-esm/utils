@@ -293,11 +293,11 @@ Implements: `detect_corrupt_ifgs`
 ##### `detect_corrupt_ifgs`
 
 ```python
-def detect_corrupt_ifgs(
-    ifg_directory: str,
-    silent: bool = True,
-    fortran_compiler: Literal["gfortran", "gfortran-9"] = "gfortran"
-) -> dict[str, list[str]]
+def detect_corrupt_ifgs(ifg_directory: str,
+                        silent: bool = True,
+                        fortran_compiler: Literal["gfortran",
+                                                  "gfortran-9"] = "gfortran",
+                        force_recompile: bool = False) -> dict[str, list[str]]
 ```
 
 Returns dict[filename, list[error_messages]] for all
@@ -690,7 +690,7 @@ any time before 20220103 00:00 (start of day)
 def insert_replacements(content: str, replacements: dict[str, str]) -> str
 ```
 
-For every key in replacements, replaces `%key$` in the
+For every key in replacements, replaces `%key%` in the
 content with its value.
 
 
