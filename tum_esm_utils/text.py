@@ -111,7 +111,7 @@ def date_is_too_recent(
 
 
 def insert_replacements(content: str, replacements: dict[str, str]) -> str:
-    """For every key in replacements, replaces `%key$` in the
+    """For every key in replacements, replaces `%key%` in the
     content with its value."""
 
     for key, value in replacements.items():
