@@ -83,3 +83,22 @@ def test_date_range() -> None:
         datetime.date(2022, 1, 2),
         datetime.date(2022, 1, 3),
     ]
+
+
+def test_parse_timezone_string() -> None:
+    assert tum_esm_utils.timing.parse_timezone_string(
+        "CET", datetime.datetime(2000, 1, 1)
+    ) == 1
+    assert tum_esm_utils.timing.parse_timezone_string(
+        "CET+3", datetime.datetime(2000, 1, 1)
+    ) == 4
+    assert tum_esm_utils.timing.parse_timezone_string("GMT+2") == 2
+    assert tum_esm_utils.timing.parse_timezone_string("UTC-2") == -2
+    assert tum_esm_utils.timing.parse_timezone_string("UTC+2.0") == 2
+    assert tum_esm_utils.timing.parse_timezone_string("UTC-02:00") == -2
+    assert tum_esm_utils.timing.parse_timezone_string("UTC+05:30") == 5.5
+    assert tum_esm_utils.timing.parse_timezone_string("UTC-05:30") == -5.5
+    assert tum_esm_utils.timing.parse_timezone_string("UTC+5.5") == 5.5
+    assert tum_esm_utils.timing.parse_timezone_string("UTC-5.5") == -5.5
+    assert tum_esm_utils.timing.parse_timezone_string("UTC+05.5") == 5.5
+    assert tum_esm_utils.timing.parse_timezone_string("UTC-05.5") == -5.5

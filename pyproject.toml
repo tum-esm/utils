@@ -7,8 +7,9 @@ dependencies = [
     "filelock>=3.13.1",
     "requests>=2.31.0",
     "psutil>=5.9.8",
-    "pydantic>=2.5.3",
-    "polars>=0.20.5",
+    "pydantic>=2.6.1",
+    "polars>=0.20.7",
+    "pytz>=2024.1",
 ]
 requires-python = ">=3.8,<4.0"
 readme = "README.md"
@@ -37,13 +38,14 @@ keywords = [
 
 [project.optional-dependencies]
 dev = [
-    "pytest>=7.4.4",
-    "types-psutil>=5.9.5.20240106",
-    "types-requests>=2.31.0.20240106",
+    "pytest>=8.0.0",
+    "types-psutil>=5.9.5.20240205",
+    "types-requests>=2.31.0.20240125",
     "pydocstyle>=6.3.0",
     "yapf>=0.40.2",
     "mypy>=1.8.0",
     "pydoc-markdown>=4.8.2",
+    "types-pytz>=2024.1.0.20240203",
 ]
 [build-system]
 requires = ["pdm-backend"]

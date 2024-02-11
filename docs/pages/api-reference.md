@@ -754,6 +754,33 @@ def clear_alarm() -> None
 Clear the alarm set by `set_alarm`.
 
 
+##### `parse_timezone_string`
+
+```python
+def parse_timezone_string(timezone_string: str,
+                          dt: Optional[datetime.datetime] = None) -> float
+```
+
+Parse a timezone string and return the offset in hours.
+
+Why does this function exist? The `strptime` function cannot parse strings
+other than "±HHMM". This function can also parse strings in the format "±H"
+("+2", "-3", "+5.5"), and "±HH:MM".
+
+**Examples**:
+
+  
+```python
+parse_timezone_string("GMT")        # returns 0
+parse_timezone_string("GMT+2")      # returns 2
+parse_timezone_string("UTC+2.0")    # returns 2
+parse_timezone_string("UTC-02:00")  # returns -2
+```
+  
+  You are required to pass a datetime object in can the utc offset for the
+  passed timezone is not constant - e.g. for "Europe/Berlin".
+
+
 ## `tum_esm_utils.validators`
 
 Implements validator functions for use with pydantic models.
