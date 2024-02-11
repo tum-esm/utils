@@ -1,5 +1,5 @@
 import os
-import shutil
+import tempfile
 import polars as pl
 import tum_esm_utils
 
@@ -75,3 +75,63 @@ def test_rel_to_abs_path() -> None:
         os.path.dirname(os.path.abspath(__file__)), "tests", "data", "some.csv"
     )
     assert a1 == expected
+
+
+def test_read_last_n_lines() -> None:
+    with tempfile.TemporaryDirectory() as d:
+        filepath = os.path.join(d, "file.txt")
+        with open(filepath, "w") as f:
+            for i in range(10):
+                f.write(f"{i} {'c'*(i+1)}\n")
+
+        r1 = tum_esm_utils.files.read_last_n_lines(
+            filepath,
+            3,
+            ignore_trailing_whitespace=True,
+        )
+        print(f"r1 = {r1}")
+        assert r1 == [
+            "7 cccccccc",
+            "8 ccccccccc",
+            "9 cccccccccc",
+        ]
+
+        r2 = tum_esm_utils.files.read_last_n_lines(
+            filepath,
+            3,
+            ignore_trailing_whitespace=False,
+        )
+        print(f"r2 = {r2}")
+        assert r2 == [
+            "8 ccccccccc",
+            "9 cccccccccc",
+            "",
+        ]
+
+        with open(filepath, "w") as f:
+            for i in range(3):
+                f.write(f"{i} {'c'*(i+1)}\n")
+
+        r3 = tum_esm_utils.files.read_last_n_lines(
+            filepath,
+            2,
+            ignore_trailing_whitespace=True,
+        )
+        print(f"r3 = {r3}")
+        assert r3 == ["1 cc", "2 ccc"]
+
+        r4 = tum_esm_utils.files.read_last_n_lines(
+            filepath,
+            3,
+            ignore_trailing_whitespace=True,
+        )
+        print(f"r4 = {r4}")
+        assert r4 == ["0 c", "1 cc", "2 ccc"]
+
+        r5 = tum_esm_utils.files.read_last_n_lines(
+            filepath,
+            4,
+            ignore_trailing_whitespace=True,
+        )
+        print(f"r5 = {r5}")
+        assert r5 == ["0 c", "1 cc", "2 ccc"]

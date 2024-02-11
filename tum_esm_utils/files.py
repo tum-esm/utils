@@ -6,7 +6,7 @@ Implements: `load_file`, `dump_file`, `load_json_file`,
 
 from __future__ import annotations
 import traceback
-from typing import Any, Optional
+from typing import Any, List, Optional
 import hashlib
 import json
 import os
@@ -156,3 +156,62 @@ def rel_to_abs_path(*path: str) -> str:
             *path,
         )
     )
+
+
+def read_last_n_lines(
+    file_path: str,
+    n: int,
+    ignore_trailing_whitespace: bool = False,
+) -> List[str]:
+    """Read the last `n` lines of a file.
+
+    The function returns less than `n` lines if the file has less than `n` lines.
+    The last element in the list is the last line of the file.
+    
+    This function uses seeking in order not to read the full file. The simple
+    approach of reading the last n lines would be:
+
+    ```python
+    # read the last 10 lines
+    with open(path, "r") as f:
+        return f.read().split("\n")[:-10]
+    ```
+
+    However, this would read the full file and if we only need to read 10 lines
+    out of a 2GB file, this would be a big waste of resources.
+    
+    The `ignore_trailing_whitespace` option to crop off trailing whitespace, i.e.
+    only return the last `n` lines that are not empty or only contain whitespace."""
+
+    with open(file_path, "rb") as f:
+        f.seek(-1, os.SEEK_END)
+
+        if ignore_trailing_whitespace:
+            while f.read(1) in [b"\n", b" ", b"\t"]:
+                try:
+                    f.seek(-2, os.SEEK_CUR)
+                except OSError:
+                    # reached the beginning of the file
+                    return [""]
+
+            f.seek(-1, os.SEEK_CUR)
+            # now the cursor is right before the last
+            # character that is not a newline or a space
+
+        last_characters: bytes = b""
+        new_line_chars_seen: int = 0
+
+        while True:
+            try:
+                new_character = f.read(1)
+                if new_character == b"\n":
+                    new_line_chars_seen += 1
+                if new_line_chars_seen == n:
+                    break
+                last_characters += new_character
+                f.seek(-2, os.SEEK_CUR)
+            except OSError:
+                # reached the beginning of the file
+                break
+
+    return last_characters.decode()[::-1].split("\n")

@@ -263,6 +263,36 @@ return `/home/somedir/config/config.json`.
 Credits to https://stackoverflow.com/a/59004672/8255842
 
 
+##### `read_last_n_lines`
+
+```python
+def read_last_n_lines(file_path: str,
+                      n: int,
+                      ignore_trailing_whitespace: bool = False) -> List[str]
+```
+
+Read the last `n` lines of a file.
+
+    The function returns less than `n` lines if the file has less than `n` lines.
+    The last element in the list is the last line of the file.
+
+    This function uses seeking in order not to read the full file. The simple
+    approach of reading the last n lines would be:
+
+    ```python
+    # read the last 10 lines
+    with open(path, "r") as f:
+        return f.read().split("
+")[:-10]
+    ```
+
+    However, this would read the full file and if we only need to read 10 lines
+    out of a 2GB file, this would be a big waste of resources.
+
+    The `ignore_trailing_whitespace` option to crop off trailing whitespace, i.e.
+    only return the last `n` lines that are not empty or only contain whitespace.
+
+
 ## `tum_esm_utils.github`
 
 Functions for interacting with GitHub.
