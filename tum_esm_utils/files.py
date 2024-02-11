@@ -169,12 +169,11 @@ def read_last_n_lines(
     The last element in the list is the last line of the file.
     
     This function uses seeking in order not to read the full file. The simple
-    approach of reading the last n lines would be:
+    approach of reading the last 10 lines would be:
 
     ```python
-    # read the last 10 lines
     with open(path, "r") as f:
-        return f.read().split("\n")[:-10]
+        return f.read().split("\\n")[:-10]
     ```
 
     However, this would read the full file and if we only need to read 10 lines
