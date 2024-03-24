@@ -11,6 +11,7 @@ import os
 import sys
 import traceback
 import datetime
+from typing_extensions import deprecated
 import filelock
 
 
@@ -204,6 +205,9 @@ class Logger:
                 if (now - Logger.last_archive_time).total_seconds() > 600:
                     self._archive()
 
+    @deprecated(
+        "Will be removed in the next breaking release. The logger will write into the archive by default and optionally keep a separate log file containing the latest x minutes. This makes the archive parsing logic redundant."
+    )
     def _archive(self) -> None:
         """moves old log lines in "logs/current-logs.log" into an
         archive file "logs/archive/YYYYMMDD.log". log lines from

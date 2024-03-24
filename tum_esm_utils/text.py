@@ -10,6 +10,7 @@ import re
 import datetime
 import random
 import string
+from typing_extensions import deprecated
 import warnings
 from . import timing
 
@@ -47,6 +48,7 @@ def is_date_string(date_string: str) -> bool:
         return False
 
 
+@deprecated("Use `timing.date_range` instead")
 def date_range(from_date_string: str, to_date_string: str) -> list[str]:
     """Returns a list of dates between `from_date_string` and `to_date_string`.
 
@@ -71,6 +73,7 @@ def date_range(from_date_string: str, to_date_string: str) -> list[str]:
     return [d.strftime("%Y%m%d") for d in timing.date_range(from_date, to_date)]
 
 
+@deprecated("Will be removed in the next breaking release")
 def is_datetime_string(datetime_string: str) -> bool:
     """Returns `True` if string is in a valid `YYYYMMDD HH:mm:ss` format"""
 
@@ -98,6 +101,7 @@ def is_rfc3339_datetime_string(rfc3339_datetime_string: str) -> bool:
         return False
 
 
+@deprecated("Will be removed in the next breaking release")
 def date_is_too_recent(
     date_string: str,
     min_days_delay: int = 1,

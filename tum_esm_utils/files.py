@@ -2,11 +2,15 @@
 
 Implements: `load_file`, `dump_file`, `load_json_file`,
 `dump_json_file`, `get_parent_dir_path`, `get_dir_checksum`,
-`get_file_checksum`, `load_raw_proffast_output`, `rel_to_abs_path`"""
+`get_file_checksum`, `load_raw_proffast_output`, `rel_to_abs_path`.
+
+`load_raw_proffast_output` is deprecated and will be removed in the
+next breaking release."""
 
 from __future__ import annotations
-import traceback
 from typing import Any, List, Optional
+from typing_extensions import deprecated
+import traceback
 import hashlib
 import json
 import os
@@ -66,6 +70,9 @@ def get_file_checksum(path: str) -> str:
         return hashlib.md5(f.read()).hexdigest()
 
 
+@deprecated(
+    "Will be removed in the next breaking release. We will move this functionality into a separate library. The reason for this is that this function is the reason why the utils package requires `polars` which is still at release `0.X`. This results in frequent version conflicts."
+)
 def load_raw_proffast_output(
     path: str,
     selected_columns: list[str] = [

@@ -15,10 +15,16 @@ Context managers for common tasks.
 
 Implements: `ensure_section_duration`, `set_alarm`, `clear_alarm`.
 
+All functions in this module are deprecated and will be removed in the
+next breaking release. Use the functions from the `timing` module instead.
+
 
 ##### `ensure_section_duration`
 
 ```python
+@deprecated(
+    "Will be removed in the next breaking release. Use `timing.ensure_section_duration` instead."
+)
 @contextlib.contextmanager
 def ensure_section_duration(duration: float) -> Generator[None, None, None]
 ```
@@ -36,6 +42,9 @@ with ensure_section_duration(6):
 ##### `set_alarm`
 
 ```python
+@deprecated(
+    "Will be removed in the next breaking release. Use `timing.set_alarm` instead."
+)
 def set_alarm(timeout: int, label: str) -> None
 ```
 
@@ -47,6 +56,9 @@ Set an alarm that will raise a `TimeoutError` after
 ##### `clear_alarm`
 
 ```python
+@deprecated(
+    "Will be removed in the next breaking release. Use `timing.clear_alarm` instead."
+)
 def clear_alarm() -> None
 ```
 
@@ -159,7 +171,11 @@ should not interfere. A file "*.lock" will be created and the
 content of this file will make the wrapped function possibly
 wait until other programs are done using it.
 
-See https://en.wikipedia.org/wiki/Semaphore_(programming)
+See https://en.wikipedia.org/wiki/Semaphore_(programming).
+
+
+Credits for the typing of higher level decorators goes to
+https://github.com/python/mypy/issues/1551#issuecomment-253978622.
 
 
 ##### `__init__`
@@ -177,7 +193,10 @@ File-related utility functions.
 
 Implements: `load_file`, `dump_file`, `load_json_file`,
 `dump_json_file`, `get_parent_dir_path`, `get_dir_checksum`,
-`get_file_checksum`, `load_raw_proffast_output`, `rel_to_abs_path`
+`get_file_checksum`, `load_raw_proffast_output`, `rel_to_abs_path`.
+
+`load_raw_proffast_output` is deprecated and will be removed in the
+next breaking release.
 
 
 ##### `get_parent_dir_path`
@@ -216,6 +235,9 @@ not spawn a new process.
 ##### `load_raw_proffast_output`
 
 ```python
+@deprecated(
+    "Will be removed in the next breaking release. We will move this functionality into a separate library. The reason for this is that this function is the reason why the utils package requires `polars` which is still at release `0.X`. This results in frequent version conflicts."
+)
 def load_raw_proffast_output(
     path: str,
     selected_columns: list[str] = [
@@ -309,6 +331,18 @@ def request_github_file(github_repository: str,
 Sends a request and returns the content of the response,
 as a string. Raises an HTTPError if the response status code
 is not 200.
+
+**Arguments**:
+
+- `github_repository` - In the format "owner/repo".
+- `filepath` - The path to the file in the repository.
+- `access_token` - The GitHub access token. Only required if
+  the repo is private.
+  
+
+**Returns**:
+
+  The content of the file as a string.
 
 
 ## `tum_esm_utils.interferograms`
@@ -670,6 +704,7 @@ Returns `True` if string is in a valid `YYYYMMDD` format
 ##### `date_range`
 
 ```python
+@deprecated("Use `timing.date_range` instead")
 def date_range(from_date_string: str, to_date_string: str) -> list[str]
 ```
 
@@ -686,6 +721,7 @@ date_range("20210101", "20210103") == ["20210101", "20210102", "20210103"]
 ##### `is_datetime_string`
 
 ```python
+@deprecated("Will be removed in the next breaking release")
 def is_datetime_string(datetime_string: str) -> bool
 ```
 
@@ -705,6 +741,7 @@ format. Caution: The appendix of `+00:00` is required for UTC!
 ##### `date_is_too_recent`
 
 ```python
+@deprecated("Will be removed in the next breaking release")
 def date_is_too_recent(date_string: str, min_days_delay: int = 1) -> bool
 ```
 
@@ -805,7 +842,7 @@ parse_timezone_string("UTC+2.0")    # returns 2
 parse_timezone_string("UTC-02:00")  # returns -2
 ```
   
-  You are required to pass a datetime object in can the utc offset for the
+  You are required to pass a datetime object in case the utc offset for the
   passed timezone is not constant - e.g. for "Europe/Berlin".
 
 
@@ -813,9 +850,11 @@ parse_timezone_string("UTC-02:00")  # returns -2
 
 Implements validator functions for use with pydantic models.
 
-Implements: `validate_bool`, `validate_float`, `validate_int`,
-`validate_str`, `validate_list`, `StrictFilePath`,
-`StrictDirectoryPath`.
+Implements: `StrictFilePath`, `StrictDirectoryPath`.
+
+Also implements `validate_bool`, `validate_float`, `validate_int`,
+`validate_str`, `validate_list` but these are deprecated and will
+be removed in the next breaking release.
 
 
 ## `StrictFilePath` Objects

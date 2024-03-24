@@ -1,14 +1,17 @@
 """Implements validator functions for use with pydantic models.
 
-Implements: `validate_bool`, `validate_float`, `validate_int`,
-`validate_str`, `validate_list`, `StrictFilePath`,
-`StrictDirectoryPath`."""
+Implements: `StrictFilePath`, `StrictDirectoryPath`.
+
+Also implements `validate_bool`, `validate_float`, `validate_int`,
+`validate_str`, `validate_list` but these are deprecated and will
+be removed in the next breaking release."""
 
 from __future__ import annotations
 from typing import Any, Callable, Optional, TypeVar
 import os
 import re
 import datetime
+from typing_extensions import deprecated
 import warnings
 import pydantic
 
@@ -52,6 +55,7 @@ def _is_rfc3339_datetime_string(datetime_string: str) -> bool:
         return False
 
 
+@deprecated("will be removed in the next breaking release")
 def validate_bool() -> Callable[[Any, bool], bool]:
     def f(cls: Any, v: Any) -> bool:
         if not isinstance(v, bool):
@@ -61,6 +65,7 @@ def validate_bool() -> Callable[[Any, bool], bool]:
     return f
 
 
+@deprecated("will be removed in the next breaking release")
 def validate_float(
     nullable: bool = False,
     minimum: Optional[float] = None,
@@ -83,6 +88,7 @@ def validate_float(
     return f
 
 
+@deprecated("will be removed in the next breaking release")
 def validate_int(
     nullable: bool = False,
     minimum: Optional[int] = None,
@@ -111,6 +117,7 @@ def validate_int(
     return f
 
 
+@deprecated("will be removed in the next breaking release")
 def validate_str(
     nullable: bool = False,
     min_len: Optional[float] = None,
@@ -175,6 +182,7 @@ def validate_str(
 T = TypeVar("T")
 
 
+@deprecated("will be removed in the next breaking release")
 def validate_list(
     min_len: Optional[float] = None,
     max_len: Optional[float] = None,

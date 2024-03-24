@@ -86,7 +86,7 @@ def parse_timezone_string(
     parse_timezone_string("UTC-02:00")  # returns -2
     ```
 
-    You are required to pass a datetime object in can the utc offset for the
+    You are required to pass a datetime object in case the utc offset for the
     passed timezone is not constant - e.g. for "Europe/Berlin"."""
 
     offset: float = 0
