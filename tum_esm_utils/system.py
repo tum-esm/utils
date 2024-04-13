@@ -27,11 +27,11 @@ def get_disk_space() -> float:
     return psutil.disk_usage("/").percent
 
 
-def get_system_battery() -> int:
-    """Returns system battery in percent in percent.
-    Returns 100 if device has no battery."""
-
-    # FIXME: In the next breaking release, return None if device has no battery
+def get_system_battery() -> Optional[int]:
+    """Checks the system battery.
+    
+    Returns:
+        The battery state in percent if available, else None."""
 
     battery_state: Any = psutil.sensors_battery()  # type: ignore
     try:
@@ -41,16 +41,13 @@ def get_system_battery() -> int:
         assert 1 <= percent <= 100
         return percent
     except AssertionError:
-        return 100
+        return None
 
 
-def get_last_boot_time() -> str:
-    """Returns last OS boot time."""
+def get_last_boot_time() -> datetime.datetime:
+    """Checks the last boot time of the system."""
 
-    # FIXME: In the next breaking release, convert this to a return a datetime
-
-    return datetime.datetime.fromtimestamp(psutil.boot_time()
-                                          ).strftime("%Y-%m-%d %H:%M:%S")
+    return datetime.datetime.fromtimestamp(psutil.boot_time())
 
 
 def get_utc_offset() -> float:
