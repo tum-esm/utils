@@ -1,14 +1,13 @@
 [project]
 name = "tum_esm_utils"
-version = "1.9.2"
+version = "2.0.0"
 description = "Python utilities by the Professorship of Environmental Sensing and Modeling at the Technical University of Munich"
 authors = [{ name = "Moritz Makowski", email = "moritz.makowski@tum.de" }]
 dependencies = [
-    "filelock>=3.13.1",
+    "filelock>=3.13.4",
     "requests>=2.31.0",
     "psutil>=5.9.8",
-    "pydantic>=2.6.1",
-    "polars>=0.20.7",
+    "pydantic>=2.7.0",
     "pytz>=2024.1",
 ]
 requires-python = ">=3.8,<4.0"
@@ -38,12 +37,12 @@ keywords = [
 
 [project.optional-dependencies]
 dev = [
-    "pytest>=8.0.0",
-    "types-psutil>=5.9.5.20240205",
-    "types-requests>=2.31.0.20240125",
+    "pytest>=8.1.1",
+    "types-psutil>=5.9.5.20240316",
+    "types-requests>=2.31.0.20240406",
     "pydocstyle>=6.3.0",
     "yapf>=0.40.2",
-    "mypy>=1.8.0",
+    "mypy>=1.9.0",
     "pydoc-markdown>=4.8.2",
     "types-pytz>=2024.1.0.20240203",
 ]
