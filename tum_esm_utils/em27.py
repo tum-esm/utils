@@ -1,4 +1,4 @@
-"""Functions for interacting with interferograms.
+"""Functions for interacting with EM27 interferograms.
 
 Implements: `detect_corrupt_ifgs`"""
 
