@@ -10,7 +10,7 @@ dependencies = [
     "pydantic>=2.7.0",
     "pytz>=2024.1",
 ]
-requires-python = ">=3.8,<4.0"
+requires-python = ">=3.9,<4.0"
 readme = "README.md"
 license = { text = "GPL-3.0" }
 classifiers = [
@@ -46,6 +46,9 @@ dev = [
     "pydoc-markdown>=4.8.2",
     "types-pytz>=2024.1.0.20240203",
 ]
+plotting = ["matplotlib>=3.8.4", "numpy>=1.26.4"]
+retrieval = ["polars>=0.20.20"]
+
 [build-system]
 requires = ["pdm-backend"]
 build-backend = "pdm.backend"
