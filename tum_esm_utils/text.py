@@ -1,8 +1,7 @@
 """Functions used for text manipulation/processing.
 
 Implements: `get_random_string`, `pad_string`, `is_date_string`,
-`date_range`, `is_datetime_string`, `is_rfc3339_datetime_string`,
-`date_is_too_recent`, `insert_replacements`."""
+`is_rfc3339_datetime_string`, `insert_replacements`"""
 
 from __future__ import annotations
 from typing import Literal
@@ -10,9 +9,6 @@ import re
 import datetime
 import random
 import string
-from typing_extensions import deprecated
-import warnings
-from . import timing
 
 
 def get_random_string(length: int, forbidden: list[str] = []) -> str:
@@ -48,45 +44,6 @@ def is_date_string(date_string: str) -> bool:
         return False
 
 
-@deprecated("Use `timing.date_range` instead")
-def date_range(from_date_string: str, to_date_string: str) -> list[str]:
-    """Returns a list of dates between `from_date_string` and `to_date_string`.
-
-    Example:
-
-    ```python
-    date_range("20210101", "20210103") == ["20210101", "20210102", "20210103"]
-    ```
-    """
-
-    assert is_date_string(
-        from_date_string
-    ), "from_date_string is not a valid date"
-    assert is_date_string(to_date_string), "to_date_string is not a valid date"
-
-    from_date = datetime.datetime.strptime(from_date_string, "%Y%m%d").date()
-    to_date = datetime.datetime.strptime(to_date_string, "%Y%m%d").date()
-    assert (
-        from_date <= to_date
-    ), "from_date_string cannot be after to_date_string"
-
-    return [d.strftime("%Y%m%d") for d in timing.date_range(from_date, to_date)]
-
-
-@deprecated("Will be removed in the next breaking release")
-def is_datetime_string(datetime_string: str) -> bool:
-    """Returns `True` if string is in a valid `YYYYMMDD HH:mm:ss` format"""
-
-    warnings.warn(
-        "Use `is_rfc3339_datetime_string` instead", DeprecationWarning
-    )
-    try:
-        datetime.datetime.strptime(datetime_string, "%Y%m%d %H:%M:%S")
-        return True
-    except ValueError:
-        return False
-
-
 def is_rfc3339_datetime_string(rfc3339_datetime_string: str) -> bool:
     """Returns `True` if string is in a valid `YYYY-MM-DDTHH:mm:ssZ` (RFC3339)
     format. Caution: The appendix of `+00:00` is required for UTC!"""
@@ -99,19 +56,6 @@ def is_rfc3339_datetime_string(rfc3339_datetime_string: str) -> bool:
         return True
     except (ValueError, AssertionError):
         return False
-
-
-@deprecated("Will be removed in the next breaking release")
-def date_is_too_recent(
-    date_string: str,
-    min_days_delay: int = 1,
-) -> bool:
-    """A min delay of two days means 20220101 will be too recent
-    any time before 20220103 00:00 (start of day)"""
-    date_object = datetime.datetime.strptime(
-        date_string, "%Y%m%d"
-    )  # will have the time 00:00:00
-    return (datetime.datetime.now() - date_object).days >= min_days_delay
 
 
 def insert_replacements(content: str, replacements: dict[str, str]) -> str:

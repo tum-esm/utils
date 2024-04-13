@@ -3,8 +3,8 @@
 Implements: `detect_corrupt_ifgs`"""
 
 from __future__ import annotations
-import time
 from typing import Literal
+import time
 import os
 import re
 import subprocess

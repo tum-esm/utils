@@ -64,6 +64,8 @@ def get_commit_sha() -> Optional[str]:
     """Get the current commit sha of the repository. Returns
     `None` if there is not git repository in any parent directory."""
 
+    # FIXME: add option for short/long commit sha
+
     p = subprocess.run(
         ["git", "rev-parse", "--verify", "HEAD", "--short"],
         stdout=subprocess.PIPE,
