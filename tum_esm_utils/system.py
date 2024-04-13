@@ -22,9 +22,16 @@ def get_memory_usage() -> float:
     return p
 
 
-def get_disk_space() -> float:
-    """Returns disk space used in % as float"""
-    return psutil.disk_usage("/").percent
+def get_disk_space(path: str = "/") -> float:
+    """Checks the disk space of a given path.
+
+    Args:
+        path: The path to check the disk space for.
+
+    Returns:
+        The available disk space in percent."""
+
+    return psutil.disk_usage(path).percent
 
 
 def get_system_battery() -> Optional[int]:

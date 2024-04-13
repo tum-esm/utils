@@ -5,7 +5,7 @@ cases.
 Implements: `run_shell_command`, `CommandLineException`,
 `get_hostname`, `get_commit_sha`, `change_file_permissions`"""
 
-from typing import Callable, Optional
+from typing import Callable, Literal, Optional
 import os
 import re
 import subprocess
@@ -60,14 +60,22 @@ def get_hostname() -> str:
     return (raw.split(".")[0]) if ("." in raw) else raw
 
 
-def get_commit_sha() -> Optional[str]:
+def get_commit_sha(
+    variant: Literal["short", "long"] = "short"
+) -> Optional[str]:
     """Get the current commit sha of the repository. Returns
-    `None` if there is not git repository in any parent directory."""
-
-    # FIXME: add option for short/long commit sha
+    `None` if there is not git repository in any parent directory.
+    
+    Args:
+        variant:  "short" or "long" to specify the length of the sha.
+    
+    Returns:
+        The commit sha as a string, or `None` if there is no git
+        repository in the parent directories."""
 
     p = subprocess.run(
-        ["git", "rev-parse", "--verify", "HEAD", "--short"],
+        ["git", "rev-parse", "--verify", "HEAD"] +
+        (["--short"] if variant == "short" else []),
         stdout=subprocess.PIPE,
         stderr=subprocess.STDOUT,
     )
