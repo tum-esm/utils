@@ -28,7 +28,15 @@ def run_shell_command(
 ) -> str:
     """runs a shell command and raises a `CommandLineException`
     if the return code is not zero, returns the stdout. Uses
-    `/bin/bash` by default."""
+    `/bin/bash` by default.
+    
+    Args:
+        command:           The command to run.
+        working_directory: The working directory for the command.
+        executable:        The shell executable to use.
+    
+    Returns:
+        The stdout of the command as a string."""
 
     p = subprocess.run(
         command,
@@ -93,7 +101,11 @@ _permission_string_pattern = re.compile(r"^((r|-)(w|-)(x|-)){3}$")
 def change_file_permissions(file_path: str, permission_string: str) -> None:
     """Change a file's system permissions.
 
-    Example permission_strings: `--x------`, `rwxr-xr-x`, `rw-r--r--`."""
+    Example permission_strings: `--x------`, `rwxr-xr-x`, `rw-r--r--`.
+    
+    Args:
+        file_path:         The path to the file.
+        permission_string: The new permission string."""
 
     assert _permission_string_pattern.match(
         permission_string

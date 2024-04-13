@@ -38,6 +38,7 @@ def get_parent_dir_path(script_path: str, current_depth: int = 1) -> str:
     current script path. Simply pass the `__file__` variable of
     the current script to this function. Depth of 1 will return
     the direct parent directory of the current script."""
+
     assert current_depth > 0, "depth must be greater than 0"
     output = os.path.dirname(os.path.abspath(script_path))
     for _ in range(current_depth - 1):

@@ -5,18 +5,26 @@ Implements: `get_cpu_usage`, `get_memory_usage`, `get_disk_space`,
 
 from __future__ import annotations
 import time
-from typing import Any
+from typing import Any, Optional
 import psutil
 import datetime
 
 
 def get_cpu_usage() -> list[float]:
-    """Returns cpu_percent for all cores as `list[cpu1%, cpu2%,...]`"""
+    """Checks the CPU usage of the system.
+
+    Returns:
+        The CPU usage in percent for each core."""
+
     return psutil.cpu_percent(interval=1, percpu=True)
 
 
 def get_memory_usage() -> float:
-    """Returns the memory usage in %"""
+    """Checks the memory usage of the system.
+
+    Returns:
+        The memory usage in percent."""
+
     p = psutil.virtual_memory().percent
     assert isinstance(p, float)
     return p
@@ -66,4 +74,5 @@ def get_utc_offset() -> float:
     ```
     
     Credits to https://stackoverflow.com/a/35058476/8255842"""
+
     return round((-time.timezone) / 3600, 3)

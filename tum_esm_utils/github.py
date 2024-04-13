@@ -6,6 +6,7 @@ from typing import Optional
 import requests
 
 
+# TODO: test this function
 def request_github_file(
     repository: str,
     filepath: str,
@@ -36,6 +37,7 @@ def request_github_file(
     return response.text
 
 
+# TODO: test this function
 def request_gitlab_file(
     repository: str,
     filepath: str,
