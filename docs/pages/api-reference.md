@@ -9,60 +9,67 @@ Documentation: https://tum-esm-utils.netlify.app
 PyPI: https://pypi.org/project/tum-esm-utils
 
 
-## `tum_esm_utils.context`
+## `tum_esm_utils.code`
 
-Context managers for common tasks.
+Functions for interacting with GitHub and GitLab.
 
-Implements: `ensure_section_duration`, `set_alarm`, `clear_alarm`.
-
-All functions in this module are deprecated and will be removed in the
-next breaking release. Use the functions from the `timing` module instead.
+Implements: `request_github_file`, `request_gitlab_file`
 
 
-##### `ensure_section_duration`
+##### `request_github_file`
 
 ```python
-@deprecated(
-    "Will be removed in the next breaking release. Use `timing.ensure_section_duration` instead."
-)
-@contextlib.contextmanager
-def ensure_section_duration(duration: float) -> Generator[None, None, None]
+def request_github_file(repository: str,
+                        filepath: str,
+                        access_token: Optional[str] = None,
+                        branch_name: str = "main",
+                        timeout: int = 10) -> str
 ```
 
-Make sure that the duration of the section is at least the given duration.
+Sends a request and returns the content of the response, as a string.
+Raises an HTTPError if the response status code is not 200.
 
-Usage example - do one measurement every 6 seconds:
+**Arguments**:
+
+- `repository` - In the format "owner/repo".
+- `filepath` - The path to the file in the repository.
+- `access_token` - The GitHub access token. Only required if the repo is private.
+- `branch_name` - The branch name.
+- `timeout` - The request timeout in seconds.
+  
+
+**Returns**:
+
+  The content of the file as a string.
+
+
+##### `request_gitlab_file`
 
 ```python
-with ensure_section_duration(6):
-    do_measurement()
+def request_gitlab_file(repository: str,
+                        filepath: str,
+                        access_token: Optional[str] = None,
+                        branch_name: str = "main",
+                        hostname: str = "gitlab.com",
+                        timeout: int = 10) -> str
 ```
 
+Sends a request and returns the content of the response, as a string.
+Raises an HTTPError if the response status code is not 200.
 
-##### `set_alarm`
+**Arguments**:
 
-```python
-@deprecated(
-    "Will be removed in the next breaking release. Use `timing.set_alarm` instead."
-)
-def set_alarm(timeout: int, label: str) -> None
-```
+- `repository` - In the format "owner/repo".
+- `filepath` - The path to the file in the repository.
+- `access_token` - The GitLab access token. Only required if the repo is private.
+- `branch_name` - The branch name.
+- `hostname` - The GitLab hostname.
+- `timeout` - The request timeout in seconds.
+  
 
-Set an alarm that will raise a `TimeoutError` after
-`timeout` seconds. The message will be formatted as
-`{label} took too long (timed out after {timeout} seconds)`.
+**Returns**:
 
-
-##### `clear_alarm`
-
-```python
-@deprecated(
-    "Will be removed in the next breaking release. Use `timing.clear_alarm` instead."
-)
-def clear_alarm() -> None
-```
-
-Clear the alarm set by `set_alarm`.
+  The content of the file as a string.
 
 
 ## `tum_esm_utils.datastructures`
@@ -187,16 +194,73 @@ def __init__(lockfile_path: str, timeout: float = -1) -> None
 A timeout of -1 means that the code waits forever.
 
 
+## `tum_esm_utils.em27`
+
+Functions for interacting with EM27 interferograms.
+
+Implements: `detect_corrupt_ifgs`
+
+
+##### `detect_corrupt_ifgs`
+
+```python
+def detect_corrupt_ifgs(ifg_directory: str,
+                        silent: bool = True,
+                        fortran_compiler: Literal["gfortran",
+                                                  "gfortran-9"] = "gfortran",
+                        force_recompile: bool = False) -> dict[str, list[str]]
+```
+
+Returns dict[filename, list[error_messages]] for all
+corrupt interferograms in the given directory.
+
+It will compile the fortran code using a given compiler
+to perform this task. The fortran code is derived from
+the preprocess source code of Proffast 2
+(https://www.imk-asf.kit.edu/english/3225.php). We use
+it because the retrieval using Proffast 2 will fail if
+there are corrupt interferograms in the input.
+
+
+##### `load_proffast2_result`
+
+```python
+def load_proffast2_result(path: str) -> Any
+```
+
+Loads the output of Proffast 2 into a polars DataFrame.
+
+This requires you to install this utils library with the optional polars dependency:
+
+
+```bash
+pip install "tum_esm_utils[polars]"
+## `or`
+pdm add "tum_esm_utils[polars]"
+```
+
+**Arguments**:
+
+- `path` - The path to the Proffast 2 output file.
+  
+
+**Returns**:
+
+  A polars DataFrame containing all columns.
+  
+
+**Raises**:
+
+- `ImportError` - If the polars library is not installed.
+
+
 ## `tum_esm_utils.files`
 
 File-related utility functions.
 
 Implements: `load_file`, `dump_file`, `load_json_file`,
 `dump_json_file`, `get_parent_dir_path`, `get_dir_checksum`,
-`get_file_checksum`, `load_raw_proffast_output`, `rel_to_abs_path`.
-
-`load_raw_proffast_output` is deprecated and will be removed in the
-next breaking release.
+`get_file_checksum`, `rel_to_abs_path`
 
 
 ##### `get_parent_dir_path`
@@ -230,44 +294,6 @@ Get the checksum of a file using MD5 from `haslib`.
 
 Significantly faster than `get_dir_checksum` since it does
 not spawn a new process.
-
-
-##### `load_raw_proffast_output`
-
-```python
-@deprecated(
-    "Will be removed in the next breaking release. We will move this functionality into a separate library. The reason for this is that this function is the reason why the utils package requires `polars` which is still at release `0.X`. This results in frequent version conflicts."
-)
-def load_raw_proffast_output(
-    path: str,
-    selected_columns: list[str] = [
-        "gnd_p",
-        "gnd_t",
-        "app_sza",
-        "azimuth",
-        "xh2o",
-        "xair",
-        "xco2",
-        "xch4",
-        "xco",
-        "xch4_s5p",
-    ]
-) -> pl.DataFrame
-```
-
-Returns a raw proffast output file as a dataframe.
-
-you can pass `selected_columns` to only keep some columns - the
-`utc` column will always be included. Example:
-
-```
-utc                     gnd_p    gnd_t    app_sza   ...
-2021-10-20 07:00:23     950.91   289.05   78.45     ...
-2021-10-20 07:00:38     950.91   289.05   78.42     ...
-2021-10-20 07:01:24     950.91   289.05   78.31     ...
-...                     ...      ...      ...       ...
-[1204 rows x 8 columns]
-```
 
 
 ##### `rel_to_abs_path`
@@ -313,148 +339,6 @@ The `ignore_trailing_whitespace` option to crop off trailing whitespace, i.e.
 only return the last `n` lines that are not empty or only contain whitespace.
 
 
-## `tum_esm_utils.github`
-
-Functions for interacting with GitHub.
-
-Implements: `request_github_file`
-
-
-##### `request_github_file`
-
-```python
-def request_github_file(github_repository: str,
-                        filepath: str,
-                        access_token: Optional[str] = None) -> str
-```
-
-Sends a request and returns the content of the response,
-as a string. Raises an HTTPError if the response status code
-is not 200.
-
-**Arguments**:
-
-- `github_repository` - In the format "owner/repo".
-- `filepath` - The path to the file in the repository.
-- `access_token` - The GitHub access token. Only required if
-  the repo is private.
-  
-
-**Returns**:
-
-  The content of the file as a string.
-
-
-## `tum_esm_utils.interferograms`
-
-Functions for interacting with interferograms.
-
-Implements: `detect_corrupt_ifgs`
-
-
-##### `detect_corrupt_ifgs`
-
-```python
-def detect_corrupt_ifgs(ifg_directory: str,
-                        silent: bool = True,
-                        fortran_compiler: Literal["gfortran",
-                                                  "gfortran-9"] = "gfortran",
-                        force_recompile: bool = False) -> dict[str, list[str]]
-```
-
-Returns dict[filename, list[error_messages]] for all
-corrupt interferograms in the given directory.
-
-It will compile the fortran code using a given compiler
-to perform this task. The fortran code is derived from
-the preprocess source code of Proffast 2
-(https://www.imk-asf.kit.edu/english/3225.php). We use
-it because the retrieval using Proffast 2 will fail if
-there are corrupt interferograms in the input.
-
-
-## `tum_esm_utils.logger`
-
-Implements custom logging functionality, because the
-standard logging module is hard to configure for special
-cases.
-
-Implements: `Logger`
-
-
-## `Logger` Objects
-
-```python
-class Logger()
-```
-
-
-##### `horizontal_line`
-
-```python
-def horizontal_line(fill_char: Literal["-", "=", ".", "_"] = "=") -> None
-```
-
-writes a horizonal line wiht `-`/`=`/... characters
-
-
-##### `debug`
-
-```python
-def debug(message: str, details: Optional[str] = None) -> None
-```
-
-writes a debug log line
-
-
-##### `info`
-
-```python
-def info(message: str, details: Optional[str] = None) -> None
-```
-
-writes an info log line
-
-
-##### `warning`
-
-```python
-def warning(message: str, details: Optional[str] = None) -> None
-```
-
-writes a warning log line
-
-
-##### `error`
-
-```python
-def error(message: str, details: Optional[str] = None) -> None
-```
-
-writes an error log line, sends the message via
-MQTT when config is passed (required for revision number)
-
-
-##### `exception`
-
-```python
-def exception(label: Optional[str] = None,
-              details: Optional[str] = None) -> None
-```
-
-logs the traceback of an exception; output will be
-formatted like this:
-
-```
-(label, )ZeroDivisionError: division by zero
---- details: -----------------
-...
---- traceback: ---------------
-...
-------------------------------
-```
-
-
 ## `tum_esm_utils.mathematics`
 
 Mathematical functions.
@@ -469,6 +353,9 @@ def distance_between_angles(angle_1: float, angle_2: float) -> float
 ```
 
 calculate the directional distance (in degrees) between two angles
+
+
+## `tum_esm_utils.plotting`
 
 
 ## `tum_esm_utils.processes`
@@ -535,6 +422,17 @@ runs a shell command and raises a `CommandLineException`
 if the return code is not zero, returns the stdout. Uses
 `/bin/bash` by default.
 
+**Arguments**:
+
+- `command` - The command to run.
+- `working_directory` - The working directory for the command.
+- `executable` - The shell executable to use.
+  
+
+**Returns**:
+
+  The stdout of the command as a string.
+
 
 ##### `get_hostname`
 
@@ -550,11 +448,22 @@ when the hostname doesn't contain a dot.
 ##### `get_commit_sha`
 
 ```python
-def get_commit_sha() -> Optional[str]
+def get_commit_sha(
+        variant: Literal["short", "long"] = "short") -> Optional[str]
 ```
 
 Get the current commit sha of the repository. Returns
 `None` if there is not git repository in any parent directory.
+
+**Arguments**:
+
+- `variant` - "short" or "long" to specify the length of the sha.
+  
+
+**Returns**:
+
+  The commit sha as a string, or `None` if there is no git
+  repository in the parent directories.
 
 
 ##### `change_file_permissions`
@@ -566,6 +475,11 @@ def change_file_permissions(file_path: str, permission_string: str) -> None
 Change a file's system permissions.
 
 Example permission_strings: `--x------`, `rwxr-xr-x`, `rw-r--r--`.
+
+**Arguments**:
+
+- `file_path` - The path to the file.
+- `permission_string` - The new permission string.
 
 
 ## `tum_esm_utils.system`
@@ -582,7 +496,11 @@ Implements: `get_cpu_usage`, `get_memory_usage`, `get_disk_space`,
 def get_cpu_usage() -> list[float]
 ```
 
-Returns cpu_percent for all cores as `list[cpu1%, cpu2%,...]`
+Checks the CPU usage of the system.
+
+**Returns**:
+
+  The CPU usage in percent for each core.
 
 
 ##### `get_memory_usage`
@@ -591,35 +509,51 @@ Returns cpu_percent for all cores as `list[cpu1%, cpu2%,...]`
 def get_memory_usage() -> float
 ```
 
-Returns the memory usage in %
+Checks the memory usage of the system.
+
+**Returns**:
+
+  The memory usage in percent.
 
 
 ##### `get_disk_space`
 
 ```python
-def get_disk_space() -> float
+def get_disk_space(path: str = "/") -> float
 ```
 
-Returns disk space used in % as float
+Checks the disk space of a given path.
+
+**Arguments**:
+
+- `path` - The path to check the disk space for.
+  
+
+**Returns**:
+
+  The available disk space in percent.
 
 
 ##### `get_system_battery`
 
 ```python
-def get_system_battery() -> int
+def get_system_battery() -> Optional[int]
 ```
 
-Returns system battery in percent in percent.
-Returns 100 if device has no battery.
+Checks the system battery.
+
+**Returns**:
+
+  The battery state in percent if available, else None.
 
 
 ##### `get_last_boot_time`
 
 ```python
-def get_last_boot_time() -> str
+def get_last_boot_time() -> datetime.datetime
 ```
 
-Returns last OS boot time.
+Checks the last boot time of the system.
 
 
 ##### `get_utc_offset`
@@ -678,8 +612,7 @@ if the condition is not met within the given timeout.
 Functions used for text manipulation/processing.
 
 Implements: `get_random_string`, `pad_string`, `is_date_string`,
-`date_range`, `is_datetime_string`, `is_rfc3339_datetime_string`,
-`date_is_too_recent`, `insert_replacements`.
+`is_rfc3339_datetime_string`, `insert_replacements`
 
 
 ##### `get_random_string`
@@ -701,33 +634,6 @@ def is_date_string(date_string: str) -> bool
 Returns `True` if string is in a valid `YYYYMMDD` format
 
 
-##### `date_range`
-
-```python
-@deprecated("Use `timing.date_range` instead")
-def date_range(from_date_string: str, to_date_string: str) -> list[str]
-```
-
-Returns a list of dates between `from_date_string` and `to_date_string`.
-
-**Example**:
-
-  
-```python
-date_range("20210101", "20210103") == ["20210101", "20210102", "20210103"]
-```
-
-
-##### `is_datetime_string`
-
-```python
-@deprecated("Will be removed in the next breaking release")
-def is_datetime_string(datetime_string: str) -> bool
-```
-
-Returns `True` if string is in a valid `YYYYMMDD HH:mm:ss` format
-
-
 ##### `is_rfc3339_datetime_string`
 
 ```python
@@ -736,17 +642,6 @@ def is_rfc3339_datetime_string(rfc3339_datetime_string: str) -> bool
 
 Returns `True` if string is in a valid `YYYY-MM-DDTHH:mm:ssZ` (RFC3339)
 format. Caution: The appendix of `+00:00` is required for UTC!
-
-
-##### `date_is_too_recent`
-
-```python
-@deprecated("Will be removed in the next breaking release")
-def date_is_too_recent(date_string: str, min_days_delay: int = 1) -> bool
-```
-
-A min delay of two days means 20220101 will be too recent
-any time before 20220103 00:00 (start of day)
 
 
 ##### `insert_replacements`
@@ -764,12 +659,7 @@ content with its value.
 Functions used for timing or time calculations.
 
 Implements: `date_range`, `ensure_section_duration`, `set_alarm`,
-`clear_alarm`.
-
-Some of the functions in here are duplicate as in the `context`
-module because they fit better here. The functions in `context`
-have been deprecated and will be removed in the next breaking
-release.
+`clear_alarm`
 
 
 ##### `date_range`
@@ -848,13 +738,9 @@ parse_timezone_string("UTC-02:00")  # returns -2
 
 ## `tum_esm_utils.validators`
 
-Implements validator functions for use with pydantic models.
+Implements validator utils for use with pydantic models.
 
-Implements: `StrictFilePath`, `StrictDirectoryPath`.
-
-Also implements `validate_bool`, `validate_float`, `validate_int`,
-`validate_str`, `validate_list` but these are deprecated and will
-be removed in the next breaking release.
+Implements: `StrictFilePath`, `StrictDirectoryPath`
 
 
 ## `StrictFilePath` Objects
