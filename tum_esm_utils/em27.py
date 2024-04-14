@@ -3,7 +3,7 @@
 Implements: `detect_corrupt_ifgs`"""
 
 from __future__ import annotations
-from typing import Literal
+from typing import Any, Literal
 import time
 import os
 import re
@@ -153,3 +153,54 @@ def detect_corrupt_ifgs(
             ]
 
     return results
+
+
+def load_proffast2_result(path: str) -> Any:
+    """Loads the output of Proffast 2 into a polars DataFrame. This requires you
+    to install this utils library with the optional polars dependency:
+
+    ```bash
+    pip install "tum_esm_utils[retrieval]"
+    # or
+    pdm add "tum_esm_utils[retrieval]"
+    ```
+
+    Args:
+        path: The path to the Proffast 2 output file.
+    
+    Returns:
+        A polars DataFrame containing all columns.
+
+    Raises:
+        ImportError: If the polars library is not installed.
+    """
+
+    import polars as pl
+
+    column_names = [
+        "JulianDate", "UTtimeh", "gndP", "gndT", "latdeg", "londeg", "altim",
+        "appSZA", "azimuth", "XH2O", "XAIR", "XCO2", "XCH4", "XCO2_STR", "XCO",
+        "XCH4_S5P", "H2O", "O2", "CO2", "CH4", "CO", "CH4_S5P"
+    ]
+    df = pl.read_csv(
+        path,
+        has_header=True,
+        separator=",",
+        dtypes={
+            "UTC": pl.Datetime,
+            " LocalTime": pl.Utf8,
+            " spectrum": pl.Utf8,
+            **{f" {cn}": pl.Float32
+               for cn in column_names},
+        }
+    ).drop(" JulianDate", " UTtimeh")
+    return df.rename({
+        " LocalTime": "LocalTime",
+        " spectrum": "spectrum",
+        **{f" {cn}": cn
+           for cn in column_names if f" {cn}" in df.columns},
+    }).with_columns(
+        pl.col("LocalTime").str.strptime(
+            dtype=pl.Datetime, format=" %Y-%m-%d %H:%M:%S"
+        ),
+    )
