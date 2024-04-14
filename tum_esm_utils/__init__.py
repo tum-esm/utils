@@ -12,6 +12,7 @@ from . import (
     files,
     github,
     mathematics,
+    plotting,
     processes,
     shell,
     system,
