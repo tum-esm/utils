@@ -46,7 +46,11 @@ dev = [
     "pydoc-markdown>=4.8.2",
     "types-pytz>=2024.1.0.20240203",
 ]
-plotting = ["matplotlib>=3.8.4", "numpy>=1.26.4"]
+plotting = [
+    "matplotlib>=3.8.4",
+    "numpy>=1.26.4",
+    "tailwind-colors>=1.2.1",
+]
 polars = ["polars>=0.20.20"]
 
 [build-system]

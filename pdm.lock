@@ -5,7 +5,7 @@
 groups = ["default", "dev", "plotting", "polars"]
 strategy = ["cross_platform", "inherit_metadata"]
 lock_version = "4.4.1"
-content_hash = "sha256:559cb09eed34c3c247fa34172c67fe0be8465fbe8ec4b75418f325ac9e2f4e75"
+content_hash = "sha256:792a6b114fddd0ae13d7c7495470d45cc89d42e6f2060b27b277202792a62443"
 
 [[package]]
 name = "annotated-types"
@@ -1198,6 +1198,17 @@ groups = ["dev"]
 files = [
     {file = "snowballstemmer-2.2.0-py2.py3-none-any.whl", hash = "sha256:c8e1716e83cc398ae16824e5572ae04e0d9fc2c6b985fb0f900f5f0c96ecba1a"},
     {file = "snowballstemmer-2.2.0.tar.gz", hash = "sha256:09b16deb8547d3412ad7b590689584cd0fe25ec8db3be37788be3810cbf19cb1"},
+]
+
+[[package]]
+name = "tailwind-colors"
+version = "1.2.1"
+requires_python = ">=3.8,<4.0"
+summary = "Use the default color palette from TailwindCSS (https://tailwindcss.com/docs/customizing-colors) in your python code for plotting, image generation, etc."
+groups = ["plotting"]
+files = [
+    {file = "tailwind_colors-1.2.1-py3-none-any.whl", hash = "sha256:e9dd804c3033b1fdd2bf4e6c1385ff14b7a850f7abd2e3d4d8a90492fcc6172a"},
+    {file = "tailwind_colors-1.2.1.tar.gz", hash = "sha256:28e83bc83cc6600e4e96c8ebf30ff87f439bb9398d394c04400ee73304639b2e"},
 ]
 
 [[package]]
