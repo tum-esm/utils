@@ -2,10 +2,10 @@
 # It is not intended for manual editing.
 
 [metadata]
-groups = ["default", "dev", "plotting", "retrieval"]
+groups = ["default", "dev", "plotting", "polars"]
 strategy = ["cross_platform", "inherit_metadata"]
 lock_version = "4.4.1"
-content_hash = "sha256:5bcc864a732fa5fa9767af632a63dfb741da08f3d06ad5bc3aa72a1d5a4dba5f"
+content_hash = "sha256:559cb09eed34c3c247fa34172c67fe0be8465fbe8ec4b75418f325ac9e2f4e75"
 
 [[package]]
 name = "annotated-types"
@@ -893,7 +893,7 @@ name = "polars"
 version = "0.20.20"
 requires_python = ">=3.8"
 summary = "Blazingly fast DataFrame library"
-groups = ["retrieval"]
+groups = ["polars"]
 files = [
     {file = "polars-0.20.20-cp38-abi3-macosx_10_12_x86_64.whl", hash = "sha256:04e57b2858e4279fe47e1fe960534a0e7a007f648622072964d941983c20842a"},
     {file = "polars-0.20.20-cp38-abi3-macosx_11_0_arm64.whl", hash = "sha256:1f14a610247130b957f38b352c7f7cf1b92bd34f03e3f3f17bf82a44f1f3fd0f"},

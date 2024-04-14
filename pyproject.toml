@@ -47,7 +47,7 @@ dev = [
     "types-pytz>=2024.1.0.20240203",
 ]
 plotting = ["matplotlib>=3.8.4", "numpy>=1.26.4"]
-retrieval = ["polars>=0.20.20"]
+polars = ["polars>=0.20.20"]
 
 [build-system]
 requires = ["pdm-backend"]

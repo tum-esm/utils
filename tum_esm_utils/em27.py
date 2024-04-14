@@ -156,13 +156,14 @@ def detect_corrupt_ifgs(
 
 
 def load_proffast2_result(path: str) -> Any:
-    """Loads the output of Proffast 2 into a polars DataFrame. This requires you
-    to install this utils library with the optional polars dependency:
+    """Loads the output of Proffast 2 into a polars DataFrame.
+    
+    This requires you to install this utils library with the optional polars dependency:
 
     ```bash
-    pip install "tum_esm_utils[retrieval]"
+    pip install "tum_esm_utils[polars]"
     # or
-    pdm add "tum_esm_utils[retrieval]"
+    pdm add "tum_esm_utils[polars]"
     ```
 
     Args:
