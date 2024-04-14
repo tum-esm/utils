@@ -255,3 +255,37 @@ clear_alarm()
 # if my_function takes longer than 10 seconds, raises:
 # TimeoutError("some section name took too long (timed out after 10 seconds)")
 ```
+
+## Plotting
+
+A very simple wrapper around `matplotlib` to creater prettier plots with less code.
+
+```python
+import tum_esm_utils
+
+# apply some nice styles to axis/labels/etc.
+tum_esm_utils.plotting.apply_better_defaults(font_family="Roboto")
+
+with tum_esm_utils.plotting.create_figure(
+    "some-path-to-figure.png",
+    width=10,
+    height=6,
+) as fig:
+    axis1 = tum_esm_utils.plotting.add_subplot(
+        fig, (2, 1, 1), title="Test Plot", xlabel="X", ylabel="Y"
+    )
+    axis1.plot([1, 2, 3], [1, 2, 3])
+
+    axis2 = tum_esm_utils.plotting.add_subplot(
+        fig, (2, 1, 2), title="Test Plot 2", xlabel="X", ylabel="Y"
+    )
+    axis2.plot([1, 2, 3], [3, 2, 1])
+```
+
+You have to have the optional `plotting` dependencies installed for this to work:
+
+```bash
+pip install "tum-esm-utils[plotting]"
+# or
+pdm add "tum-esm-utils[plotting]"
+```
