@@ -27,3 +27,18 @@ def test_detect_corrupt_ifgs() -> None:
             "charfilter 'TSC' is missing",
         ]
     }
+
+
+def test_load_proffast2_result() -> None:
+    input_dir = tum_esm_utils.files.rel_to_abs_path("./data")
+    files = [
+        f for f in os.listdir(input_dir)
+        if f.startswith("comb_inv") and f.endswith(".csv")
+    ]
+    for f in files:
+        df = tum_esm_utils.em27.load_proffast2_result(
+            os.path.join(input_dir, f)
+        )
+        assert len(df) > 2
+        assert "UTC" in df.columns
+        assert "XCO2" in df.columns
