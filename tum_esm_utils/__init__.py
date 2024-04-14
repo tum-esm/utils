@@ -9,10 +9,8 @@ from . import (
     code,
     datastructures,
     decorators,
-    em27,
     files,
     mathematics,
-    plotting,
     processes,
     shell,
     system,
@@ -21,3 +19,13 @@ from . import (
     timing,
     validators,
 )
+
+try:
+    from . import em27
+except ImportError:
+    pass
+
+try:
+    from . import plotting
+except ImportError:
+    pass

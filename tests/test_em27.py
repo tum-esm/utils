@@ -14,10 +14,12 @@ def test_detect_corrupt_ifgs() -> None:
     with tempfile.TemporaryDirectory() as tmpdir:
         with open(os.path.join(tmpdir, "test_ifg"), "w") as f:
             f.write("corrupt interferogram")
-        assert len(tum_esm_utils.em27.detect_corrupt_ifgs(tmpdir)) == 0
+        assert len(tum_esm_utils.optional.em27.detect_corrupt_ifgs(tmpdir)) == 0
 
     test_data_path = os.path.join(_PROJECT_DIR, "tests", "data")
-    detection_results = tum_esm_utils.em27.detect_corrupt_ifgs(test_data_path)
+    detection_results = tum_esm_utils.optional.em27.detect_corrupt_ifgs(
+        test_data_path
+    )
     assert detection_results == {
         "md20220409s0e00a.0199": [
             "charfilter 'GFW' is missing",
@@ -36,7 +38,7 @@ def test_load_proffast2_result() -> None:
         if f.startswith("comb_inv") and f.endswith(".csv")
     ]
     for f in files:
-        df = tum_esm_utils.em27.load_proffast2_result(
+        df = tum_esm_utils.optional.em27.load_proffast2_result(
             os.path.join(input_dir, f)
         )
         assert len(df) > 2

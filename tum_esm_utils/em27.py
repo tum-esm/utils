@@ -1,6 +1,14 @@
 """Functions for interacting with EM27 interferograms.
 
-Implements: `detect_corrupt_ifgs`"""
+Implements: `detect_corrupt_ifgs`, `load_proffast2_result`
+
+This requires you to install this utils library with the optional `polars` dependency:
+
+```bash
+pip install "tum_esm_utils[polars]"
+# or
+pdm add "tum_esm_utils[polars]"
+```"""
 
 from __future__ import annotations
 from typing import Any, Literal
@@ -10,6 +18,7 @@ import re
 import subprocess
 import filelock
 import tum_esm_utils
+import polars as pl
 
 _PARSER_DIR = os.path.join(
     os.path.dirname(os.path.abspath(__file__)), "ifg_parser"
@@ -155,28 +164,15 @@ def detect_corrupt_ifgs(
     return results
 
 
-def load_proffast2_result(path: str) -> Any:
+def load_proffast2_result(path: str) -> pl.DataFrame:
     """Loads the output of Proffast 2 into a polars DataFrame.
-    
-    This requires you to install this utils library with the optional polars dependency:
-
-    ```bash
-    pip install "tum_esm_utils[polars]"
-    # or
-    pdm add "tum_esm_utils[polars]"
-    ```
 
     Args:
         path: The path to the Proffast 2 output file.
     
     Returns:
         A polars DataFrame containing all columns.
-
-    Raises:
-        ImportError: If the polars library is not installed.
     """
-
-    import polars as pl
 
     column_names = [
         "JulianDate", "UTtimeh", "gndP", "gndT", "latdeg", "londeg", "altim",
