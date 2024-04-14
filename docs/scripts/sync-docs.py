@@ -25,12 +25,16 @@ module_names = list(
         if (f.endswith(".py") and (f != "__init__.py"))
     ])
 )
+print("Module names:", module_names)
+
+parsed_modules = ["--module=tum_esm_utils"]
+for m in module_names:
+    parsed_modules.append(f"--module=tum_esm_utils.{m}")
 
 with tempfile.NamedTemporaryFile() as f:
     os.system(
-        f"cd {PROJECT_DIR} && pydoc-markdown --module=tum_esm_utils " +
-        (" ").join([f"--module=tum_esm_utils.{m}"
-                    for m in module_names]) + f" > {f.name}"
+        f"cd {PROJECT_DIR} && pydoc-markdown " + (" ").join(parsed_modules) +
+        f" > {f.name}"
     )
     with open(f.name, "r") as f2:
         raw_api_reference_content = f2.read()

@@ -198,7 +198,15 @@ A timeout of -1 means that the code waits forever.
 
 Functions for interacting with EM27 interferograms.
 
-Implements: `detect_corrupt_ifgs`
+Implements: `detect_corrupt_ifgs`, `load_proffast2_result`
+
+This requires you to install this utils library with the optional `polars` dependency:
+
+```bash
+pip install "tum_esm_utils[polars]"
+## `or`
+pdm add "tum_esm_utils[polars]"
+```
 
 
 ##### `detect_corrupt_ifgs`
@@ -225,19 +233,10 @@ there are corrupt interferograms in the input.
 ##### `load_proffast2_result`
 
 ```python
-def load_proffast2_result(path: str) -> Any
+def load_proffast2_result(path: str) -> pl.DataFrame
 ```
 
 Loads the output of Proffast 2 into a polars DataFrame.
-
-This requires you to install this utils library with the optional polars dependency:
-
-
-```bash
-pip install "tum_esm_utils[polars]"
-## `or`
-pdm add "tum_esm_utils[polars]"
-```
 
 **Arguments**:
 
@@ -247,11 +246,6 @@ pdm add "tum_esm_utils[polars]"
 **Returns**:
 
   A polars DataFrame containing all columns.
-  
-
-**Raises**:
-
-- `ImportError` - If the polars library is not installed.
 
 
 ## `tum_esm_utils.files`
@@ -260,7 +254,7 @@ File-related utility functions.
 
 Implements: `load_file`, `dump_file`, `load_json_file`,
 `dump_json_file`, `get_parent_dir_path`, `get_dir_checksum`,
-`get_file_checksum`, `rel_to_abs_path`
+`get_file_checksum`, `rel_to_abs_path`, `expect_file_contents`
 
 
 ##### `get_parent_dir_path`
@@ -339,6 +333,18 @@ The `ignore_trailing_whitespace` option to crop off trailing whitespace, i.e.
 only return the last `n` lines that are not empty or only contain whitespace.
 
 
+##### `expect_file_contents`
+
+```python
+def expect_file_contents(filepath: str,
+                         required_content_blocks: list[str] = [],
+                         forbidden_content_blocks: list[str] = []) -> None
+```
+
+Assert that the given file contains all of the required content
+blocks, and/or none of the forbidden content blocks.
+
+
 ## `tum_esm_utils.mathematics`
 
 Mathematical functions.
@@ -356,6 +362,91 @@ calculate the directional distance (in degrees) between two angles
 
 
 ## `tum_esm_utils.plotting`
+
+Better defaults for matplotlib plots and utilities for creating and saving figures.
+
+Implements: `apply_better_defaults`, `create_figure`, `add_subplot`
+
+This requires you to install this utils library with the optional `plotting` dependencies:
+
+```bash
+pip install "tum_esm_utils[plotting]"
+## `or`
+pdm add "tum_esm_utils[plotting]"
+```
+
+
+##### `apply_better_defaults`
+
+```python
+def apply_better_defaults(font_family: Optional[str] = "Roboto") -> None
+```
+
+Apply better defaults to matplotlib plots.
+
+**Arguments**:
+
+- `font_family` - The font family to use for the plots. If None, the default
+  settings are not changed.
+
+
+##### `create_figure`
+
+```python
+@contextlib.contextmanager
+def create_figure(path: str,
+                  title: Optional[str] = None,
+                  width: float = 10,
+                  height: float = 10,
+                  suptitle_y: float = 0.97,
+                  padding: float = 2,
+                  dpi: int = 250) -> Generator[plt.Figure, None, None]
+```
+
+Create a figure for plotting.
+
+**Arguments**:
+
+- `path` - The path to save the figure to.
+- `title` - The title of the figure.
+- `width` - The width of the figure.
+- `height` - The height of the figure.
+- `suptitle_y` - The y-coordinate of the figure title.
+- `padding` - The padding of the figure.
+- `dpi` - The DPI of the figure.
+
+
+##### `add_subplot`
+
+```python
+def add_subplot(fig: plt.Figure,
+                position: tuple[int, int, int],
+                title: Optional[str] = None,
+                xlabel: Optional[str] = None,
+                ylabel: Optional[str] = None,
+                **kwargs: dict[str, Any]) -> plt.Axes
+```
+
+Add a subplot to a figure.
+
+**Arguments**:
+
+- `fig` - The figure to add the subplot to.
+- `position` - The position of the subplot. The tuple should contain three integers: the number of rows, the number of columns, and the index of the subplot.
+- `title` - The title of the subplot.
+- `xlabel` - The x-axis label of the subplot.
+- `ylabel` - The y-axis label of the subplot.
+- `**kwargs` - Additional keyword arguments for the subplot.
+  
+
+**Returns**:
+
+  An axis object for the new subplot.
+  
+
+**Raises**:
+
+- `ValueError` - If the index of the subplot is invalid.
 
 
 ## `tum_esm_utils.processes`
@@ -572,41 +663,6 @@ local time == utc time + x
 Credits to https://stackoverflow.com/a/35058476/8255842
 
 
-## `tum_esm_utils.testing`
-
-Functions commonly used in testing scripts.
-
-Implements: `expect_file_contents`, `wait_for_condition`
-
-
-##### `expect_file_contents`
-
-```python
-def expect_file_contents(filepath: str,
-                         required_content_blocks: list[str] = [],
-                         forbidden_content_blocks: list[str] = []) -> None
-```
-
-Assert that the given file contains all of the required content
-blocks, and/or none of the forbidden content blocks.
-
-
-##### `wait_for_condition`
-
-```python
-def wait_for_condition(is_successful: Callable[[], bool],
-                       timeout_message: str,
-                       timeout_seconds: float = 5,
-                       check_interval_seconds: float = 0.25) -> None
-```
-
-Wait for the given condition to be true, or raise a TimeoutError
-if the condition is not met within the given timeout.
-
-`check_interval_seconds` controls, how long to wait inbetween
-`is_successful()` calls.
-
-
 ## `tum_esm_utils.text`
 
 Functions used for text manipulation/processing.
@@ -659,7 +715,7 @@ content with its value.
 Functions used for timing or time calculations.
 
 Implements: `date_range`, `ensure_section_duration`, `set_alarm`,
-`clear_alarm`
+`clear_alarm`, `wait_for_condition`
 
 
 ##### `date_range`
@@ -734,6 +790,22 @@ parse_timezone_string("UTC-02:00")  # returns -2
   
   You are required to pass a datetime object in case the utc offset for the
   passed timezone is not constant - e.g. for "Europe/Berlin".
+
+
+##### `wait_for_condition`
+
+```python
+def wait_for_condition(is_successful: Callable[[], bool],
+                       timeout_message: str,
+                       timeout_seconds: float = 5,
+                       check_interval_seconds: float = 0.25) -> None
+```
+
+Wait for the given condition to be true, or raise a TimeoutError
+if the condition is not met within the given timeout.
+
+`check_interval_seconds` controls, how long to wait inbetween
+`is_successful()` calls.
 
 
 ## `tum_esm_utils.validators`
