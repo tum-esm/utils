@@ -26,6 +26,6 @@ jobs:
           python-version: ${{ matrix.python_version }}
           cache: "pip"
       - name: Install dependencies
-        run: pip install ".[all]"
+        run: pip install ".[dev,polars,plotting]"
       - name: Run pytests
         run: python -m pytest --verbose tests
