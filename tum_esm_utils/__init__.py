@@ -6,13 +6,11 @@ Documentation: https://tum-esm-utils.netlify.app
 PyPI: https://pypi.org/project/tum-esm-utils"""
 
 from . import (
-    context,
     datastructures,
     decorators,
     em27,
     files,
     github,
-    logger,
     mathematics,
     processes,
     shell,
