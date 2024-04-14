@@ -2,7 +2,7 @@
 
 Implements: `load_file`, `dump_file`, `load_json_file`,
 `dump_json_file`, `get_parent_dir_path`, `get_dir_checksum`,
-`get_file_checksum`, `rel_to_abs_path`"""
+`get_file_checksum`, `rel_to_abs_path`, `expect_file_contents`"""
 
 from __future__ import annotations
 from typing import Any, List, Optional
@@ -139,3 +139,21 @@ def read_last_n_lines(
                 break
 
     return last_characters.decode()[::-1].split("\n")
+
+
+def expect_file_contents(
+    filepath: str,
+    required_content_blocks: list[str] = [],
+    forbidden_content_blocks: list[str] = [],
+) -> None:
+    """Assert that the given file contains all of the required content
+    blocks, and/or none of the forbidden content blocks."""
+
+    with open(filepath, "r") as f:
+        file_content = f.read()
+
+    for b in required_content_blocks:
+        assert b in file_content, f'required log content block not found "{b}"'
+
+    for b in forbidden_content_blocks:
+        assert b not in file_content, f'forbidden log content block found "{b}"'
