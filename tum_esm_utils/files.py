@@ -147,7 +147,13 @@ def expect_file_contents(
     forbidden_content_blocks: list[str] = [],
 ) -> None:
     """Assert that the given file contains all of the required content
-    blocks, and/or none of the forbidden content blocks."""
+    blocks, and/or none of the forbidden content blocks.
+    
+    Args:
+        filepath:                 The path to the file.
+        required_content_blocks:  A list of strings that must be present in the file.
+        forbidden_content_blocks: A list of strings that must not be present in the file.
+    """
 
     with open(filepath, "r") as f:
         file_content = f.read()

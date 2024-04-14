@@ -75,7 +75,17 @@ def detect_corrupt_ifgs(
     the preprocess source code of Proffast 2
     (https://www.imk-asf.kit.edu/english/3225.php). We use
     it because the retrieval using Proffast 2 will fail if
-    there are corrupt interferograms in the input."""
+    there are corrupt interferograms in the input.
+    
+    Args:
+        ifg_directory:     The directory containing the interferograms.
+        silent:            If set to False, print additional information.
+        fortran_compiler:  The fortran compiler to use.
+        force_recompile:   If set to True, the fortran code will be recompiled.
+
+    Returns:
+        A dictionary containing corrupt filenames as keys and a list of error
+        messages as values."""
 
     # compiling fortran code
     with filelock.FileLock(

@@ -12,6 +12,7 @@ import subprocess
 
 
 class CommandLineException(Exception):
+    """Exception raised for errors in the command line."""
     def __init__(self, value: str, details: Optional[str] = None) -> None:
         self.value = value
         self.details = details

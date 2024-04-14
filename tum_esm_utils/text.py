@@ -12,8 +12,15 @@ import string
 
 
 def get_random_string(length: int, forbidden: list[str] = []) -> str:
-    """Return a random string from lowercase letter, the strings
-    from the list passed as `forbidden` will not be generated"""
+    """Return a random string from lowercase letters.
+    
+    Args:
+        length:     The length of the random string.
+        forbidden:  A list of strings that should not be generated.
+    
+    Returns:
+        A random string."""
+
     output: str = ""
     while True:
         output = "".join(random.choices(string.ascii_lowercase, k=length))
@@ -28,6 +35,17 @@ def pad_string(
     pad_position: Literal["left", "right"] = "left",
     fill_char: Literal["0", " ", "-", "_"] = " ",
 ) -> str:
+    """Pad a string with a fill character to a minimum width.
+
+    Args:
+        text:         The text to pad.
+        min_width:    The minimum width of the text.
+        pad_position: The position of the padding. Either "left" or "right".
+        fill_char:    The character to use for padding.
+    
+    Returns:
+        The padded string."""
+
     if len(text) >= min_width:
         return text
     else:
@@ -36,7 +54,7 @@ def pad_string(
 
 
 def is_date_string(date_string: str) -> bool:
-    """Returns `True` if string is in a valid `YYYYMMDD` format"""
+    """Returns `True` if string is in a valid `YYYYMMDD` format."""
     try:
         datetime.datetime.strptime(date_string, "%Y%m%d")
         return True

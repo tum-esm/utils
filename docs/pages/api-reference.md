@@ -86,13 +86,22 @@ class RingList()
 ```
 
 
+##### `__init__`
+
+```python
+def __init__(max_size: int)
+```
+
+Initialize a RingList with a maximum size.
+
+
 ##### `clear`
 
 ```python
 def clear() -> None
 ```
 
-removes all elements
+Removes all elements from the list.
 
 
 ##### `is_full`
@@ -101,7 +110,7 @@ removes all elements
 def is_full() -> bool
 ```
 
-returns true if list is full
+Returns True if the list is full.
 
 
 ##### `append`
@@ -110,7 +119,7 @@ returns true if list is full
 def append(x: float) -> None
 ```
 
-appends an element to the list
+Appends an element to the list.
 
 
 ##### `get`
@@ -119,7 +128,7 @@ appends an element to the list
 def get() -> list[float]
 ```
 
-returns the list of elements
+Returns the list of elements.
 
 
 ##### `sum`
@@ -128,7 +137,7 @@ returns the list of elements
 def sum() -> float
 ```
 
-returns the max size of the list
+Returns the max size of the list
 
 
 ##### `set_max_size`
@@ -137,7 +146,7 @@ returns the max size of the list
 def set_max_size(new_max_size: int) -> None
 ```
 
-sets a new max size
+Sets a new max size fo the list.
 
 
 ##### `merge_dicts`
@@ -191,7 +200,14 @@ https://github.com/python/mypy/issues/1551#issuecomment-253978622.
 def __init__(lockfile_path: str, timeout: float = -1) -> None
 ```
 
+Create a new filelock decorator.
+
 A timeout of -1 means that the code waits forever.
+
+**Arguments**:
+
+- `lockfile_path` - The path to the lockfile.
+- `timeout` - The time to wait for the lock in seconds.
 
 
 ## `tum_esm_utils.em27`
@@ -228,6 +244,19 @@ the preprocess source code of Proffast 2
 (https://www.imk-asf.kit.edu/english/3225.php). We use
 it because the retrieval using Proffast 2 will fail if
 there are corrupt interferograms in the input.
+
+**Arguments**:
+
+- `ifg_directory` - The directory containing the interferograms.
+- `silent` - If set to False, print additional information.
+- `fortran_compiler` - The fortran compiler to use.
+- `force_recompile` - If set to True, the fortran code will be recompiled.
+  
+
+**Returns**:
+
+  A dictionary containing corrupt filenames as keys and a list of error
+  messages as values.
 
 
 ##### `load_proffast2_result`
@@ -344,6 +373,12 @@ def expect_file_contents(filepath: str,
 Assert that the given file contains all of the required content
 blocks, and/or none of the forbidden content blocks.
 
+**Arguments**:
+
+- `filepath` - The path to the file.
+- `required_content_blocks` - A list of strings that must be present in the file.
+- `forbidden_content_blocks` - A list of strings that must not be present in the file.
+
 
 ## `tum_esm_utils.mathematics`
 
@@ -358,7 +393,7 @@ Implements: `distance_between_angles`
 def distance_between_angles(angle_1: float, angle_2: float) -> float
 ```
 
-calculate the directional distance (in degrees) between two angles
+Calculate the directional distance (in degrees) between two angles.
 
 
 ## `tum_esm_utils.plotting`
@@ -404,6 +439,13 @@ def create_figure(path: str,
 ```
 
 Create a figure for plotting.
+
+Usage:
+
+```python
+with create_figure("path/to/figure.png", title="Title") as fig:
+    ...
+```
 
 **Arguments**:
 
@@ -463,7 +505,11 @@ Implements: `get_process_pids`, `start_background_process`,
 def get_process_pids(script_path: str) -> list[int]
 ```
 
-Return a list of PIDs that have the given script as their entrypoint
+Return a list of PIDs that have the given script as their entrypoint.
+
+**Arguments**:
+
+- `script_path` - The absolute path of the python file entrypoint.
 
 
 ##### `start_background_process`
@@ -490,6 +536,17 @@ entrypoint. Returns the list of terminated PIDs.
 If `termination_timeout` is not None, the processes will be
 terminated forcefully after the given timeout (in seconds).
 
+**Arguments**:
+
+- `script_path` - The absolute path of the python file entrypoint.
+- `termination_timeout` - The timeout in seconds after which the
+  processes will be terminated forcefully.
+  
+
+**Returns**:
+
+  The list of terminated PIDs.
+
 
 ## `tum_esm_utils.shell`
 
@@ -499,6 +556,15 @@ cases.
 
 Implements: `run_shell_command`, `CommandLineException`,
 `get_hostname`, `get_commit_sha`, `change_file_permissions`
+
+
+## `CommandLineException` Objects
+
+```python
+class CommandLineException(Exception)
+```
+
+Exception raised for errors in the command line.
 
 
 ##### `run_shell_command`
@@ -655,12 +721,17 @@ def get_utc_offset() -> float
 
 Returns the UTC offset of the system.
 
+
+Credits to https://stackoverflow.com/a/35058476/8255842
+
 ```python
 x = get_utc_offset()
 local time == utc time + x
 ```
 
-Credits to https://stackoverflow.com/a/35058476/8255842
+**Returns**:
+
+  The UTC offset in hours.
 
 
 ## `tum_esm_utils.text`
@@ -677,8 +748,41 @@ Implements: `get_random_string`, `pad_string`, `is_date_string`,
 def get_random_string(length: int, forbidden: list[str] = []) -> str
 ```
 
-Return a random string from lowercase letter, the strings
-from the list passed as `forbidden` will not be generated
+Return a random string from lowercase letters.
+
+**Arguments**:
+
+- `length` - The length of the random string.
+- `forbidden` - A list of strings that should not be generated.
+  
+
+**Returns**:
+
+  A random string.
+
+
+##### `pad_string`
+
+```python
+def pad_string(text: str,
+               min_width: int,
+               pad_position: Literal["left", "right"] = "left",
+               fill_char: Literal["0", " ", "-", "_"] = " ") -> str
+```
+
+Pad a string with a fill character to a minimum width.
+
+**Arguments**:
+
+- `text` - The text to pad.
+- `min_width` - The minimum width of the text.
+- `pad_position` - The position of the padding. Either "left" or "right".
+- `fill_char` - The character to use for padding.
+  
+
+**Returns**:
+
+  The padded string.
 
 
 ##### `is_date_string`
@@ -687,7 +791,7 @@ from the list passed as `forbidden` will not be generated
 def is_date_string(date_string: str) -> bool
 ```
 
-Returns `True` if string is in a valid `YYYYMMDD` format
+Returns `True` if string is in a valid `YYYYMMDD` format.
 
 
 ##### `is_rfc3339_datetime_string`
@@ -802,10 +906,15 @@ def wait_for_condition(is_successful: Callable[[], bool],
 ```
 
 Wait for the given condition to be true, or raise a TimeoutError
-if the condition is not met within the given timeout.
+if the condition is not met within the given timeout. The condition
+is passed as a function that will be called periodically.
 
-`check_interval_seconds` controls, how long to wait inbetween
-`is_successful()` calls.
+**Arguments**:
+
+- `is_successful` - A function that returns True if the condition is met.
+- `timeout_message` - The message to include in the TimeoutError.
+- `timeout_seconds` - The maximum time to wait for the condition to be met.
+- `check_interval_seconds` - How long to wait inbetween `is_successful()` calls.
 
 
 ## `tum_esm_utils.validators`

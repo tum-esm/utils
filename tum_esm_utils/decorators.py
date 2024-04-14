@@ -23,7 +23,14 @@ class with_filelock:
     https://github.com/python/mypy/issues/1551#issuecomment-253978622.
     """
     def __init__(self, lockfile_path: str, timeout: float = -1) -> None:
-        """A timeout of -1 means that the code waits forever."""
+        """Create a new filelock decorator.
+        
+        A timeout of -1 means that the code waits forever.
+        
+        Args:
+            lockfile_path: The path to the lockfile.
+            timeout:       The time to wait for the lock in seconds."""
+
         self.lockfile_path: str = lockfile_path
         self.timeout: float = timeout
 

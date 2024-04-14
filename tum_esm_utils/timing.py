@@ -136,10 +136,14 @@ def wait_for_condition(
     check_interval_seconds: float = 0.25,
 ) -> None:
     """Wait for the given condition to be true, or raise a TimeoutError
-    if the condition is not met within the given timeout.
-
-    `check_interval_seconds` controls, how long to wait inbetween
-    `is_successful()` calls."""
+    if the condition is not met within the given timeout. The condition
+    is passed as a function that will be called periodically.
+    
+    Args:
+        is_successful:             A function that returns True if the condition is met.
+        timeout_message:           The message to include in the TimeoutError.
+        timeout_seconds:           The maximum time to wait for the condition to be met.
+        check_interval_seconds:    How long to wait inbetween `is_successful()` calls."""
 
     start_time = time.time()
     while True:

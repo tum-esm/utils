@@ -65,7 +65,13 @@ def create_figure(
     dpi: int = 250,
 ) -> Generator[plt.Figure, None, None]:
     """Create a figure for plotting.
+    
+    Usage:
 
+    ```python
+    with create_figure("path/to/figure.png", title="Title") as fig:
+        ...
+    ```
     Args:
         path: The path to save the figure to.
         title: The title of the figure.

@@ -11,7 +11,10 @@ import psutil
 
 
 def get_process_pids(script_path: str) -> list[int]:
-    """Return a list of PIDs that have the given script as their entrypoint"""
+    """Return a list of PIDs that have the given script as their entrypoint.
+    
+    Args:
+        script_path: The absolute path of the python file entrypoint."""
 
     pids: list[int] = []
     for p in psutil.process_iter():
@@ -56,7 +59,15 @@ def terminate_process(
     entrypoint. Returns the list of terminated PIDs.
     
     If `termination_timeout` is not None, the processes will be
-    terminated forcefully after the given timeout (in seconds)."""
+    terminated forcefully after the given timeout (in seconds).
+    
+    Args:
+        script_path:         The absolute path of the python file entrypoint.
+        termination_timeout: The timeout in seconds after which the
+                             processes will be terminated forcefully.
+
+    Returns:
+        The list of terminated PIDs."""
 
     processes_to_terminate: list[psutil.Process] = []
 

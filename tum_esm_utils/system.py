@@ -73,6 +73,9 @@ def get_utc_offset() -> float:
     local time == utc time + x
     ```
     
-    Credits to https://stackoverflow.com/a/35058476/8255842"""
+    Credits to https://stackoverflow.com/a/35058476/8255842
+    
+    Returns:
+        The UTC offset in hours."""
 
     return round((-time.timezone) / 3600, 3)
