@@ -1,6 +1,6 @@
 """Functions for interacting with EM27 interferograms.
 
-Implements: `detect_corrupt_ifgs`, `load_proffast2_result`
+Implements: `detect_corrupt_ifgs`, `load_proffast2_result`.
 
 This requires you to install this utils library with the optional `polars` dependency:
 
@@ -12,10 +12,9 @@ pdm add "tum_esm_utils[polars]"
 
 from __future__ import annotations
 from typing import Any, Literal
-import time
 import os
-import re
 import subprocess
+from typing_extensions import deprecated
 import filelock
 import tum_esm_utils
 import polars as pl
@@ -57,13 +56,6 @@ def _compile_fortran_code(
             )
 
 
-def _write_input_file(random_id: str, ifgs: list[str]) -> None:
-    with open(f"{_PARSER_DIR}/opus_file_validator.template.inp", "r") as f:
-        template_content = f.read()
-    with open(f"{_PARSER_DIR}/opus_file_validator.inp.{random_id}", "w") as f:
-        f.write(template_content.replace("%IFG_LIST%", "\n".join(ifgs)))
-
-
 def detect_corrupt_ifgs(
     ifg_directory: str,
     silent: bool = True,
@@ -71,7 +63,7 @@ def detect_corrupt_ifgs(
     force_recompile: bool = False,
 ) -> dict[str, list[str]]:
     """Returns dict[filename, list[error_messages]] for all
-    corrupt interferograms in the given directory.
+    corrupt opus files in the given directory.
 
     It will compile the fortran code using a given compiler
     to perform this task. The fortran code is derived from
@@ -90,92 +82,89 @@ def detect_corrupt_ifgs(
         A dictionary containing corrupt filenames as keys and a list of error
         messages as values."""
 
-    # compiling fortran code
+    # compiling the fortran code in a semaphore
     with filelock.FileLock(
-        os.path.join(_PARSER_DIR, "opus_file_validator.compile.lock"),
+        os.path.join(_PARSER_DIR, "opus_file_validator.lock"),
         timeout=30,
     ):
-        # these sleeps are sadly necessary to eliminate race conditions between
-        # two parallel processes. I don't knwo why, but now it works. Don't spend
-        # more hours here.
-        time.sleep(1)
         _compile_fortran_code(
             silent=silent,
             fortran_compiler=fortran_compiler,
             force_recompile=force_recompile
         )
-        time.sleep(1)
 
-    # generate input file
-    ifgs = [f"{ifg_directory}/{x}" for x in os.listdir(ifg_directory)]
-    ifgs = list(sorted(list(filter(os.path.isfile, ifgs))))
+    # list directory files
+    filepaths = list(
+        sorted([
+            fp for fp in
+            [f"{ifg_directory}/{x}" for x in os.listdir(ifg_directory)]
+            if os.path.isfile(fp)
+        ])
+    )
+
+    # write input file for parser in a semaphore
+    with filelock.FileLock(f"{_PARSER_DIR}/opus_file_validator.lock"):
+        random_id = tum_esm_utils.text.get_random_string(
+            10,
+            forbidden=[
+                f.replace("opus_file_validator.inp.", "")
+                for f in os.listdir(_PARSER_DIR)
+                if f.startswith("opus_file_validator.inp.")
+            ],
+        )
+        input_file_path = f"{_PARSER_DIR}/opus_file_validator.inp.{random_id}"
+
+        with open(f"{_PARSER_DIR}/opus_file_validator.template.inp", "r") as f:
+            template_content = f.read()
+        with open(input_file_path, "w") as f:
+            f.write(
+                template_content.replace("%IFG_LIST%", "\n".join(filepaths))
+            )
 
     # run the parser
-    results: dict[str, list[str]] = {}
-    stdout: str = ""
-    while True:
-        with filelock.FileLock(f"{_PARSER_DIR}/opus_file_validator.inp.lock"):
-            random_id = tum_esm_utils.text.get_random_string(
-                10,
-                forbidden=[
-                    f.replace("opus_file_validator.inp.", "")
-                    for f in os.listdir(_PARSER_DIR)
-                    if f.startswith("opus_file_validator.inp.")
-                ],
-            )
-            _write_input_file(random_id, ifgs)
-        process = subprocess.run(
-            ["./opus_file_validator", f"opus_file_validator.inp.{random_id}"],
-            cwd=_PARSER_DIR,
-            stdout=subprocess.PIPE,
-            stderr=subprocess.PIPE,
+    process = subprocess.run(
+        ["./opus_file_validator", input_file_path],
+        cwd=_PARSER_DIR,
+        stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE,
+    )
+    os.remove(input_file_path)
+    stdout = process.stdout.decode()
+    stderr = process.stderr.decode()
+
+    if not process.returncode == 0:
+        raise RuntimeError(
+            f"Opus File Parser failed with exit code {process.returncode}, " +
+            f"stderr: {stderr}, stdout: {stdout}",
         )
-        os.remove(f"{_PARSER_DIR}/opus_file_validator.inp.{random_id}")
-        stdout = process.stdout.decode()
-        stderr = process.stderr.decode()
 
-        # TODO: update parsing logic
+    # locate the block of verification results
+    if ((stdout.count("--- Start verifying file integrities ---") != 1) or
+        (stdout.count("--- Done verifying file integrities ---") != 1)):
+        raise Exception("This is a bug in the `tum_esm_utils` library")
+    verification_block = stdout.split(
+        "--- Start verifying file integrities ---"
+    )[1].split("--- Done verifying file integrities ---")[0].strip("\t\n ")
 
-        if process.returncode == 0:
-            break
-        else:
-            # find the filename that caused the error
-            failing_filenames = list(
-                filter(lambda f: f in ifgs, stderr.split("'"))
-            )
-            assert (
-                "At line 837 of file opus_file_validator.F90" in stderr
-            ), f"Unknown error behavior: {stderr}"
-            assert len(
-                failing_filenames
-            ) == 1, "invalid filename not found in stderr"
-            failing_filepath = failing_filenames[0]
+    # parse the verification results
+    file_verification_blocks = verification_block.split("\n\n")
+    checked_files: set[str] = set(filepaths)
+    results: dict[str, list[str]] = {}
+    for block in file_verification_blocks:
+        lines = block.split("\n")
+        is_corrupt = len(lines) > 2
+        filepath = lines[0].split('"')[1]
+        if is_corrupt:
+            results[filepath] = lines[1 :-1]
+        checked_files.remove(filepath)
 
-            # remove the error-causing file from the ifg list and try again
-            ifgs.remove(failing_filepath)
-            failing_filename = failing_filepath.split("/")[-1]
-            results[failing_filename] = ["file not processable"]
-            if not silent:
-                print(f'error with file "{failing_filename}", running again')
+    # every file not mentioned in the verification results failed during reading it
+    for filepath in checked_files:
+        results[filepath] = ["file not even readible by the parser"]
 
+    # save the raw output for debugging purposes
     with open(os.path.join(_PARSER_DIR, "output.txt"), "w") as f:
         f.write(stdout)
-
-    file_parsing_block = stdout.split("Done!")[-1]
-    file_parsing_lines = file_parsing_block.split("Read OPUS parms:")[1 :]
-
-    # get results from output stream
-    for line in file_parsing_lines:
-        filename = line[12 :].split("\n")[0].split("/")[-1].replace(")", "")
-        parser_output = line[12 :].replace("\n", " ")
-        parser_messages = re.findall(
-            'charfilter "[^"]+" is missing', parser_output
-        )
-        if len(parser_messages) > 0:
-            results[filename] = [
-                ("charfilter '" + x.split('"')[1] + "' is missing")
-                for x in parser_messages
-            ]
 
     return results
 
