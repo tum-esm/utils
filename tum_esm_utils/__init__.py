@@ -19,11 +19,16 @@ from . import (
     validators,
 )
 
+# ignore import errors from the following submodules
+# because they requires extras to be installed
+
+# requires extra "polars"
 try:
     from . import em27
 except ImportError:
     pass
 
+# requires extra "plotting"
 try:
     from . import plotting
 except ImportError:

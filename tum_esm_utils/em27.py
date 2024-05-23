@@ -133,6 +133,9 @@ def detect_corrupt_ifgs(
         os.remove(f"{_PARSER_DIR}/opus_file_validator.inp.{random_id}")
         stdout = process.stdout.decode()
         stderr = process.stderr.decode()
+
+        # TODO: update parsing logic
+
         if process.returncode == 0:
             break
         else:
