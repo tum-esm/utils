@@ -21,7 +21,7 @@ import tum_esm_utils
 import polars as pl
 
 _PARSER_DIR = os.path.join(
-    os.path.dirname(os.path.abspath(__file__)), "ifg_parser"
+    os.path.dirname(os.path.abspath(__file__)), "opus_file_validator"
 )
 
 
@@ -31,12 +31,15 @@ def _compile_fortran_code(
     force_recompile: bool = False,
 ) -> None:
     if force_recompile or (
-        not os.path.isfile(os.path.join(_PARSER_DIR, "ifg_parser"))
+        not os.path.isfile(os.path.join(_PARSER_DIR, "opus_file_validator"))
     ):
         if not silent:
             print("compiling fortran code")
 
-        command = f"{fortran_compiler} -nocpp -O3 -o ./ifg_parser glob_prepro4.F90 glob_OPUSparms.F90 ifg_parser.F90"
+        command = (
+            f"{fortran_compiler} -nocpp -O3 -o ./opus_file_validator " +
+            f"glob_prepro6.F90 glob_OPUSparms6.F90 opus_file_validator.F90"
+        )
         p = subprocess.run(
             command,
             shell=True,
@@ -55,9 +58,9 @@ def _compile_fortran_code(
 
 
 def _write_input_file(random_id: str, ifgs: list[str]) -> None:
-    with open(f"{_PARSER_DIR}/ifg_parser.template.inp", "r") as f:
+    with open(f"{_PARSER_DIR}/opus_file_validator.template.inp", "r") as f:
         template_content = f.read()
-    with open(f"{_PARSER_DIR}/ifg_parser.inp.{random_id}", "w") as f:
+    with open(f"{_PARSER_DIR}/opus_file_validator.inp.{random_id}", "w") as f:
         f.write(template_content.replace("%IFG_LIST%", "\n".join(ifgs)))
 
 
@@ -89,7 +92,7 @@ def detect_corrupt_ifgs(
 
     # compiling fortran code
     with filelock.FileLock(
-        os.path.join(_PARSER_DIR, "ifg_parser.compile.lock"),
+        os.path.join(_PARSER_DIR, "opus_file_validator.compile.lock"),
         timeout=30,
     ):
         # these sleeps are sadly necessary to eliminate race conditions between
@@ -111,23 +114,23 @@ def detect_corrupt_ifgs(
     results: dict[str, list[str]] = {}
     stdout: str = ""
     while True:
-        with filelock.FileLock(f"{_PARSER_DIR}/ifg_parser.inp.lock"):
+        with filelock.FileLock(f"{_PARSER_DIR}/opus_file_validator.inp.lock"):
             random_id = tum_esm_utils.text.get_random_string(
                 10,
                 forbidden=[
-                    f.replace("ifg_parser.inp.", "")
+                    f.replace("opus_file_validator.inp.", "")
                     for f in os.listdir(_PARSER_DIR)
-                    if f.startswith("ifg_parser.inp.")
+                    if f.startswith("opus_file_validator.inp.")
                 ],
             )
             _write_input_file(random_id, ifgs)
         process = subprocess.run(
-            ["./ifg_parser", f"ifg_parser.inp.{random_id}"],
+            ["./opus_file_validator", f"opus_file_validator.inp.{random_id}"],
             cwd=_PARSER_DIR,
             stdout=subprocess.PIPE,
             stderr=subprocess.PIPE,
         )
-        os.remove(f"{_PARSER_DIR}/ifg_parser.inp.{random_id}")
+        os.remove(f"{_PARSER_DIR}/opus_file_validator.inp.{random_id}")
         stdout = process.stdout.decode()
         stderr = process.stderr.decode()
         if process.returncode == 0:
@@ -138,7 +141,7 @@ def detect_corrupt_ifgs(
                 filter(lambda f: f in ifgs, stderr.split("'"))
             )
             assert (
-                "At line 837 of file ifg_parser.F90" in stderr
+                "At line 837 of file opus_file_validator.F90" in stderr
             ), f"Unknown error behavior: {stderr}"
             assert len(
                 failing_filenames

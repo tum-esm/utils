@@ -25,7 +25,7 @@
 !
 !====================================================================
 
-program ifg_parser
+program opus_file_validator
 
 use glob_prepro6
 
@@ -220,7 +220,7 @@ deallocate (measfile,nptrfirstdir,nofblock,nifg)
 deallocate (icbfwd,icbbwd,icbfwd2,icbbwd2)
 deallocate (errflag,errflag_CO)
 
-end program ifg_parser
+end program opus_file_validator
 
 
 
