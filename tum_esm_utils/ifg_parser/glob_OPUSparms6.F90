@@ -14,9 +14,9 @@
 ! along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 
-module glob_OPUSparms
+module glob_OPUSparms6
 
-use glob_prepro4,only : maxmeas,maxOPUSchar
+use glob_prepro6,only : maxmeas,maxOPUSchar
 
 implicit none
 
@@ -33,7 +33,8 @@ implicit none
 !    ' HPF - high pass filter
 !    ' LPF - low pass filter
 !    ' TSC - scanner T
-!    ' SSM - sample spacing multiplicator (should be 2)  
+!    ' SSM - sample spacing multiplicator (should be 2)
+!    ' DUR - total duration of sample recording (sec)  
 
 type OPUS_parameters
     sequence
@@ -51,9 +52,10 @@ type OPUS_parameters
     real(8) :: HFL                    ! high folding limit(should be sligtly less than 15798)
     real(8) :: LWN                    ! laser wavenumber (should be near 15798)
     real(8) :: TSC                    ! scanner T
+    real(8) :: DUR                    ! total scan duration in sec
 end type
 
 type (OPUS_parameters) :: OPUS_parms(maxmeas)
 
-end module glob_OPUSparms
+end module glob_OPUSparms6
 

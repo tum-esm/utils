@@ -13,7 +13,6 @@
 ! You should have received a copy of the GNU General Public License
 ! along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-
 !====================================================================
 !
 ! This program is for the preprocessing of COCCON measurements.
@@ -28,21 +27,18 @@
 
 program ifg_parser
 
-use glob_prepro4
+use glob_prepro6
 
 implicit none
 
-logical :: dateidadec
-integer :: imeas,itest,iunit,iscan,narg,next_free_unit
-character(len=300) :: inputdatei,logdatei,logdatei_test
-character(len=10) :: idchar
-character(len=7) :: imeaschar
-character(len=4) :: argchar
+logical :: dateidadec,reftrmdec
+integer :: imeas
+character(len=300) :: inputdatei
 
 character(len=lengthcharmeas),dimension(:),allocatable :: measfile
-logical,dimension(:),allocatable :: dualifg
+integer(8),dimension(:),allocatable :: errflag,errflag_CO 
 integer,dimension(:),allocatable :: nptrfirstdir,nofblock,nifg &
-  ,errflag,errflag_CO,icbfwd,icbbwd,icbfwd2,icbbwd2
+  ,icbfwd,icbbwd,icbfwd2,icbbwd2
 integer,dimension(:,:),allocatable :: blocktype,blocklength,blockptr
 
 real(8),dimension(:),allocatable :: JDdate
@@ -50,37 +46,18 @@ real,dimension(:),allocatable :: UTh,durationsec,astrelev,azimuth
 
 character(len=6),dimension(:),allocatable :: YYMMDDlocal,HHMMSSlocal,YYMMDDUT
 
-real,dimension(:),allocatable :: refspec,refspec2,sinc
+real,dimension(:,:),allocatable :: reftrmT
+real,dimension(:),allocatable :: refspec,refspec2,refphas,reftrm,sinc
 real,dimension(:),allocatable :: cbfwd,cbbwd,cbfwd2,cbbwd2
+real,dimension(:),allocatable :: obslatdeg,obslondeg,obsaltkm
 
-! arrays for processing loop
-real,dimension(:),allocatable :: ifgfwd,ifgbwd,ifgfwd2,ifgbwd2
-real,dimension(:),allocatable :: specfwd,specbwd,specfwd2,specbwd2
-real,dimension(:),allocatable :: specfwdrs,specbwdrs,specfwd2rs,specbwd2rs
-real,dimension(:),allocatable :: specmeanrs,specmean2rs
-complex,dimension(:),allocatable :: cspecfwd,cspecbwd,cspecfwd2,cspecbwd2
+logical :: file_is_intact
 
 !====================================================================
 !  read command argument
-!  check presence of optional tccon.inp File
 !  read input file
 !====================================================================
 call get_command_argument(1,inputdatei)
-
-inquire (file = 'tccon.inp',exist = dateidadec)
-if (dateidadec) then
-    print *,'Optional TCCON input file detected...'
-    iunit = next_free_unit()
-    open (iunit,file = 'tccon.inp',status = 'old',action = 'read')
-    call gonext(iunit,.false.)
-    read (iunit,*) TCCONkind
-    print *,'TCCONkind:',TCCONkind
-    close (iunit)
-else
-   print *,'No optional TCCON input file detected...'
-   TCCONkind = 0
-end if
-
 print *,'Reading input file...'
 call read_input(trim(inputdatei))
 print *,'Done!'
@@ -88,41 +65,51 @@ print *,'Number of raw measurements to be processed:',nmeas
 
 if (nmeas .gt. maxmeas) then
     print *,'nmeas maxmeas: ',nmeas,maxmeas
-    call warnout ('Too many files for processing!',0)
+    call warnout ('Too many files for processing!')
 end if
 
 !====================================================================
-!  set ifg, spectral points and OPDmax according to choice of mpowFFT
+!  set ifg, spectral points and OPDmax according to input choice of mpowFFT
 !====================================================================
 select case (mpowFFT)
     case (17)
-        OPDmax = 1.8d0
-        ifgradius = 56873
-        maxspcrs = 56874            
-    case (18)
-        OPDmax = 3.0d0
+        OPDmax = 1.8d0 ! equivalent to Bruker Res 0.5 cm-1
+        ifgradius = 56873            
+    case (19)
+        OPDmax = 4.5d0
+        ifgradius = 142182
+    case (20)
+        OPDmax = 16.2d0
+        ifgradius = 511857
+    case (181)
+        mpowFFT = 18
+        OPDmax = 2.5d0 ! equivalent to Bruker Res 0.36 cm-1
+        ifgradius = 78990
+    case (182)
+        mpowFFT = 18
+        OPDmax = 3.0d0 ! equivalent to Bruker Res 0.3 cm-1
         ifgradius = 94788
-        maxspcrs = 94789
     case default
-        call warnout("Invalid choice of mpowFFT (allowed: 17 or 18)!",0)
+        call warnout("Invalid choice of mpowFFT (allowed: 17, 181/182, 19, 20)!")
 end select
+maxspcrs = ifgradius + 1
 maxifg = 2**mpowFFT
 maxspc = maxifg / 2 
 
 !====================================================================
 !  allocation of general arrays, init sinc, read reference spectrum (for nue cal check)
 !====================================================================
-allocate (dualifg(nmeas))
-allocate (measfile(nmeas),nptrfirstdir(nmeas),nofblock(nmeas) &
-  ,nifg(nmeas),errflag(nmeas),errflag_CO(nmeas))
+allocate (errflag(nmeas),errflag_CO(nmeas))
+allocate (measfile(nmeas),nptrfirstdir(nmeas),nofblock(nmeas),nifg(nmeas))
 allocate (icbfwd(nmeas),icbbwd(nmeas),icbfwd2(nmeas),icbbwd2(nmeas))
 allocate (cbfwd(nmeas),cbbwd(nmeas),cbfwd2(nmeas),cbbwd2(nmeas))
+allocate (obslatdeg(maxmeas),obslondeg(maxmeas),obsaltkm(maxmeas))
 allocate (blocktype(maxblock,nmeas),blocklength(maxblock,nmeas),blockptr(maxblock,nmeas))
 allocate (YYMMDDlocal(nmeas),HHMMSSlocal(nmeas),YYMMDDUT(nmeas))
 allocate (JDdate(nmeas),UTh(nmeas),durationsec(nmeas),astrelev(nmeas),azimuth(nmeas))
 nsinc = nzf * nconv
 allocate (sinc(-nsinc:nsinc))
-allocate (refspec(maxspc),refspec2(maxspc))
+allocate (refspec(maxspc),refspec2(maxspc),refphas(maxspc),reftrm(maxspc))
 
 call prepare_sinc(sinc)
 
@@ -133,11 +120,29 @@ end if
 call read_refspec('refspec.dat',maxspc,refspec)
 call read_refspec('refspec2.dat',maxspc,refspec2)
 
+inquire (file = 'refphase.inp',exist = dateidadec)
+if (dateidadec) then
+    print *,'Optional phase reference file detected...'
+    call read_refspec('refphase.inp',maxspc,refphas)
+else
+    refphas = 0.0
+end if
+
+inquire (file = 'reftrm.inp',exist = dateidadec)
+if (dateidadec) then
+    print *,'Optional trm reference file detected...'
+    allocate (reftrmT(maxT,maxspc))
+    reftrmdec = .true.
+    call read_reftrmT('reftrm.inp',maxT,maxspc,reftrmT)
+else
+    reftrmdec = .false.
+end if
+
 !====================================================================
 !  read file names
 !====================================================================
 print *,'Reading file names'
-call read_meas_files(trim(inputdatei),nmeas,measfile)
+call read_meas_files(trim(inputdatei),nmeas,measfile,obslatdeg,obslondeg,obsaltkm)
 print *,'Done!'
 
 !====================================================================
@@ -146,36 +151,74 @@ print *,'Done!'
 errflag(1:nmeas) = 0
 errflag_CO(1:nmeas) = 0
 
+print *
+print '(A)', '--- Start verifying file integrities ---'
+print *
+
 do imeas = 1,nmeas
-    
-    print *, 'Read OPUS parms:', imeas, ' (', trim(measfile(imeas)), ')'
+    file_is_intact = .true.
+    print '(A)', 'Parsing file "' // trim(measfile(imeas)) // '"'
 
     ! read OPUS parms
-    call read_opus_hdr(measfile(imeas),nptrfirstdir(imeas),nofblock(imeas))
-    call read_opus_dir(measfile(imeas),nptrfirstdir(imeas),nofblock(imeas) &
-      ,blocktype(1:maxblock,imeas),blocklength(1:maxblock,imeas) &
-      ,blockptr(1:maxblock,imeas),dualifg(imeas),nifg(imeas))
-    call read_opus_parms(imeas,measfile(imeas),nofblock(imeas) &
-      ,blocktype(1:maxblock,imeas),blocklength(1:maxblock,imeas),blockptr(1:maxblock,imeas))
+    call read_opus_hdr( &
+        measfile(imeas), &
+        nptrfirstdir(imeas), &
+        nofblock(imeas), &
+        file_is_intact &
+    )
+    call read_opus_dir( &
+        measfile(imeas), &
+        nptrfirstdir(imeas), &
+        nofblock(imeas), &
+        blocktype(1:maxblock,imeas), &
+        blocklength(1:maxblock,imeas), &
+        blockptr(1:maxblock,imeas), &
+        nifg(imeas), &
+        file_is_intact &
+    )
+    call read_opus_parms( &
+        imeas, &
+        measfile(imeas), &
+        nofblock(imeas), &
+        blocktype(1:maxblock,imeas), &
+        blocklength(1:maxblock,imeas), &
+        blockptr(1:maxblock,imeas), &
+        file_is_intact &
+    )
 
     ! check formal consistency of file with COCCON / preprocessor demands
-    call checkOPUSparms(measfile(imeas),imeas)
+    call checkOPUSparms( &
+        imeas, &
+        file_is_intact &
+    )
+
+    if (file_is_intact) then
+        print '(A)', 'File is intact'
+    else
+        print '(A)', 'File is corrupted'
+    end if
+
+    print *
 
 end do
+
+print '(A)', '--- Done verifying file integrities ---'
 
 !====================================================================
 !  Deallocation of general arrays
 !====================================================================
-deallocate (refspec,refspec2)
+if (reftrmdec) deallocate (reftrmT)
+deallocate (refspec,refspec2,refphas,reftrm)
 deallocate (sinc)
 
 deallocate (JDdate,UTh,durationsec,astrelev,azimuth)
 deallocate (YYMMDDlocal,HHMMSSlocal,YYMMDDUT)
+deallocate (obslatdeg,obslondeg,obsaltkm)
 deallocate (cbfwd,cbbwd,cbfwd2,cbbwd2)
 deallocate (blocktype,blocklength,blockptr)
 deallocate (measfile,nptrfirstdir,nofblock,nifg)
-deallocate (errflag,errflag_CO,icbfwd,icbbwd,icbfwd2,icbbwd2)
-deallocate (dualifg)
+deallocate (icbfwd,icbbwd,icbfwd2,icbbwd2)
+deallocate (errflag,errflag_CO)
 
 end program ifg_parser
 
@@ -190,110 +233,30 @@ end program ifg_parser
 !====================================================================
 !  checkOPUSparms
 !====================================================================
-subroutine checkOPUSparms(measfile,imeas)
+subroutine checkOPUSparms(imeas,file_is_intact)
 
-use glob_prepro4, only : OPDmax
-use glob_OPUSparms
+use glob_prepro6, only : OPDmax
+use glob_OPUSparms6
 
 implicit none
 
-character(len=*),intent(in) :: measfile
 integer,intent(in) :: imeas
+logical,intent(inout) :: file_is_intact
 
-if (OPUS_parms(imeas)%RES .lt. 0.8999999d0 / OPDmax) then
-    print *,measfile
+if (OPUS_parms(imeas)%RES .gt. 0.90001d0 / OPDmax) then
     print *,'OPUS RES:',OPUS_parms(imeas)%RES
     print *,'Requested RES:',0.9d0 / OPDmax
-    call warnout ('RES too small!',0)
+    call warnout ('RES too small!')
+    file_is_intact = .false.
 end if
 
 if (modulo(OPUS_parms(imeas)%NSS,2) .gt. 0) then
-    print *,measfile
-    call warnout ('Uneven number of scans!',0)    
+    call warnout ('Uneven number of scans!') 
+    file_is_intact = .false.   
 end if
 
-if (scan(OPUS_parms(imeas)%AQM,"DD") .lt. 1) then
-    print *,measfile
-    call warnout ('IFG not double-sided!',0)
-end if
 
 end subroutine checkOPUSparms
-
-
-
-
-
-!====================================================================
-!  FFT
-!====================================================================
-subroutine FFT(ifg,spec)
-
-use glob_prepro4,only : mpowFFT,maxifg,maxspc,pi
-
-implicit none
-
-real,dimension(maxifg),intent(in) :: ifg
-complex,dimension(maxspc),intent(out) :: spec
-
-integer :: i,j,k,l,n1,n2
-real(8) :: angle,argument,xdum,ydum,c,s
-real(8),dimension(:),allocatable :: x,y
-
-allocate(x(maxifg),y(maxifg))
-
-do i = 1,maxifg
-    x(i) = real(ifg(i),8)
-end do
-y = 0.0d0
-
-n2 = maxifg
-do k = 1,mpowFFT
-    n1 = n2
-    n2 = n2 / 2
-    angle = 0.0d0
-    argument = 2.0d0 * pi / real(n1,8)
-    do j = 0,n2 - 1
-        c = cos(angle)
-        s = sin(angle)
-        do i = j,maxifg - 1,n1
-            l = i + n2
-            xdum = x(i+1) - x(l+1)
-            x(i+1) = x(i+1) + x(l+1)
-            ydum = y(i+1) - y(l+1)
-            y(i+1) = y(i+1) + y(l+1)
-            x(l+1) = xdum * c - ydum * s
-            y(l+1) = ydum * c + xdum * s
-        end do ! i loop
-        angle = real(j + 1,8) * argument
-    end do !j loop
-end do !k loop
-
-j = 0
-do i = 0,maxifg - 2
-    if (i .lt. j) then
-        xdum = x(j+1)
-        x(j+1) = x(i+1)
-        x(i+1) = xdum
-        ydum = y(j+1)
-        y(j+1) = y(i+1)
-        y(i+1) = ydum
-    end if
-    k = maxifg / 2
-    do while (k .lt. j + 1)
-        j = j - k
-        k = k / 2
-    end do
-    j = j + k
-end do ! i loop
-
-do i = 1,maxspc
-    spec(i) = cmplx(x(i),y(i))
-end do
-
-deallocate (x,y)
-
-end subroutine FFT
-
 
 
 !====================================================================
@@ -320,39 +283,6 @@ end do
 end subroutine gonext
 
 
-
-!====================================================================
-!  mysinc
-!====================================================================
-real function mysinc(x)
-
-implicit none
-
-real,parameter :: spi = 3.141592654
-real,parameter :: spihalb = 1.570796327
-
-real,intent(in) :: x
-real :: xabs,xabsmod,xabsqu,xabsmodqu
-
-
-xabs = abs(x) + 1.0e-8
-xabsqu = xabs * xabs
-!xabsmod = mod(xabs,spi)
-
-mysinc = sin(xabs) / (xabs + 5.0e-8 * xabsqu * xabsqu)
-
-!if (xabsmod .ge. spihalb) xabsmod = spi - xabsmod
-!
-!xabsmodqu = xabsmod * xabsmod
-!xabsqu = xabs * xabs
-!mysinc = (xabsmod &
-!  * (1.0 + xabsmodqu * (-0.1666595 + xabsmodqu &
-!  * (0.008315 - xabsmodqu * 0.0001855)))) / (xabs + 2.0e-7 * xabsqu * xabsqu)
-
-end function mysinc
-
-
-
 !====================================================================
 !  next_free_unit
 !====================================================================
@@ -369,10 +299,10 @@ is_open = .true.
 do while (is_open .and. iu_free < 100)
     iu_free = iu_free+1
     inquire (unit=iu_free, opened=is_open, iostat=istatus)
-    if (istatus .ne. 0) call warnout ('Error in inquiry!',0)
+    if (istatus .ne. 0) call warnout ('Error in inquiry!')
 enddo
 
-if (iu_free >= 100) call warnout ('No free unit < 100 found!',0)
+if (iu_free >= 100) call warnout ('No free unit < 100 found!')
 
 next_free_unit = iu_free
 
@@ -385,7 +315,7 @@ end function next_free_unit
 !====================================================================
 subroutine OPUS_eval_char(blocklength,binchar,charfilter,charwert)
 
-use glob_prepro4,only : maxOPUSchar
+use glob_prepro6,only : maxOPUSchar
 
 implicit none
 
@@ -400,7 +330,7 @@ integer :: ipos
 ipos = index(binchar,charfilter//achar(0))
 if (ipos .eq. 0) then
     print *, 'charfilter "', charfilter, '" is missing'
-    !call warnout('charfilter not found!',0)
+    !call warnout('charfilter not found!')
 end if
 
 read(binchar(ipos+4:ipos+5),FMT='(A2)') ityp
@@ -408,7 +338,7 @@ read(binchar(ipos+4:ipos+5),FMT='(A2)') ityp
 read(binchar(ipos+6:ipos+7),FMT='(A2)') ireserved
     
 if (ityp .ne. 2 .and. ityp .ne. 3) then
-    call warnout('Inconsistent parameter kind in OPUS file!',0)
+    call warnout('Inconsistent parameter kind in OPUS file!')
 end if
 
 charwert = '                                                  '
@@ -436,7 +366,7 @@ integer :: ipos
 ipos = index(binchar,charfilter//achar(0))
 if (ipos .eq. 0) then
     print *, 'charfilter "', charfilter, '" is missing'
-    !call warnout('charfilter not found!',0)
+    ! call warnout('charfilter not found!')
 end if
 
 read(binchar(ipos+4:ipos+5),FMT='(A2)') ityp
@@ -444,7 +374,7 @@ read(binchar(ipos+4:ipos+5),FMT='(A2)') ityp
 read(binchar(ipos+6:ipos+7),FMT='(A2)') ireserved
     
 if (ityp .ne. 0 .or. ireserved .ne. 2) then
-    call warnout('Inconsistent parameter kind in OPUS file!',0)
+    call warnout('Inconsistent parameter kind in OPUS file!')
 end if
 
 read(binchar(ipos+8:ipos+8+2*ireserved-1),FMT='(A4)') iwert
@@ -470,7 +400,7 @@ integer :: ipos
 ipos = index(binchar,charfilter//achar(0))
 if (ipos .eq. 0) then
     print *, 'charfilter "', charfilter, '" is missing'
-    !call warnout('charfilter not found!',0)
+    ! call warnout('charfilter not found!')
 end if
 
 read(binchar(ipos+4:ipos+5),FMT='(A2)') ityp
@@ -478,7 +408,7 @@ read(binchar(ipos+4:ipos+5),FMT='(A2)') ityp
 read(binchar(ipos+6:ipos+7),FMT='(A2)') ireserved
     
 if (ityp .ne. 1 .or. ireserved .ne. 4) then
-    call warnout('Inconsistent parameter kind in OPUS file!',0)
+    call warnout('Inconsistent parameter kind in OPUS file!')
 end if
 
 read(binchar(ipos+8:ipos+8+2*ireserved-1),FMT='(A8)') dblewert
@@ -487,13 +417,12 @@ end subroutine OPUS_eval_dble
 
 
 
-
 !====================================================================
 !  prepare_sinc
 !====================================================================
 subroutine prepare_sinc(sinc)
 
-use glob_prepro4, only : nconv,nzf,nsinc,pi
+use glob_prepro6, only : nconv,nzf,nsinc,pi
 
 implicit none
 
@@ -520,27 +449,26 @@ end subroutine prepare_sinc
 
 
 
-
 !====================================================================
-!  read_input: Einlesen der Eingabedatei
+!  read_input
 !====================================================================
 subroutine read_input(inpdatei)
 
-use glob_prepro4
+use glob_prepro6
 
 implicit none
 
 character(len=*),intent(in) :: inpdatei
 
-character(len=300) :: zeile
+character(len = lengthcharmeas) :: zeile,dateiname
 logical :: marke,decfileda,decsize
-integer :: iunit,iowert,imeas,next_free_unit,nfilebytes
+integer :: iunit,iowert,imeas,next_free_unit,nfilebytes,iscan
 
 iunit = next_free_unit()
 open (iunit,file = trim(inpdatei),status = 'old',iostat = iowert)
 if (iowert .ne. 0) then
     print *,trim(inpdatei)
-    call warnout('Cannot open input file!',0)
+    call warnout('Cannot open input file!')
 end if
 
 call gonext(iunit,.false.)
@@ -552,6 +480,7 @@ read(iunit,*) DCvar
 call gonext(iunit,.false.)
 read(iunit,*) ILSapo,ILSphas
 read(iunit,*) ILSapo2,ILSphas2
+read(iunit,*) semiFOV
 
 call gonext(iunit,.false.)
 read(iunit,*) obsfixdec
@@ -567,7 +496,14 @@ call gonext(iunit,.false.)
 read(iunit,'(L)') quietrundec
 read(iunit,'(A)') diagoutpath
 read(iunit,'(A)') binoutpath
+read(iunit,'(L)') dualchandec
+read(iunit,'(L)') chanswapdec
+read(iunit,'(L)') anaphasdec
+read(iunit,'(I2)') bandselect
+
 if (diagoutpath .eq. 'standard') diagoutpath = 'diagnosis'
+if (chanswapdec .and. .not. dualchandec) call warnout('chanswap requires dualchandec')
+if (bandselect .eq. 1 .and. .not. dualchandec) call warnout('bandselect = 1 requires dualchandec')
 
 call gonext(iunit,.false.)
 read(iunit,'(A)') infotext
@@ -577,15 +513,22 @@ call gonext(iunit,.false.)
 marke = .false.
 imeas = 0
 do while (.not. marke)
+    zeile = ''
     read(iunit,'(A)') zeile
     if (zeile(1:3) .eq. '***') then
         marke = .true.
     else        
-        ! test file existence and size here
-        inquire(file = zeile,exist = decfileda,size = nfilebytes)
+        ! test OPSUS file existence and size here
+        if (obsfixdec) then
+            dateiname = trim(zeile)
+        else
+            iscan = scan(zeile,',')
+            dateiname = zeile(1:iscan - 1)
+        end if
+        inquire(file = trim(dateiname),exist = decfileda,size = nfilebytes)
         if (.not. decfileda) then
-            print *,zeile
-            call warnout('spectrum file does not exist!',0)
+            print *,dateiname
+            call warnout('spectrum file does not exist!')
         end if
         if (nfilebytes .lt. minfilesize) then
             decsize = .false.
@@ -604,28 +547,30 @@ end subroutine read_input
 
 
 !====================================================================
-!  read names of all files to be processed
+! read_meas_files
 !====================================================================
-subroutine read_meas_files(inpdatei,nmeas,measfile)
+subroutine read_meas_files(inpdatei,nmeas,measfile,obslatdeg,obslondeg,obsaltkm)
 
-use glob_prepro4, only : lengthcharmeas,minfilesize
+use glob_prepro6, only : obsfixdec,obsfixlatdeg,obsfixlondeg,obsfixaltkm,lengthcharmeas,minfilesize
 
 implicit none
 
 character(len=*),intent(in) :: inpdatei
 integer,intent(in) :: nmeas
 character(len=lengthcharmeas),dimension(nmeas),intent(out) :: measfile
+real,dimension(nmeas),intent(out) :: obslatdeg,obslondeg,obsaltkm
 
 logical :: marke,decfileda,decsize
-character(len=lengthcharmeas) :: zeile
-integer :: i,imeas,imeasall,iunit,iowert,next_free_unit,nfilebytes
+character(len=lengthcharmeas) :: zeile,dateiname
+integer :: i,imeas,iunit,iowert,next_free_unit,nfilebytes,iscan
+real :: latdeg,londeg,altkm
 
 iunit = next_free_unit()
 
 open (iunit,file = trim(inpdatei),status = 'old',iostat = iowert)
 if (iowert .ne. 0) then
     print *,trim(inpdatei)
-    call warnout('Cannot open input file!',0)
+    call warnout('Cannot open input file!')
 end if
 
 do i = 1,6
@@ -635,15 +580,28 @@ end do
 marke = .false.
 imeas = 0
 do while (.not. marke)
+    zeile = ''
     read(iunit,'(A)') zeile
+    if (zeile(1:3) .ne. '***') then
+        if (obsfixdec) then
+            dateiname = trim(zeile)
+            latdeg = obsfixlatdeg
+            londeg = obsfixlondeg
+            altkm = obsfixaltkm
+        else
+            iscan = scan(zeile,',')
+            dateiname = zeile(1:iscan - 1)
+            read(zeile(iscan+1:len(trim(zeile))),*) latdeg,londeg,altkm
+        end if
+    end if
     if (zeile(1:3) .eq. '***') then
         marke = .true.
     else        
         ! test file size here
-        inquire(file = zeile,exist = decfileda,size = nfilebytes)
+        inquire(file = trim(dateiname),exist = decfileda,size = nfilebytes)
         if (.not. decfileda) then
-            print *,zeile
-            call warnout('spectrum file does not exist!',0)
+            print *,dateiname
+            call warnout('spectrum file does not exist!')
         end if
         if (nfilebytes .lt. minfilesize) then
             decsize = .false.
@@ -652,7 +610,10 @@ do while (.not. marke)
         end if
         if (decsize) then
             imeas = imeas + 1
-            measfile(imeas) = trim(zeile)
+            obslatdeg(imeas) = latdeg
+            obslondeg(imeas) = londeg
+            obsaltkm(imeas) = altkm
+            measfile(imeas) = trim(dateiname)
             print *,trim(measfile(imeas))
         end if
     end if
@@ -668,21 +629,21 @@ end subroutine read_meas_files
 !  read_opus_dir
 !====================================================================
 subroutine read_opus_dir(measfile,nptrfirstdir,nofblock,blocktype &
-  ,blocklength,blockptr,dualifg,nifg)
+  ,blocklength,blockptr,nifg,file_is_intact)
 
-use glob_prepro4,only : maxblock,maxblength,maxifg
+use glob_prepro6,only : maxblock,maxblength,maxifg,dualchandec,ifgradius,nphaspts
 
 implicit none
 
 character(len=*),intent(in) :: measfile
 integer,intent(in) :: nptrfirstdir,nofblock
 integer,dimension(maxblock),intent(out) :: blocktype,blocklength,blockptr
-logical,intent(out) :: dualifg
 integer,intent(out) :: nifg
+logical,intent(inout) :: file_is_intact
 
 character(len=1) :: charbyte
-integer :: i,nifga,nifgb,iwert,magic,iunit,iowert,next_free_unit
-real(8) :: progver
+logical :: dualifg
+integer :: i,nifga,nifgb,iwert,iunit,iowert,next_free_unit
 
 iunit = next_free_unit()
 
@@ -716,30 +677,36 @@ do i = 1,nofblock
     end if
 end do
 
-if (nifga .eq. 0) then
-    print *,measfile
-    call warnout('Zero IFG block size!',0)
+if (dualifg .neqv. dualchandec) then
+    call warnout ('inconsistent dualifg!') 
+    file_is_intact = .false.   
 end if
 
-if (dualifg .and. nifga .ne. nifgb) then
-    print *,measfile
-    call warnout('Differing sizes of dual channel IFGs!',0)
+if (nifga .eq. 0) then
+    call warnout('Zero IFG block size!')
+    file_is_intact = .false.
+end if
+
+if (dualchandec .and. nifga .ne. nifgb) then
+    call warnout('Differing sizes of dual channel IFGs!')
+    file_is_intact = .false.
 else
     if (mod(nifga,8) .ne. 0) then
         print*, measfile
-        call warnout('Unexpected IFG size!',0)
+        call warnout('Unexpected IFG size!')
+        file_is_intact = .false.
     end if
     nifg = nifga / 8
 end if
 
-if (mod(nifg,2) .ne. 0) then
-    print *,measfile
-    call warnout('nifg not even!',0)
+if (nifg .gt. maxifg) then
+    call warnout('Note: nifg > maxifg')
+    file_is_intact = .false.
 end if
 
-if (nifg .gt. maxifg) then
-    print *,measfile
-    call warnout('IFG size too big!',0)
+if (nifg .lt. ifgradius + nphaspts + 1) then
+    call warnout('IFG size too small!')
+    file_is_intact = .false.
 end if
 
 end subroutine read_opus_dir
@@ -749,17 +716,17 @@ end subroutine read_opus_dir
 !====================================================================
 !  read_opus_hdr
 !====================================================================
-subroutine read_opus_hdr(measfile,nptrfirstdir,nofblock)
+subroutine read_opus_hdr(measfile,nptrfirstdir,nofblock,file_is_intact)
 
-use glob_prepro4, only : maxblock
+use glob_prepro6, only : maxblock
 
 implicit none
 
 character(len=*),intent(in) :: measfile
 integer,intent(out) :: nptrfirstdir,nofblock
+logical,intent(inout) :: file_is_intact
 
-character(len=1) :: charbyte
-integer :: i,ntest,magic,iunit,iowert,next_free_unit
+integer :: ntest,magic,iunit,iowert,next_free_unit
 real(8) :: progver
 
 iunit = next_free_unit()
@@ -767,13 +734,15 @@ iunit = next_free_unit()
 open (iunit,file = trim(measfile),form='unformatted',access ='stream',status = 'old',action = 'read',iostat = iowert)
 if (iowert .ne. 0) then
     print *,trim(measfile)
-    call warnout('Cannot open measurement file!',0)
+    call warnout('Cannot open measurement file!')
+    file_is_intact = .false.
 end if
 
 read(iunit) magic
 if (magic .ne. -16905718) then
     print *,'measurement file:',trim(measfile)
-    call warnout('Not an OPUS file!',0)
+    call warnout('Not an OPUS file!')
+    file_is_intact = .false.
 end if
 
 read(iunit) progver
@@ -789,7 +758,8 @@ read(iunit) nofblock
 !print *,nofblock
 if (nofblock .gt. maxblock) then
     print *,'measurement file:',trim(measfile)
-    call warnout('nofblock too big!',0)
+    call warnout('nofblock too big!')
+    file_is_intact = .false.
 end if
 
 close (iunit)
@@ -799,19 +769,19 @@ end subroutine read_opus_hdr
 
 
 !====================================================================
-!  read OPUS parameters
-!              
+! read_opus_parms           
 !====================================================================
-subroutine read_opus_parms(imeas,measfile,nofblock,blocktype,blocklength,blockptr)
+subroutine read_opus_parms(imeas,measfile,nofblock,blocktype,blocklength,blockptr,file_is_intact)
 
-use glob_prepro4,only : maxblock,maxblength
-use glob_OPUSparms
+use glob_prepro6,only : maxblock,maxblength
+use glob_OPUSparms6
 
 implicit none
 
 character(len=*),intent(in) :: measfile
 integer,intent(in) :: imeas,nofblock
 integer,dimension(maxblock),intent(in) :: blocktype,blocklength,blockptr
+logical,intent(inout) :: file_is_intact
 
 integer :: i,iunit,iowert,next_free_unit
 character(len=maxblength) :: binchar
@@ -826,12 +796,14 @@ iunit = next_free_unit()
 open (iunit,file = trim(measfile),form='unformatted',access ='stream',status = 'old',action = 'read',iostat = iowert)
 if (iowert .ne. 0) then
     print *,trim(measfile)
-    call warnout('Cannot open measurement file!',0)
+    call warnout('Cannot open measurement file!')
+    file_is_intact = .false.
 end if
 
 if (blocklength(i) .gt. maxblength) then
     print *,trim(measfile)
-    call warnout('Max blocklength exceeded!',0)
+    call warnout('Max blocklength exceeded!')
+    file_is_intact = .false.
 end if
 
 read(unit = iunit,pos = blockptr(i) + 1) binchar(1:blocklength(i))
@@ -842,6 +814,7 @@ call OPUS_eval_int(blocklength(i),binchar,'GBW',OPUS_parms(imeas)%GBW)
 call OPUS_eval_dble(blocklength(i),binchar,'HFL',OPUS_parms(imeas)%HFL)
 call OPUS_eval_dble(blocklength(i),binchar,'LWN',OPUS_parms(imeas)%LWN)
 call OPUS_eval_dble(blocklength(i),binchar,'TSC',OPUS_parms(imeas)%TSC)
+call OPUS_eval_dble(blocklength(i),binchar,'DUR',OPUS_parms(imeas)%DUR)
 
 ! read variables from blocktype 48: NSS,AQM
 do i = 1,nofblock
@@ -853,12 +826,14 @@ iunit = next_free_unit()
 open (iunit,file = trim(measfile),form='unformatted',access ='stream',status = 'old',action = 'read',iostat = iowert)
 if (iowert .ne. 0) then
     print *,trim(measfile)
-    call warnout('Cannot open measurement file!',0)
+    call warnout('Cannot open measurement file!')
+    file_is_intact = .false.
 end if
 
 if (blocklength(i) .gt. maxblength) then
     print *,trim(measfile)
-    call warnout('Max blocklength exceeded!',0)
+    call warnout('Max blocklength exceeded!')
+    file_is_intact = .false.
 end if
 
 read(unit = iunit,pos = blockptr(i) + 1) binchar(1:blocklength(i))
@@ -881,12 +856,14 @@ iunit = next_free_unit()
 open (iunit,file = trim(measfile),form='unformatted',access ='stream',status = 'old',action = 'read',iostat = iowert)
 if (iowert .ne. 0) then
     print *,trim(measfile)
-    call warnout('Cannot open measurement file!',0)
+    call warnout('Cannot open measurement file!')
+    file_is_intact = .false.
 end if
 
 if (blocklength(i) .gt. maxblength) then
     print *,trim(measfile)
-    call warnout('Max blocklength exceeded!',0)
+    call warnout('Max blocklength exceeded!')
+    file_is_intact = .false.
 end if
 
 read(unit = iunit,pos = blockptr(i) + 1) binchar(1:blocklength(i))
@@ -907,12 +884,14 @@ iunit = next_free_unit()
 open (iunit,file = trim(measfile),form='unformatted',access ='stream',status = 'old',action = 'read',iostat = iowert)
 if (iowert .ne. 0) then
     print *,trim(measfile)
-    call warnout('Cannot open measurement file!',0)
+    call warnout('Cannot open measurement file!')
+    file_is_intact = .false.
 end if
 
 if (blocklength(i) .gt. maxblength) then
     print *,trim(measfile)
-    call warnout('Max blocklength exceeded!',0)
+    call warnout('Max blocklength exceeded!')
+    file_is_intact = .false.
 end if
 
 read(unit = iunit,pos = blockptr(i) + 1) binchar(1:blocklength(i))
@@ -936,15 +915,17 @@ character(len=*),intent(in) :: refspecfile
 integer,intent(in) :: maxspc
 real,dimension(maxspc),intent(out) :: refspec
 
-integer :: i,icount,iunit,iowert,next_free_unit
+integer :: i,icount,ixpos,iunit,iowert,next_free_unit
 real :: wert
+real(8) :: a0,a1,a2,a3,a4,xpos,rest,gridratio
+real,dimension(:),allocatable :: wrkspec
 
 iunit = next_free_unit()
 ! check availability of file, number of file entries
 open (iunit,file = trim(refspecfile),status = 'old',iostat = iowert)
 if (iowert .ne. 0) then
     print *,trim(refspecfile)
-    call warnout('Cannot open refspec file!',0)
+    call warnout('Cannot open refspec file!')
 end if
 
 icount = 0
@@ -955,20 +936,111 @@ end do
 102 continue
 close (iunit)
 
-if (icount .ne. maxspc) then
+if (icount .lt. maxspc) then
     print *,'maxspc:',maxspc
     print *,'icount:',icount
-    call warnout('Incompatible # of entries in refspec!',0)
+    call warnout('Incompatible # of entries in refspec!')
 end if
 
 iunit = next_free_unit()
 open (iunit,file = trim(refspecfile),status = 'old',iostat = iowert)
-do i = 1,icount
-    read(iunit,*) refspec(i)
+if (icount .gt. maxspc) then
+    allocate (wrkspec(icount))    
+    do i = 1,icount
+        read(iunit,*) wrkspec(i)
+    end do
+    close (iunit)
+    ! interpolation on output grid
+    gridratio = real(icount - 1,8) / real(maxspc - 1,8)
+    refspec(1) = wrkspec(1)
+    xpos = 1.0d0 + gridratio
+    ixpos = nint(xpos)
+    rest = xpos - real(ixpos,8)
+    a0 = wrkspec(ixpos)
+    a1 = 0.5d0 * (wrkspec(ixpos + 1) - wrkspec(ixpos - 1))
+    a2 = 0.125d0 * (wrkspec(ixpos-1) - 2.0d0 * wrkspec(ixpos) + wrkspec(ixpos+1))
+    refspec(2) = a0 + rest * (a1 + rest * a2)
+    do i = 3,maxspc - 2
+        xpos = 1.0d0 + gridratio * real(i - 1,8)
+        ixpos = nint(xpos)
+        rest = xpos - real(ixpos,8)
+        a0 = wrkspec(ixpos)
+        a1 = wrkspec(ixpos - 2) / 12.0d0 - 2.0d0 * wrkspec(ixpos - 1) &
+          / 3.0d0 + 2.0d0 * wrkspec(ixpos + 1) / 3.0d0 - wrkspec(ixpos + 2) / 12.0d0
+        a2 = - wrkspec(ixpos - 2) / 24.0d0 + 2.0d0 * wrkspec(ixpos - 1) / 3.0d0 - 5.0d0 * wrkspec(ixpos) / 4.0d0 &
+          + 2.0d0 * wrkspec(ixpos + 1) / 3.0d0 - wrkspec(ixpos + 2) / 24.0d0
+        a3 = - wrkspec(ixpos - 2) / 12.0d0 + wrkspec(ixpos - 1) / 6.0d0 - wrkspec(ixpos + 1) / 6.0d0 &
+          + wrkspec(ixpos + 2) / 12.0d0
+        a4 = wrkspec(ixpos - 2) / 24.0d0 - wrkspec(ixpos - 1) / 6.0d0 + 0.25d0 * wrkspec(ixpos) - wrkspec(ixpos + 1) &
+          / 6.0d0 + wrkspec(ixpos + 2) / 24.0d0
+        refspec(i) = a0 + rest * (a1 + rest * (a2 + rest * (a3 + rest * a4)))
+    end do
+    xpos = 1.0d0 + gridratio * real(maxspc - 2,8)
+    ixpos = nint(xpos)
+    rest = xpos - real(ixpos,8)
+    a0 = wrkspec(ixpos)
+    a1 = 0.5d0 * (wrkspec(ixpos + 1) - wrkspec(ixpos - 1))
+    a2 = 0.125d0 * (wrkspec(ixpos-1) - 2.0d0 * wrkspec(ixpos) + wrkspec(ixpos+1))
+    refspec(maxspc - 1) = a0 + rest * (a1 + rest * a2)
+    refspec(maxspc) = wrkspec(icount)
+    deallocate (wrkspec)
+else
+    do i = 1,icount
+        read(iunit,*) refspec(i)
+    end do
+    close (iunit)
+end if
+
+end subroutine read_refspec
+
+
+
+!====================================================================
+!  read_reftrmT
+!====================================================================
+subroutine read_reftrmT(refspecfile,maxT,maxspc,reftrmT)
+
+implicit none
+
+character(len=*),intent(in) :: refspecfile
+integer,intent(in) :: maxT,maxspc
+real,dimension(maxT,maxspc),intent(out) :: reftrmT
+
+character(len=376) :: zeile
+integer :: i,j,icount,iunit,iowert,next_free_unit
+
+iunit = next_free_unit()
+! check availability of file, number of file entries
+open (iunit,file = trim(refspecfile),status = 'old',iostat = iowert)
+
+if (iowert .ne. 0) then
+    print *,trim(refspecfile)
+    call warnout('Cannot open refspec file!')
+end if
+
+icount = 0
+do
+    read(iunit,'(A376)',end = 102) zeile
+    icount = icount + 1
+end do
+102 continue
+close (iunit)
+
+if (icount .ne. maxspc) then
+    print *,'maxspc:',maxspc
+    print *,'icount:',icount
+    call warnout('Incompatible # of entries in reftrmT!')
+end if
+
+iunit = next_free_unit()
+open (iunit,file = trim(refspecfile),status = 'old',iostat = iowert)  
+do i = 1,maxspc
+    read(iunit,'(A376)') zeile
+    read (zeile,'(E12.5,28(1X,E12.5))') (reftrmT(j,i),j = 1,maxT)
 end do
 close (iunit)
 
-end subroutine read_refspec
+end subroutine read_reftrmT
 
 
 
@@ -999,22 +1071,18 @@ end subroutine tofile_spec
 
 
 
+
 !====================================================================
 !� Warnung rausschreiben und Programm evtl. beenden
 !====================================================================
-subroutine warnout(text,predec)
+subroutine warnout(text)
 
 use ISO_FORTRAN_ENV, only : ERROR_UNIT
-use glob_prepro4, only : quietrundec
 
 implicit none
 
 character(len=*),intent(in) :: text
-integer,intent(in) :: predec
-character(len=1) :: chardum
-integer :: intdec
 
-print *,'Warning:'
-print *, trim(text)
+print '(A)', trim(text)
 
 end subroutine warnout
