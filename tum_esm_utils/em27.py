@@ -1,6 +1,6 @@
 """Functions for interacting with EM27 interferograms.
 
-Implements: `detect_corrupt_ifgs`, `load_proffast2_result`.
+Implements: `detect_corrupt_opus_files`, `load_proffast2_result`.
 
 This requires you to install this utils library with the optional `polars` dependency:
 
@@ -56,7 +56,7 @@ def _compile_fortran_code(
             )
 
 
-def detect_corrupt_ifgs(
+def detect_corrupt_opus_files(
     ifg_directory: str,
     silent: bool = True,
     fortran_compiler: Literal["gfortran", "gfortran-9"] = "gfortran",
@@ -167,6 +167,43 @@ def detect_corrupt_ifgs(
         f.write(stdout)
 
     return results
+
+
+@deprecated(
+    "This will be removed in the next breaking release. Please use " +
+    "the identical function `detect_corrupt_opus_files` instead."
+)
+def detect_corrupt_ifgs(
+    ifg_directory: str,
+    silent: bool = True,
+    fortran_compiler: Literal["gfortran", "gfortran-9"] = "gfortran",
+    force_recompile: bool = False,
+) -> dict[str, list[str]]:
+    """Returns dict[filename, list[error_messages]] for all
+    corrupt opus files in the given directory.
+
+    It will compile the fortran code using a given compiler
+    to perform this task. The fortran code is derived from
+    the preprocess source code of Proffast 2
+    (https://www.imk-asf.kit.edu/english/3225.php). We use
+    it because the retrieval using Proffast 2 will fail if
+    there are corrupt interferograms in the input.
+    
+    Args:
+        ifg_directory:     The directory containing the interferograms.
+        silent:            If set to False, print additional information.
+        fortran_compiler:  The fortran compiler to use.
+        force_recompile:   If set to True, the fortran code will be recompiled.
+
+    Returns:
+        A dictionary containing corrupt filenames as keys and a list of error
+        messages as values."""
+    return detect_corrupt_opus_files(
+        ifg_directory=ifg_directory,
+        silent=silent,
+        fortran_compiler=fortran_compiler,
+        force_recompile=force_recompile,
+    )
 
 
 def load_proffast2_result(path: str) -> pl.DataFrame:
