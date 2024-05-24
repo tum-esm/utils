@@ -675,7 +675,7 @@ do i = 1,nofblock
 end do
 
 if (dualifg .neqv. dualchandec) then
-    call warnout ('inconsistent dualifg!') 
+    call warnout ('Inconsistent dualifg!') 
     file_is_intact = .false.   
 end if
 

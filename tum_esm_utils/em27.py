@@ -162,7 +162,7 @@ def detect_corrupt_opus_files(
     # every file not mentioned in the verification results failed during reading it
     for filepath in checked_files:
         results[os.path.basename(filepath)] = [
-            "file not even readible by the parser"
+            "File not even readible by the parser"
         ]
 
     # save the raw output for debugging purposes
