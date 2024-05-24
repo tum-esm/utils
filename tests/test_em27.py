@@ -12,21 +12,22 @@ def test_detect_corrupt_ifgs() -> None:
     is not an interferogram at all"""
 
     with tempfile.TemporaryDirectory() as tmpdir:
-        with open(os.path.join(tmpdir, "test_ifg"), "w") as f:
+        assert len(tum_esm_utils.em27.detect_corrupt_opus_files(tmpdir)) == 0
+        test_file_name = os.path.join(tmpdir, "test_ifg")
+        with open(test_file_name, "w") as f:
             f.write("corrupt interferogram")
-        assert len(tum_esm_utils.em27.detect_corrupt_ifgs(tmpdir)) == 0
+        assert set(tum_esm_utils.em27.detect_corrupt_opus_files(tmpdir).keys()
+                  ) == {"test_ifg"}
 
-    test_data_path = os.path.join(_PROJECT_DIR, "tests", "data")
-    detection_results = tum_esm_utils.em27.detect_corrupt_ifgs(test_data_path)
-    assert detection_results == {
-        "md20220409s0e00a.0199": [
-            "charfilter 'GFW' is missing",
-            "charfilter 'GBW' is missing",
-            "charfilter 'HFL' is missing",
-            "charfilter 'LWN' is missing",
-            "charfilter 'TSC' is missing",
-        ]
-    }
+    detection_results = tum_esm_utils.em27.detect_corrupt_opus_files(
+        tum_esm_utils.files.rel_to_abs_path("./data")
+    )
+    assert set(detection_results.keys()) == set([
+        "comb_invparms_ma_SN061_210329-210329.csv",
+        "comb_invparms_mc_SN115_220602-220602.csv",
+        "md20220409s0e00a.0199",
+        "md20220409s0e00a.0200",
+    ])
 
 
 def test_load_proffast2_result() -> None:
