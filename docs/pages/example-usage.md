@@ -32,9 +32,8 @@ The following code will run a modified code of the [Proffast 2](https://www.imk-
 ```python
 import tum_esm_utils
 
-test_data_path = os.path.join("/path/to/a/folder/with/interferograms")
 detection_results = tum_esm_utils.em27.detect_corrupt_opus_files(
-    test_data_path
+    "/path/to/a/folder/with/interferograms"
 )
 assert detection_results == {
     'md20220409s0e00a.0199': [
@@ -60,8 +59,6 @@ assert detection_results == {
     ]
 }
 ```
-
-The detection result means the file `/path/to/a/folder/with/interferograms/md20220409s0e00a.0199` could not be read.
 
 ## Ring List
 
