@@ -13,6 +13,9 @@ SCRIPT_PATH_WITH_GRACE = os.path.join(
 
 
 def test_ungraceful_process() -> None:
+    terminate_process(SCRIPT_PATH)
+    time.sleep(0.1)
+
     expected_pid = start_background_process(sys.executable, SCRIPT_PATH)
     time.sleep(0.1)
 

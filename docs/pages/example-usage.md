@@ -33,16 +33,30 @@ The following code will run a modified code of the [Proffast 2](https://www.imk-
 import tum_esm_utils
 
 test_data_path = os.path.join("/path/to/a/folder/with/interferograms")
-detection_results = tum_esm_utils.interferograms.detect_corrupt_ifgs(
+detection_results = tum_esm_utils.interferograms.detect_corrupt_opus_files(
     test_data_path
 )
 assert detection_results == {
-    "md20220409s0e00a.0199": [
-        "charfilter 'GFW' is missing",
-        "charfilter 'GBW' is missing",
-        "charfilter 'HFL' is missing",
-        "charfilter 'LWN' is missing",
-        "charfilter 'TSC' is missing",
+    'md20220409s0e00a.0199': [
+        'Charfilter "DUR" is missing',
+        'Charfilter "GBW" is missing',
+        'Charfilter "GFW" is missing',
+        'Charfilter "HFL" is missing',
+        'Charfilter "LWN" is missing',
+        'Charfilter "TSC" is missing',
+        'Differing sizes of dual channel IFGs!',
+        'IFG size too small!',
+        'Inconsistent dualifg!',
+        'Inconsistent parameter kind in OPUS file!'
+    ],
+    'comb_invparms_ma_SN061_210329-210329.csv': [
+        'File not even readible by the parser'
+    ],
+    'comb_invparms_mc_SN115_220602-220602.csv': [
+        'File not even readible by the parser'
+    ],
+    'md20220409s0e00a.0200': [
+        'File not even readible by the parser'
     ]
 }
 ```
