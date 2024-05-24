@@ -33,7 +33,7 @@ The following code will run a modified code of the [Proffast 2](https://www.imk-
 import tum_esm_utils
 
 test_data_path = os.path.join("/path/to/a/folder/with/interferograms")
-detection_results = tum_esm_utils.interferograms.detect_corrupt_opus_files(
+detection_results = tum_esm_utils.em27.detect_corrupt_opus_files(
     test_data_path
 )
 assert detection_results == {
