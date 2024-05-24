@@ -147,20 +147,23 @@ def detect_corrupt_opus_files(
     )[1].split("--- Done verifying file integrities ---")[0].strip("\t\n ")
 
     # parse the verification results
-    file_verification_blocks = verification_block.split("\n\n")
-    checked_files: set[str] = set(filepaths)
     results: dict[str, list[str]] = {}
-    for block in file_verification_blocks:
-        lines = block.split("\n")
-        is_corrupt = len(lines) > 2
-        filepath = lines[0].split('"')[1]
-        if is_corrupt:
-            results[filepath] = lines[1 :-1]
-        checked_files.remove(filepath)
+    checked_files: set[str] = set(filepaths)
+    if "\n\n" in verification_block:
+        file_verification_blocks = verification_block.split("\n\n")
+        for block in file_verification_blocks:
+            lines = block.split("\n")
+            is_corrupt = len(lines) > 2
+            filepath = lines[0].split('"')[1]
+            if is_corrupt:
+                results[os.path.basename(filepath)] = lines[1 :-1]
+            checked_files.remove(filepath)
 
     # every file not mentioned in the verification results failed during reading it
     for filepath in checked_files:
-        results[filepath] = ["file not even readible by the parser"]
+        results[os.path.basename(filepath)] = [
+            "file not even readible by the parser"
+        ]
 
     # save the raw output for debugging purposes
     with open(os.path.join(_PARSER_DIR, "output.txt"), "w") as f:

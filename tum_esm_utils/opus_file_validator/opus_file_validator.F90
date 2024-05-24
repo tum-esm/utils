@@ -329,8 +329,7 @@ integer :: ipos
 
 ipos = index(binchar,charfilter//achar(0))
 if (ipos .eq. 0) then
-    print *, 'charfilter "', charfilter, '" is missing'
-    !call warnout('charfilter not found!')
+    print '(A)', 'Charfilter "', charfilter, '" is missing'
 end if
 
 read(binchar(ipos+4:ipos+5),FMT='(A2)') ityp
@@ -365,8 +364,7 @@ integer :: ipos
 
 ipos = index(binchar,charfilter//achar(0))
 if (ipos .eq. 0) then
-    print *, 'charfilter "', charfilter, '" is missing'
-    ! call warnout('charfilter not found!')
+    print '(A)', 'Charfilter "', charfilter, '" is missing'
 end if
 
 read(binchar(ipos+4:ipos+5),FMT='(A2)') ityp
@@ -399,8 +397,7 @@ integer :: ipos
 
 ipos = index(binchar,charfilter//achar(0))
 if (ipos .eq. 0) then
-    print *, 'charfilter "', charfilter, '" is missing'
-    ! call warnout('charfilter not found!')
+    print '(A)', 'Charfilter "', charfilter, '" is missing'
 end if
 
 read(binchar(ipos+4:ipos+5),FMT='(A2)') ityp
