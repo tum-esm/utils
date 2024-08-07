@@ -41,16 +41,20 @@ documentation = "https://tum-esm-utils.netlify.app"
 [project.optional-dependencies]
 dev = [
     "pytest>=8.1.1",
-    "types-psutil>=5.9.5.20240316",
-    "types-requests>=2.31.0.20240406",
     "pydocstyle>=6.3.0",
     "yapf>=0.40.2",
     "mypy>=1.9.0",
     "pydoc-markdown>=4.8.2",
+    "matplotlib>=3.9.1.post1",
+    "numpy>=2.0.1",
+    "tailwind-colors>=1.2.1",
+    "polars>=1.4.1",
+    "types-psutil>=5.9.5.20240316",
+    "types-requests>=2.31.0.20240406",
     "types-pytz>=2024.1.0.20240203",
 ]
-plotting = ["matplotlib>=3.8.4", "numpy>=1.26.4", "tailwind-colors>=1.2.1"]
-polars = ["polars>=0.20.20"]
+plotting = ["matplotlib>=3.9.1.post1", "numpy>=2.0.1", "tailwind-colors>=1.2.1"]
+polars = ["polars>=1.4.1"]
 
 [build-system]
 requires = ["pdm-backend"]
