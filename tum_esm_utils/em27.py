@@ -228,7 +228,7 @@ def load_proffast2_result(path: str) -> pl.DataFrame:
         path,
         has_header=True,
         separator=",",
-        dtypes={
+        schema_overrides={
             "UTC": pl.Datetime,
             " LocalTime": pl.Utf8,
             " spectrum": pl.Utf8,
