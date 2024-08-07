@@ -1013,3 +1013,30 @@ m = MyModel.model_validate(
 ) # does not raise an error
 ```
 
+
+## `Version` Objects
+
+```python
+class Version(pydantic.RootModel[str])
+```
+
+A version string in the format of MAJOR.MINOR.PATCH[-(alpha|beta|rc).N]
+
+
+##### `as_tag`
+
+```python
+def as_tag() -> str
+```
+
+Return the version string as a tag, i.e. vMAJOR.MINOR.PATCH...
+
+
+##### `as_identifier`
+
+```python
+def as_identifier() -> str
+```
+
+Return the version string as a number, i.e. MAJOR.MINOR.PATCH...
+
