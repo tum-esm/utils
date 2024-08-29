@@ -258,6 +258,8 @@ SERIAL_NUMBERS: dict[str, int] = {
     "me": 117,
     "kc": 83,
 }
+"""The serial numbers of the EM27 devices."""
+
 COLORS: dict[str, str] = {
     "ma": TCH.YELLOW_500,
     "mb": TCH.ORANGE_500,
@@ -266,6 +268,8 @@ COLORS: dict[str, str] = {
     "me": TCH.BLUE_500,
     "kc": TCH.GREEN_500,
 }
+"""Colors recommended for plotting the EM27 data."""
+
 COLORS_LIGHT: dict[str, str] = {
     "ma": TCH.YELLOW_400,
     "mb": TCH.ORANGE_400,
@@ -274,6 +278,8 @@ COLORS_LIGHT: dict[str, str] = {
     "me": TCH.BLUE_400,
     "kc": TCH.GREEN_400,
 }
+"""Lighter colors recommended for plotting the EM27 data."""
+
 COLORS_DARK: dict[str, str] = {
     "ma": TCH.YELLOW_600,
     "mb": TCH.ORANGE_600,
@@ -282,7 +288,9 @@ COLORS_DARK: dict[str, str] = {
     "me": TCH.BLUE_600,
     "kc": TCH.GREEN_600,
 }
-MULTIPLIERS: dict[str, float] = {
+"""Darker colors recommended for plotting the EM27 data."""
+
+PROFFAST_MULTIPLIERS: dict[str, float] = {
     "XCO2": 1,
     "XCH4": 1000,
     "XCO": 1000,
@@ -302,7 +310,9 @@ MULTIPLIERS: dict[str, float] = {
     "CO": 1 / (6.022 * 10e+23),
     "CH4_S5P": 1 / (6.022 * 10e+23),
 }
-UNITS: dict[str, str] = {
+"""Multiplication factors for the EM27 data retrieved using Proffast to bring the data in a common unit."""
+
+PROFFAST_UNITS: dict[str, str] = {
     "XH2O": "ppm",
     "XAIR": "ppm",
     "XCO2": "ppm",
@@ -318,3 +328,4 @@ UNITS: dict[str, str] = {
     "CO": "mol",
     "CH4_S5P": "mol",
 }
+"""Units for the EM27 data retrieved using Proffast after applying the multiplication factor."""

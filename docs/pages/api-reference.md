@@ -313,6 +313,36 @@ Loads the output of Proffast 2 into a polars DataFrame.
   A polars DataFrame containing all columns.
 
 
+##### `SERIAL_NUMBERS`
+
+The serial numbers of the EM27 devices.
+
+
+##### `COLORS`
+
+Colors recommended for plotting the EM27 data.
+
+
+##### `COLORS_LIGHT`
+
+Lighter colors recommended for plotting the EM27 data.
+
+
+##### `COLORS_DARK`
+
+Darker colors recommended for plotting the EM27 data.
+
+
+##### `PROFFAST_MULTIPLIERS`
+
+Multiplication factors for the EM27 data retrieved using Proffast to bring the data in a common unit.
+
+
+##### `PROFFAST_UNITS`
+
+Units for the EM27 data retrieved using Proffast after applying the multiplication factor.
+
+
 ## `tum_esm_utils.files`
 
 File-related utility functions.
