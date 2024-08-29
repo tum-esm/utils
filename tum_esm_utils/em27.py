@@ -11,6 +11,7 @@ pdm add "tum_esm_utils[polars]"
 ```"""
 
 from __future__ import annotations
+import enum
 from typing import Any, Literal
 import os
 import subprocess
@@ -18,6 +19,7 @@ from typing_extensions import deprecated
 import filelock
 import tum_esm_utils
 import polars as pl
+from tailwind_colors import TAILWIND_COLORS_HEX as TCH
 
 _PARSER_DIR = os.path.join(
     os.path.dirname(os.path.abspath(__file__)), "opus_file_validator"
@@ -246,3 +248,73 @@ def load_proffast2_result(path: str) -> pl.DataFrame:
             dtype=pl.Datetime, format=" %Y-%m-%d %H:%M:%S"
         ),
     )
+
+
+SERIAL_NUMBERS: dict[str, int] = {
+    "ma": 61,
+    "mb": 86,
+    "mc": 115,
+    "md": 116,
+    "me": 117,
+    "kc": 83,
+}
+COLORS: dict[str, str] = {
+    "ma": TCH.YELLOW_500,
+    "mb": TCH.ORANGE_500,
+    "mc": TCH.PINK_500,
+    "md": TCH.VIOLET_500,
+    "me": TCH.BLUE_500,
+    "kc": TCH.GREEN_500,
+}
+COLORS_LIGHT: dict[str, str] = {
+    "ma": TCH.YELLOW_400,
+    "mb": TCH.ORANGE_400,
+    "mc": TCH.PINK_400,
+    "md": TCH.VIOLET_400,
+    "me": TCH.BLUE_400,
+    "kc": TCH.GREEN_400,
+}
+COLORS_DARK: dict[str, str] = {
+    "ma": TCH.YELLOW_600,
+    "mb": TCH.ORANGE_600,
+    "mc": TCH.PINK_600,
+    "md": TCH.VIOLET_600,
+    "me": TCH.BLUE_600,
+    "kc": TCH.GREEN_600,
+}
+MULTIPLIERS: dict[str, float] = {
+    "XCO2": 1,
+    "XCH4": 1000,
+    "XCO": 1000,
+    "XAIR": 1,
+    "XH2O": 1,
+    "XAIR": 1,
+    "XCO2": 1,
+    "XCO2_STR": 1,
+    "XCH4": 1000,
+    "XCO": 1000,
+    "XCH4_S5P": 1000,
+    "XAIR": 1,
+    "H2O": 1 / (6.022 * 10e+23),
+    "O2": 1 / (6.022 * 10e+23),
+    "CO2": 1 / (6.022 * 10e+23),
+    "CH4": 1 / (6.022 * 10e+23),
+    "CO": 1 / (6.022 * 10e+23),
+    "CH4_S5P": 1 / (6.022 * 10e+23),
+}
+UNITS: dict[str, str] = {
+    "XH2O": "ppm",
+    "XAIR": "ppm",
+    "XCO2": "ppm",
+    "XCO2_STR": "ppm",
+    "XCH4": "ppb",
+    "XCO": "ppb",
+    "XCH4_S5P": "ppb",
+    "XAIR": "-",
+    "H2O": "mol",
+    "O2": "mol",
+    "CO2": "mol",
+    "CH4": "mol",
+    "CO": "mol",
+    "CH4_S5P": "mol",
+}

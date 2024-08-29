@@ -5,7 +5,7 @@
 groups = ["default", "dev", "plotting", "polars"]
 strategy = ["inherit_metadata"]
 lock_version = "4.5.0"
-content_hash = "sha256:652b37f86e3ebc40a943d1ebb5d61851574272add9abef73f850568fc8ad1958"
+content_hash = "sha256:c17509f304443289c53cadb29a920bd88731c20c2c1a82c6df06e8851c142bf5"
 
 [[metadata.targets]]
 requires_python = "~=3.9"
@@ -1257,7 +1257,7 @@ name = "tailwind-colors"
 version = "1.2.1"
 requires_python = ">=3.8,<4.0"
 summary = "Use the default color palette from TailwindCSS (https://tailwindcss.com/docs/customizing-colors) in your python code for plotting, image generation, etc."
-groups = ["dev", "plotting"]
+groups = ["default", "dev", "plotting"]
 files = [
     {file = "tailwind_colors-1.2.1-py3-none-any.whl", hash = "sha256:e9dd804c3033b1fdd2bf4e6c1385ff14b7a850f7abd2e3d4d8a90492fcc6172a"},
     {file = "tailwind_colors-1.2.1.tar.gz", hash = "sha256:28e83bc83cc6600e4e96c8ebf30ff87f439bb9398d394c04400ee73304639b2e"},

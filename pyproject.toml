@@ -9,6 +9,7 @@ dependencies = [
     "psutil>=5.9.8",
     "pydantic>=2.7.0",
     "pytz>=2024.1",
+    "tailwind-colors>=1.2.1",
 ]
 requires-python = ">=3.9,<4.0"
 readme = "README.md"
