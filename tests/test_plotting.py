@@ -25,5 +25,18 @@ def test_plotting() -> None:
         )
         axis2.plot([1, 2, 3], [3, 2, 1])
 
+        tum_esm_utils.plotting.add_colorpatch_legend(
+            fig,
+            handles=[
+                ("Label 1", "red"),
+                ("Label 2", "blue"),
+                ("Label 3", (0.2, 0.5, 0.8)),
+                ("Label 4", (0.2, 0.5, 0.8, 0.5)),
+                ("Label 5", "#FF00FF"),
+            ],
+            ncols=3,
+            location="upper right",
+        )
+
     assert os.path.exists(figure_path)
     os.remove(figure_path)
