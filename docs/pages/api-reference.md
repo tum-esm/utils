@@ -557,6 +557,31 @@ Add a subplot to a figure.
 - `ValueError` - If the index of the subplot is invalid.
 
 
+##### `add_colorpatch_legend`
+
+```python
+def add_colorpatch_legend(fig: plt.Figure,
+                          handles: List[Tuple[str, Union[
+                              str,
+                              Tuple[float, float, float],
+                              Tuple[float, float, float, float],
+                          ]]],
+                          ncols: Optional[int] = None,
+                          location: str = "upper left") -> None
+```
+
+Add a color patch legend to a figure.
+
+**Arguments**:
+
+- `fig` - The figure to add the legend to.
+- `handles` - A list of tuples containing the label and color of each patch
+  (e.g. `[("Label 1", "red"), ("Label 2", "blue")]`). You can pass any color
+  that is accepted by matplotlib.
+- `ncols` - The number of columns in the legend.
+- `location` - The location of the legend.
+
+
 ## `tum_esm_utils.processes`
 
 Functions to start and terminate background processes.
