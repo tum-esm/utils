@@ -10,11 +10,12 @@ pip install "tum_esm_utils[plotting]"
 pdm add "tum_esm_utils[plotting]"
 ```"""
 
-from typing import Generator, Optional, Any
+from typing import Generator, List, Optional, Any, Tuple, Union
 import contextlib
 
 import matplotlib.pyplot as plt
 import matplotlib.font_manager
+import matplotlib.patches
 from tailwind_colors import TAILWIND_COLORS_HEX
 
 
@@ -132,3 +133,34 @@ def add_subplot(
     axis.grid(visible=None, which="minor", axis="both", linewidth=0.25)
     axis.grid(visible=None, which="major", axis="both", linewidth=0.75)
     return axis
+
+
+def add_colorpatch_legend(
+    fig: plt.Figure,
+    handles: List[Tuple[str, Union[
+        str,
+        Tuple[float, float, float],
+        Tuple[float, float, float, float],
+    ]]],
+    ncols: Optional[int] = None,
+    location: str = "upper left",
+) -> None:
+    """Add a color patch legend to a figure.
+    
+    Args:
+        fig: The figure to add the legend to.
+        handles: A list of tuples containing the label and color of each patch 
+            (e.g. `[("Label 1", "red"), ("Label 2", "blue")]`). You can pass any color
+            that is accepted by matplotlib.
+        ncols: The number of columns in the legend.
+        location: The location of the legend.
+    """
+
+    fig.legend(
+        handles=[
+            matplotlib.patches.Patch(color=color, label=label)
+            for label, color in handles
+        ],
+        ncol=len(handles) if ncols is None else ncols,
+        loc=location,
+    )
