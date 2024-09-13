@@ -6,6 +6,7 @@ Implements: `load_file`, `dump_file`, `load_json_file`,
 
 from __future__ import annotations
 import fnmatch
+import re
 from typing import Any, List, Optional
 import traceback
 import hashlib
@@ -257,3 +258,46 @@ def render_directory_tree(
     if os.path.isfile(root):
         return f"{file_prefix}{root_name}"
     return ""
+
+
+def list_directory(
+    path: str,
+    regex: Optional[str] = None,
+    ignore: Optional[list[str]] = None,
+    include_directories: bool = True,
+    include_files: bool = True,
+    include_links: bool = True,
+) -> list[str]:
+    """List the contents of a directory based on certain criteria. Like `os.listdir`
+    with superpowers. You can filter the list by a regex or you can ignore Unix shell
+    style patterns like `*.lock`.
+    
+    Args:
+        path:                 The path to the directory.
+        regex:                A regex pattern to match the item names against.
+        ignore:               A list of patterns to ignore. If the basename of an item
+                              matches any of the patterns, the item is ignored.
+        include_directories:  Whether to include directories in the output.
+        include_files:        Whether to include files in the output.
+        include_links:        Whether to include symbolic links in the output.
+    
+    Returns: A list of items in the directory that match the criteria.
+    """
+
+    assert os.path.isdir(path), f"Path {path} is not a directory"
+    files = os.listdir(path)
+    if regex is not None:
+        files = [f for f in files if re.match(regex, f)]
+    if ignore is not None:
+        files = [
+            f for f in files
+            if not any([fnmatch.fnmatch(f, pattern) for pattern in ignore])
+        ]
+    if not include_directories:
+        files = [f for f in files if not os.path.isdir(os.path.join(path, f))]
+    if not include_files:
+        files = [f for f in files if not os.path.isfile(os.path.join(path, f))]
+    if not include_links:
+        files = [f for f in files if not os.path.islink(os.path.join(path, f))]
+
+    return files
