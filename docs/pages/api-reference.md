@@ -1027,6 +1027,77 @@ or "hello   world" -> "hello world").
   The string with duplicate characters replaced.
 
 
+## `RandomLabelGenerator` Objects
+
+```python
+class RandomLabelGenerator()
+```
+
+A class to generate random labels that follow the Docker style naming of
+containers, e.g `admiring-archimedes` or `happy-tesla`.
+
+**Usage with tracking duplicates:**
+
+```python
+generator = RandomLabelGenerator()
+label = generator.generate()
+another_label = generator.generate()  # Will not be the same as `label`
+generator.free(label)  # Free the label to be used again
+```
+
+**Usage without tracking duplicates:**
+
+```python
+label = RandomLabelGenerator.generate_fully_random()
+```
+
+Source for the names and adjectives: https://github.com/moby/moby/blob/master/pkg/namesgenerator/names-generator.go
+
+
+##### `__init__`
+
+```python
+def __init__(occupied_labels: set[str] | list[str] = set(),
+             adjectives: set[str] | list[str] = CONTAINER_ADJECTIVES,
+             names: set[str] | list[str] = CONTAINER_NAMES) -> None
+```
+
+Initialize the label generator.
+
+
+##### `generate`
+
+```python
+def generate() -> str
+```
+
+Generate a random label that is not already occupied.
+
+
+##### `free`
+
+```python
+def free(label: str) -> None
+```
+
+Free a label to be used again.
+
+
+##### `generate_fully_random`
+
+```python
+@staticmethod
+def generate_fully_random(
+        adjectives: set[str] | list[str] = CONTAINER_ADJECTIVES,
+        names: set[str] | list[str] = CONTAINER_NAMES) -> str
+```
+
+Get a random label without tracking duplicates.
+
+Use an instance of `RandomLabelGenerator` if you want to avoid
+duplicates by tracking occupied labels.
+
+
 ## `tum_esm_utils.timing`
 
 Functions used for timing or time calculations.
