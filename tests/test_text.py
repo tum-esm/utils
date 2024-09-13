@@ -113,7 +113,20 @@ def test_container_name_generation() -> None:
     generator = tum_esm_utils.text.RandomLabelGenerator(
         adjectives=set(["a", "b", "c"]), names=set(["d", "e", "f"])
     )
-    for i in range(9):
+    for i in range(3):
+        label = generator.generate()
+        assert label not in used_labels, f"Duplicate label: {label}"
+        used_labels.add(label)
+        adjective, name = label.split("-")
+        assert adjective in ["a", "b", "c"], f"Invalid adjective: {adjective}"
+        assert name in ["d", "e", "f"], f"Invalid name: {name}"
+
+    used_adjectives = set([label.split("-")[0] for label in used_labels])
+    assert len(
+        used_adjectives
+    ) == 3, f"Not all adjectives are used equally: {used_adjectives}"
+
+    for i in range(6):
         label = generator.generate()
         assert label not in used_labels, f"Duplicate label: {label}"
         used_labels.add(label)
@@ -141,10 +154,38 @@ def test_container_name_generation() -> None:
         generator.free(label)
     used_labels.clear()
 
-    for i in range(9):
+    for i in range(3):
         label = generator.generate()
         assert label not in used_labels, f"Duplicate label: {label}"
         used_labels.add(label)
         adjective, name = label.split("-")
         assert adjective in ["a", "b", "c"], f"Invalid adjective: {adjective}"
         assert name in ["d", "e", "f"], f"Invalid name: {name}"
+
+    used_adjectives = set([label.split("-")[0] for label in used_labels])
+    assert len(
+        used_adjectives
+    ) == 3, f"Not all adjectives are used equally: {used_adjectives}"
+
+    for i in range(6):
+        label = generator.generate()
+        assert label not in used_labels, f"Duplicate label: {label}"
+        used_labels.add(label)
+        adjective, name = label.split("-")
+        assert adjective in ["a", "b", "c"], f"Invalid adjective: {adjective}"
+        assert name in ["d", "e", "f"], f"Invalid name: {name}"
+
+    generator = tum_esm_utils.text.RandomLabelGenerator()
+    for i in range(10):
+        label1 = generator.generate()
+        generator.free(label1)
+        label2 = generator.generate()
+        generator.free(label2)
+        print(label1, label2)
+        same_adjective = (label1.split("-")[0] == label2.split("-")[0])
+        if not same_adjective:
+            break
+        if i == 9:
+            raise AssertionError(
+                f"Generator always uses the same adjective first: {label1.split('-')[0]}"
+            )

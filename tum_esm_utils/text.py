@@ -301,22 +301,26 @@ class RandomLabelGenerator:
               ) == (len(self.adjectives) * len(self.names)):
             raise RuntimeError("All possible labels are used")
 
-        least_used_adjective, usage_count = min(
+        min_usage_count = min(
             self.adjective_usage_counts.items(), key=lambda x: x[1]
-        )
-        assert usage_count < len(self.names), "This should not happen"
+        )[1]
+        available_adjectives = [
+            a for a, c in self.adjective_usage_counts.items()
+            if c == min_usage_count
+        ]
+        random_adjective = random.choice(available_adjectives)
 
         used_names = set([
             x.split("-")[1] for x in self.occupied_labels
-            if x.startswith(least_used_adjective + "-")
+            if x.startswith(random_adjective + "-")
         ])
         random_name = random.choice(list(self.names - used_names))
 
-        new_label = f"{least_used_adjective}-{random_name}"
+        new_label = f"{random_adjective}-{random_name}"
         assert new_label not in self.occupied_labels, "This should not happen"
         self.occupied_labels.add(new_label)
 
-        self.adjective_usage_counts[least_used_adjective] += 1
+        self.adjective_usage_counts[random_adjective] += 1
         return new_label
 
     def free(self, label: str) -> None:
