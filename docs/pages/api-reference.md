@@ -905,6 +905,49 @@ For every key in replacements, replaces `%key%` in the
 content with its value.
 
 
+##### `simplify_string_characters`
+
+```python
+def simplify_string_characters(s: str,
+                               additional_replacements: dict[str,
+                                                             str] = {}) -> str
+```
+
+Simplify a string by replacing special characters with their ASCII counterparts
+and removing unwanted characters.
+
+For example, `simplify_string_characters("Héllo, wörld!")` will return `"hello-woerld"`.
+
+**Arguments**:
+
+- `s` - The string to simplify.
+- `additional_replacements` - A dictionary of additional replacements to apply.
+  `{ "ö": "oe" }` will replace `ö` with `oe`.
+  
+- `Returns` - The simplified string.
+
+
+##### `replace_consecutive_characters`
+
+```python
+def replace_consecutive_characters(s: str,
+                                   characters: list[str] = [" ", "-"]) -> str
+```
+
+Replace consecutiv characters in a string (e.g. "hello---world" -> "hello-world"
+or "hello   world" -> "hello world").
+
+**Arguments**:
+
+- `s` - The string to process.
+- `characters` - A list of characters to replace duplicates of.
+  
+
+**Returns**:
+
+  The string with duplicate characters replaced.
+
+
 ## `tum_esm_utils.timing`
 
 Functions used for timing or time calculations.
