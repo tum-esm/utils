@@ -11,11 +11,10 @@ pdm add "tum_esm_utils[polars]"
 ```"""
 
 from __future__ import annotations
-import enum
-from typing import Any, Literal
+from typing import Literal
+from typing_extensions import deprecated
 import os
 import subprocess
-from typing_extensions import deprecated
 import filelock
 import tum_esm_utils
 import polars as pl

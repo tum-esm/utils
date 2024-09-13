@@ -1,7 +1,8 @@
 """Functions used for text manipulation/processing.
 
 Implements: `get_random_string`, `pad_string`, `is_date_string`,
-`is_rfc3339_datetime_string`, `insert_replacements`"""
+`is_rfc3339_datetime_string`, `insert_replacements`, `simplify_string_characters`,
+`replace_consecutive_characters`, `RandomLabelGenerator`"""
 
 from __future__ import annotations
 from typing import Literal

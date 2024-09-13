@@ -10,7 +10,7 @@ pip install "tum_esm_utils[plotting]"
 pdm add "tum_esm_utils[plotting]"
 ```"""
 
-from typing import Generator, List, Optional, Any, Tuple, Union
+from typing import Generator, Optional, Any, Union
 import contextlib
 
 import matplotlib.pyplot as plt
@@ -137,10 +137,10 @@ def add_subplot(
 
 def add_colorpatch_legend(
     fig: plt.Figure,
-    handles: List[Tuple[str, Union[
+    handles: list[tuple[str, Union[
         str,
-        Tuple[float, float, float],
-        Tuple[float, float, float, float],
+        tuple[float, float, float],
+        tuple[float, float, float, float],
     ]]],
     ncols: Optional[int] = None,
     location: str = "upper left",

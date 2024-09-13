@@ -3,7 +3,7 @@
 Implements: `date_range`, `ensure_section_duration`, `set_alarm`,
 `clear_alarm`, `wait_for_condition`"""
 
-from typing import Any, Callable, Generator, List, Optional
+from typing import Any, Callable, Generator, Optional
 import contextlib
 import datetime
 import re
@@ -15,7 +15,7 @@ import pytz
 def date_range(
     from_date: datetime.date,
     to_date: datetime.date,
-) -> List[datetime.date]:
+) -> list[datetime.date]:
     """Returns a list of dates between from_date and to_date (inclusive)."""
     delta = to_date - from_date
     assert delta.days >= 0, "from_date must be before to_date"

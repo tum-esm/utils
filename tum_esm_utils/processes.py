@@ -4,9 +4,9 @@ Implements: `get_process_pids`, `start_background_process`,
 `terminate_process`"""
 
 from __future__ import annotations
+from typing import Optional
 import os
 import time
-from typing import Optional
 import psutil
 
 

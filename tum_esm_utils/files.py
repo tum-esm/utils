@@ -2,12 +2,13 @@
 
 Implements: `load_file`, `dump_file`, `load_json_file`,
 `dump_json_file`, `get_parent_dir_path`, `get_dir_checksum`,
-`get_file_checksum`, `rel_to_abs_path`, `expect_file_contents`"""
+`get_file_checksum`, `rel_to_abs_path`, `read_last_n_lines`,
+`expect_file_contents`, `render_directory_tree`, `list_directory`"""
 
 from __future__ import annotations
+from typing import Any, Optional
 import fnmatch
 import re
-from typing import Any, List, Optional
 import traceback
 import hashlib
 import json
@@ -89,7 +90,7 @@ def read_last_n_lines(
     file_path: str,
     n: int,
     ignore_trailing_whitespace: bool = False,
-) -> List[str]:
+) -> list[str]:
     """Read the last `n` lines of a file.
 
     The function returns less than `n` lines if the file has less than `n` lines.
