@@ -230,7 +230,7 @@ def render_directory_tree(
 
         sublists: list[str] = []
         for item in sorted(os.listdir(root)):
-            sd = render_file_tree(
+            sd = render_directory_tree(
                 os.path.join(root, item),
                 ignore=ignore,
                 max_depth=(max_depth - 1) if max_depth is not None else None

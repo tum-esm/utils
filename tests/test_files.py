@@ -96,3 +96,30 @@ def test_read_last_n_lines() -> None:
         )
         print(f"r5 = {r5}")
         assert r5 == ["0 c", "1 cc", "2 ccc"]
+
+
+def test_render_directory_tree() -> None:
+    ignore = [
+        ".git", ".github", ".vscode", ".venv", "dist", ".pdm-build", "docs"
+    ]
+
+    expect = ["📁 tests", "📁 tum_esm_utils", "📄 test_files.py", "📄 .gitignore"]
+    tree = tum_esm_utils.files.render_directory_tree(PROJECT_DIR, ignore=ignore)
+    assert tree is not None
+    print(tree)
+    for i in ignore:
+        assert f"📁 {i}" not in tree
+    for e in expect:
+        assert e in tree
+
+    tree = tum_esm_utils.files.render_directory_tree(
+        PROJECT_DIR, ignore=ignore, max_depth=1
+    )
+    assert tree is not None
+    print(tree)
+    ignore.append("📄 test_files.py")
+    expect.remove("📄 test_files.py")
+    for i in ignore:
+        assert f"📁 {i}" not in tree
+    for e in expect:
+        assert e in tree
