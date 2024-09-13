@@ -349,7 +349,8 @@ File-related utility functions.
 
 Implements: `load_file`, `dump_file`, `load_json_file`,
 `dump_json_file`, `get_parent_dir_path`, `get_dir_checksum`,
-`get_file_checksum`, `rel_to_abs_path`, `expect_file_contents`
+`get_file_checksum`, `rel_to_abs_path`, `read_last_n_lines`,
+`expect_file_contents`, `render_directory_tree`, `list_directory`
 
 
 ##### `get_parent_dir_path`
@@ -405,7 +406,7 @@ Credits to https://stackoverflow.com/a/59004672/8255842
 ```python
 def read_last_n_lines(file_path: str,
                       n: int,
-                      ignore_trailing_whitespace: bool = False) -> List[str]
+                      ignore_trailing_whitespace: bool = False) -> list[str]
 ```
 
 Read the last `n` lines of a file.
@@ -640,10 +641,10 @@ Add a subplot to a figure.
 
 ```python
 def add_colorpatch_legend(fig: plt.Figure,
-                          handles: List[Tuple[str, Union[
+                          handles: list[tuple[str, Union[
                               str,
-                              Tuple[float, float, float],
-                              Tuple[float, float, float, float],
+                              tuple[float, float, float],
+                              tuple[float, float, float, float],
                           ]]],
                           ncols: Optional[int] = None,
                           location: str = "upper left") -> None
@@ -685,12 +686,23 @@ Return a list of PIDs that have the given script as their entrypoint.
 ##### `start_background_process`
 
 ```python
-def start_background_process(interpreter_path: str, script_path: str) -> int
+def start_background_process(interpreter_path: str,
+                             script_path: str,
+                             waiting_period: float = 0.5) -> int
 ```
 
 Start a new background process with nohup with a given python
 interpreter and script path. The script paths parent directory
 will be used as the working directory for the process.
+
+**Arguments**:
+
+- `interpreter_path` - The absolute path of the python interpreter.
+- `script_path` - The absolute path of the python file entrypoint.
+- `waiting_period` - The waiting period in seconds after starting
+  the process.
+  
+- `Returns` - The PID of the started process.
 
 
 ##### `terminate_process`
@@ -909,7 +921,8 @@ local time == utc time + x
 Functions used for text manipulation/processing.
 
 Implements: `get_random_string`, `pad_string`, `is_date_string`,
-`is_rfc3339_datetime_string`, `insert_replacements`
+`is_rfc3339_datetime_string`, `insert_replacements`, `simplify_string_characters`,
+`replace_consecutive_characters`, `RandomLabelGenerator`
 
 
 ##### `get_random_string`
@@ -1110,7 +1123,7 @@ Implements: `date_range`, `ensure_section_duration`, `set_alarm`,
 
 ```python
 def date_range(from_date: datetime.date,
-               to_date: datetime.date) -> List[datetime.date]
+               to_date: datetime.date) -> list[datetime.date]
 ```
 
 Returns a list of dates between from_date and to_date (inclusive).
