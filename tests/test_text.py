@@ -1,3 +1,4 @@
+import re
 import tum_esm_utils
 
 
@@ -88,3 +89,62 @@ def test_replace_consecutive_characters() -> None:
     assert tum_esm_utils.text.replace_consecutive_characters(
         "boooogie-------man---like", characters=["o", "-"]
     ) == "bogie-man-like"
+
+
+def test_container_adjectives_and_names() -> None:
+    min_ord, max_ord = ord("a"), ord("z")
+    for s in tum_esm_utils.text.CONTAINER_ADJECTIVES.union(
+        tum_esm_utils.text.CONTAINER_NAMES
+    ):
+        for c in s:
+            assert min_ord <= ord(c) <= max_ord, f"Invalid character: {c}"
+
+
+def test_container_name_generation() -> None:
+    label_pattern = re.compile(r"^[a-z]+-[a-z]+$")
+    for _ in range(1000):
+        label = tum_esm_utils.text.RandomLabelGenerator.generate_fully_random()
+        assert label_pattern.match(label), f"Invalid label: {label}"
+        adjective, name = label.split("-")
+        assert adjective in tum_esm_utils.text.CONTAINER_ADJECTIVES, f"Invalid adjective: {adjective}"
+        assert name in tum_esm_utils.text.CONTAINER_NAMES, f"Invalid name: {name}"
+
+    used_labels = set()
+    generator = tum_esm_utils.text.RandomLabelGenerator(
+        adjectives=set(["a", "b", "c"]), names=set(["d", "e", "f"])
+    )
+    for i in range(9):
+        label = generator.generate()
+        assert label not in used_labels, f"Duplicate label: {label}"
+        used_labels.add(label)
+        adjective, name = label.split("-")
+        assert adjective in ["a", "b", "c"], f"Invalid adjective: {adjective}"
+        assert name in ["d", "e", "f"], f"Invalid name: {name}"
+
+    try:
+        generator.generate()
+        assert False, "The generator should have raised an exception"
+    except RuntimeError:
+        pass
+
+    generator.free("b-d")
+    label = generator.generate()
+    assert label == "b-d", f"Invalid label: {label}"
+
+    try:
+        generator.generate()
+        assert False, "The generator should have raised an exception"
+    except RuntimeError:
+        pass
+
+    for label in used_labels:
+        generator.free(label)
+    used_labels.clear()
+
+    for i in range(9):
+        label = generator.generate()
+        assert label not in used_labels, f"Duplicate label: {label}"
+        used_labels.add(label)
+        adjective, name = label.split("-")
+        assert adjective in ["a", "b", "c"], f"Invalid adjective: {adjective}"
+        assert name in ["d", "e", "f"], f"Invalid name: {name}"
