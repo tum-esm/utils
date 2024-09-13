@@ -497,6 +497,34 @@ Render a file tree as a string.
 - `Returns` - The directory tree as a string. If the root directory is ignored, `None`.
 
 
+##### `list_directory`
+
+```python
+def list_directory(path: str,
+                   regex: Optional[str] = None,
+                   ignore: Optional[list[str]] = None,
+                   include_directories: bool = True,
+                   include_files: bool = True,
+                   include_links: bool = True) -> list[str]
+```
+
+List the contents of a directory based on certain criteria. Like `os.listdir`
+with superpowers. You can filter the list by a regex or you can ignore Unix shell
+style patterns like `*.lock`.
+
+**Arguments**:
+
+- `path` - The path to the directory.
+- `regex` - A regex pattern to match the item names against.
+- `ignore` - A list of patterns to ignore. If the basename of an item
+  matches any of the patterns, the item is ignored.
+- `include_directories` - Whether to include directories in the output.
+- `include_files` - Whether to include files in the output.
+- `include_links` - Whether to include symbolic links in the output.
+  
+- `Returns` - A list of items in the directory that match the criteria.
+
+
 ## `tum_esm_utils.mathematics`
 
 Mathematical functions.

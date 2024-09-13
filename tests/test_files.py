@@ -123,3 +123,37 @@ def test_render_directory_tree() -> None:
         assert f"📁 {i}" not in tree
     for e in expect:
         assert e in tree
+
+
+def test_list_directory() -> None:
+    l = tum_esm_utils.files.list_directory(PROJECT_DIR)
+    assert set(l) == set(os.listdir(PROJECT_DIR))
+
+    # REGEX
+
+    l = tum_esm_utils.files.list_directory(PROJECT_DIR, regex=r"^.*\.lock$")
+    assert set(l) == {"pdm.lock"}
+    l = tum_esm_utils.files.list_directory(PROJECT_DIR, regex=r"^\.git.*$")
+    assert set(l) == {".git", ".github", ".gitignore"}
+
+    # IGNORE
+
+    l = tum_esm_utils.files.list_directory(
+        PROJECT_DIR, ignore=[".git", ".github"]
+    )
+    assert set(l) == set(os.listdir(PROJECT_DIR)) - {".git", ".github"}
+
+    l = tum_esm_utils.files.list_directory(PROJECT_DIR, ignore=["*.toml"])
+    assert set(l) == set(os.listdir(PROJECT_DIR)) - {"pyproject.toml"}
+
+    # INCLUDES
+
+    l = tum_esm_utils.files.list_directory(
+        PROJECT_DIR, include_directories=False, include_links=False
+    )
+    assert set(l) == {f for f in os.listdir(PROJECT_DIR) if os.path.isfile(f)}
+
+    l = tum_esm_utils.files.list_directory(
+        PROJECT_DIR, include_files=False, include_links=False
+    )
+    assert set(l) == {f for f in os.listdir(PROJECT_DIR) if os.path.isdir(f)}
