@@ -102,3 +102,35 @@ def test_parse_timezone_string() -> None:
     assert tum_esm_utils.timing.parse_timezone_string("UTC-5.5") == -5.5
     assert tum_esm_utils.timing.parse_timezone_string("UTC+05.5") == 5.5
     assert tum_esm_utils.timing.parse_timezone_string("UTC-05.5") == -5.5
+
+
+def test_parse_iso_8601_datetime() -> None:
+
+    strings = [
+        "2021-01-01T00:00:00",
+        "2021-01-01T00:00:00Z",
+        "2021-01-01T00:00:00+00:00",
+        "2021-01-01T00:00:00+0000",
+        "2021-01-01T00:00:00+00",
+    ]
+    dts = [tum_esm_utils.timing.parse_iso_8601_datetime(s) for s in strings]
+
+    assert dts[0].tzinfo is None
+    dts[0] = dts[0].astimezone(datetime.timezone.utc)
+
+    assert all([dt == dts[0] for dt in dts[1 :]])
+
+    strings = [
+        "2019-07-05T03:01:11Z",
+        "2019-07-05T03:01:11+03:40",
+        "2019-07-05T03:01:11+0340",
+        "2019-07-05T03:01:11+03",
+    ]
+    dts = [tum_esm_utils.timing.parse_iso_8601_datetime(s) for s in strings]
+
+    assert dts[0].tzinfo is not None
+    dts[0] = dts[0].astimezone(datetime.timezone.utc
+                              ) - datetime.timedelta(hours=3, minutes=40)
+    dts[3] = dts[3] - datetime.timedelta(minutes=40)
+
+    assert all([dt == dts[0] for dt in dts[1 :]])

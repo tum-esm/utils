@@ -152,3 +152,43 @@ def wait_for_condition(
         if (time.time() - start_time) > timeout_seconds:
             raise TimeoutError(timeout_message)
         time.sleep(check_interval_seconds)
+
+
+_ISO_8601_PATTERN_1 = re.compile(
+    r"^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(\.\d+)?$"
+)
+_ISO_8601_PATTERN_2 = re.compile(
+    r"^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(\.\d+)?Z$"
+)
+_ISO_8601_PATTERN_3 = re.compile(
+    r"^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(\.\d+)?(\+|-)\d{2}:\d{2}$"
+)
+_ISO_8601_PATTERN_4 = re.compile(
+    r"^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(\.\d+)?(\+|-)\d{4}$"
+)
+_ISO_8601_PATTERN_5 = re.compile(
+    r"^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(\.\d+)?(\+|-)\d{2}$"
+)
+
+
+def parse_iso_8601_datetime(s: str) -> datetime.datetime:
+    """Parse a datetime string from various formats and return a datetime object.
+    
+    ISO 8601 supports time zones as `<time>Z`, `<time>±hh:mm`, `<time>±hhmm` and
+    `<time>±hh`. However, only the second format is supported by `datetime.datetime.fromisoformat()`
+    (`HH[:MM[:SS[.fff[fff]]]][+HH:MM[:SS[.ffffff]]]`).
+    
+    This function supports parsing alll ISO 8601 time formats."""
+
+    if _ISO_8601_PATTERN_1.match(s) is not None:
+        return datetime.datetime.fromisoformat(s)
+    elif _ISO_8601_PATTERN_2.match(s) is not None:
+        return datetime.datetime.fromisoformat(s[:-1] + "+00:00")
+    elif _ISO_8601_PATTERN_3.match(s) is not None:
+        return datetime.datetime.fromisoformat(s)
+    elif _ISO_8601_PATTERN_4.match(s) is not None:
+        return datetime.datetime.fromisoformat(s[:-2] + ":" + s[-2 :])
+    elif _ISO_8601_PATTERN_5.match(s) is not None:
+        return datetime.datetime.fromisoformat(s + ":00")
+    else:
+        raise ValueError(f"Invalid datetime string: {s}")

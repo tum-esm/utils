@@ -1130,6 +1130,21 @@ is passed as a function that will be called periodically.
 - `check_interval_seconds` - How long to wait inbetween `is_successful()` calls.
 
 
+##### `parse_iso_8601_datetime`
+
+```python
+def parse_iso_8601_datetime(s: str) -> datetime.datetime
+```
+
+Parse a datetime string from various formats and return a datetime object.
+
+ISO 8601 supports time zones as `<time>Z`, `<time>±hh:mm`, `<time>±hhmm` and
+`<time>±hh`. However, only the second format is supported by `datetime.datetime.fromisoformat()`
+(`HH[:MM[:SS[.fff[fff]]]][+HH:MM[:SS[.ffffff]]]`).
+
+This function supports parsing alll ISO 8601 time formats.
+
+
 ## `tum_esm_utils.validators`
 
 Implements validator utils for use with pydantic models.
