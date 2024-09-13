@@ -52,6 +52,32 @@ def test_insert_replacements() -> None:
         ) == "Hello replacement!"
     )
 
+
+def test_simplify_string_characters() -> None:
+    assert tum_esm_utils.text.simplify_string_characters(
+        "Héllö wörld!"
+    ) == "helloe-woerld"
+    assert tum_esm_utils.text.simplify_string_characters(
+        "Høllå world!"
+    ) == "holla-world"
+
+    assert tum_esm_utils.text.simplify_string_characters(
+        "-".join(tum_esm_utils.text.SIMPLE_STRING_REPLACEMENTS.values())
+    ) == tum_esm_utils.text.replace_consecutive_characters(
+        "-".join(tum_esm_utils.text.SIMPLE_STRING_REPLACEMENTS.values())
+    ).strip("-")
+
+    assert tum_esm_utils.text.simplify_string_characters(
+        "-".join(tum_esm_utils.text.SIMPLE_STRING_REPLACEMENTS.keys())
+    ) == tum_esm_utils.text.replace_consecutive_characters(
+        "-".join(tum_esm_utils.text.SIMPLE_STRING_REPLACEMENTS.values())
+    ).strip("-")
+
+    assert tum_esm_utils.text.simplify_string_characters(
+        "úed", additional_replacements=({"e": "3"})
+    ) == "u3d"
+
+
 def test_replace_consecutive_characters() -> None:
     assert tum_esm_utils.text.replace_consecutive_characters(
         "he--llo---world"

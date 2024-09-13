@@ -85,6 +85,92 @@ def insert_replacements(content: str, replacements: dict[str, str]) -> str:
     return content
 
 
+"""Characters replaced by their ASCII counterparts in `simplify_string_characters`."""
+SIMPLE_STRING_REPLACEMENTS: dict[str, str] = {
+    'ö': 'oe',
+    'ø': 'o',
+    'ä': 'ae',
+    'å': 'a',
+    'ü': 'ue',
+    'ß': 'ss',
+    ",": "",
+    'é': 'e',
+    'ë': 'e',
+    ":": "-",
+    "(": "-",
+    ")": "-",
+    'š': "s",
+    '.': "-",
+    "/": "-",
+    'ó': "o",
+    'ð': "d",
+    'á': "a",
+    "–": "-",
+    "ł": "l",
+    "‐": "-",
+    "’": "",
+    "'": "",
+    "?": "-",
+    "!": "-",
+    "ò": "o",
+    "&": "-and-",
+    "ñ": "n",
+    "δ": "d",
+    "í": "i",
+    "ř": "r",
+    "è": "e",
+    "₂": "2",
+    "₃": "3",
+    "₄": "4",
+    "₅": "5",
+    "₆": "6",
+    "₇": "7",
+    "₈": "8",
+    "₉": "9",
+    "ç": "c",
+    "ú": "u",
+    "“": "",
+    "”": "",
+    "∆": "d",
+}
+
+
+def simplify_string_characters(
+    s: str,
+    additional_replacements: dict[str, str] = {},
+) -> str:
+    """Simplify a string by replacing special characters with their ASCII counterparts
+    and removing unwanted characters.
+    
+    For example, `simplify_string_characters("Héllo, wörld!")` will return `"hello-woerld"`.
+    
+    Args:
+        s: The string to simplify.
+        additional_replacements: A dictionary of additional replacements to apply. 
+                                 `{ "ö": "oe" }` will replace `ö` with `oe`.
+    
+    Returns: The simplified string.
+    """
+
+    all_replacements = {**SIMPLE_STRING_REPLACEMENTS}
+    all_replacements.update(additional_replacements)
+
+    s = s.lower().replace(" ", "-")
+    for key, value in all_replacements.items():
+        s = s.replace(key, value)
+    s = s.lower().replace(" ", "-")
+    while "--" in s:
+        s = s.replace("--", "-")
+    s = s.strip("-")
+    allowed_chars = "abcdefghijklmnopqrstuvwxyz0123456789-_@"
+    dirty = [c for c in s if c not in allowed_chars]
+    if len(dirty) > 0:
+        raise Exception(
+            f"Found invalid non-replaced characters in name: {dirty} ({s})"
+        )
+    return s
+
+
 def replace_consecutive_characters(
     s: str, characters: list[str] = [" ", "-"]
 ) -> str:
