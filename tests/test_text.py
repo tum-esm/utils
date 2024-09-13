@@ -51,3 +51,14 @@ def test_insert_replacements() -> None:
             "Hello %YOU%!", {"YOU": "replacement"}
         ) == "Hello replacement!"
     )
+
+def test_replace_consecutive_characters() -> None:
+    assert tum_esm_utils.text.replace_consecutive_characters(
+        "he--llo---world"
+    ) == "he-llo-world"
+    assert tum_esm_utils.text.replace_consecutive_characters(
+        "  has--  spaced  --  "
+    ) == " has- spaced - "
+    assert tum_esm_utils.text.replace_consecutive_characters(
+        "boooogie-------man---like", characters=["o", "-"]
+    ) == "bogie-man-like"

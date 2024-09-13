@@ -83,3 +83,23 @@ def insert_replacements(content: str, replacements: dict[str, str]) -> str:
     for key, value in replacements.items():
         content = content.replace(f"%{key}%", value)
     return content
+
+
+def replace_consecutive_characters(
+    s: str, characters: list[str] = [" ", "-"]
+) -> str:
+    """Replace consecutiv characters in a string (e.g. "hello---world" -> "hello-world"
+    or "hello   world" -> "hello world").
+    
+    Args:
+        s: The string to process.
+        characters: A list of characters to replace duplicates of.
+    
+    Returns:
+        The string with duplicate characters replaced.
+    """
+
+    for c in characters:
+        while c + c in s:
+            s = s.replace(c + c, c)
+    return s
