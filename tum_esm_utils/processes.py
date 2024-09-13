@@ -31,17 +31,30 @@ def get_process_pids(script_path: str) -> list[int]:
     return pids
 
 
-def start_background_process(interpreter_path: str, script_path: str) -> int:
+def start_background_process(
+    interpreter_path: str,
+    script_path: str,
+    waiting_period: float = 0.5
+) -> int:
     """Start a new background process with nohup with a given python
     interpreter and script path. The script paths parent directory
-    will be used as the working directory for the process."""
+    will be used as the working directory for the process.
+    
+    Args:
+        interpreter_path: The absolute path of the python interpreter.
+        script_path:      The absolute path of the python file entrypoint.
+        waiting_period:   The waiting period in seconds after starting
+                          the process.
+    
+    Returns: The PID of the started process.
+    """
 
     existing_pids = get_process_pids(script_path)
     assert len(existing_pids) == 0, "process is already running"
 
     cwd = os.path.dirname(script_path)
     os.system(f"cd {cwd} && nohup {interpreter_path} {script_path} &")
-    time.sleep(0.5)
+    time.sleep(waiting_period)
 
     new_pids = get_process_pids(script_path)
     assert (
