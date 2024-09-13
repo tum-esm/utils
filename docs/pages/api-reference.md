@@ -446,6 +446,57 @@ blocks, and/or none of the forbidden content blocks.
 - `forbidden_content_blocks` - A list of strings that must not be present in the file.
 
 
+##### `render_directory_tree`
+
+```python
+def render_directory_tree(root: str,
+                          ignore: list[str] = [],
+                          max_depth: Optional[int] = None,
+                          root_alias: Optional[str] = None,
+                          directory_prefix: Optional[str] = "📁 ",
+                          file_prefix: Optional[str] = "📄 ") -> Optional[str]
+```
+
+Render a file tree as a string.
+
+**Example**:
+
+  
+```
+📁 <config.general.data.results>
+├─── 📁 bundle
+│    ├─── 📄 __init__.py
+│    ├─── 📄 load_results.py
+│    └─── 📄 main.py
+├─── 📁 profiles
+│    ├─── 📄 __init__.py
+│    ├─── 📄 cache.py
+│    ├─── 📄 download_logic.py
+│    ├─── 📄 generate_queries.py
+│    ├─── 📄 main.py
+│    ├─── 📄 std_site_logic.py
+│    └─── 📄 upload_logic.py
+├─── 📁 retrieval
+│    ├─── 📁 algorithms
+...
+```
+  
+
+**Arguments**:
+
+- `root` - The root directory to render.
+- `ignore` - A list of patterns to ignore. If the basename of a directory
+  matches any of the patterns, the directory is ignored.
+- `max_depth` - The maximum depth to render. If `None`, render the full tree.
+- `root_alias` - An alias for the root directory. If `None`, the basename of
+  the root directory is used. In the example above, the root
+  directory is was aliased to `<config.general.data.results>`.
+- `directory_prefix` - The prefix to use for directories.
+- `file_prefix` - The prefix to use for files.
+  
+- `Returns` - The directory tree as a string. If the root directory is ignored, `None`.
+
+
 ## `tum_esm_utils.mathematics`
 
 Mathematical functions.
