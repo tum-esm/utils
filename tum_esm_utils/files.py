@@ -5,6 +5,7 @@ Implements: `load_file`, `dump_file`, `load_json_file`,
 `get_file_checksum`, `rel_to_abs_path`, `expect_file_contents`"""
 
 from __future__ import annotations
+import fnmatch
 from typing import Any, List, Optional
 import traceback
 import hashlib
@@ -163,3 +164,96 @@ def expect_file_contents(
 
     for b in forbidden_content_blocks:
         assert b not in file_content, f'forbidden log content block found "{b}"'
+
+
+def render_directory_tree(
+    root: str,
+    ignore: list[str] = [],
+    max_depth: Optional[int] = None,
+    root_alias: Optional[str] = None,
+    directory_prefix: Optional[str] = "📁 ",
+    file_prefix: Optional[str] = "📄 ",
+) -> Optional[str]:
+    """Render a file tree as a string.
+    
+    Example:
+    
+    ```
+    📁 <config.general.data.results>
+    ├─── 📁 bundle
+    │    ├─── 📄 __init__.py
+    │    ├─── 📄 load_results.py
+    │    └─── 📄 main.py
+    ├─── 📁 profiles
+    │    ├─── 📄 __init__.py
+    │    ├─── 📄 cache.py
+    │    ├─── 📄 download_logic.py
+    │    ├─── 📄 generate_queries.py
+    │    ├─── 📄 main.py
+    │    ├─── 📄 std_site_logic.py
+    │    └─── 📄 upload_logic.py
+    ├─── 📁 retrieval
+    │    ├─── 📁 algorithms
+    ...
+    ```
+    
+    Args:
+        root:              The root directory to render.
+        ignore:            A list of patterns to ignore. If the basename of a directory
+                           matches any of the patterns, the directory is ignored.
+        max_depth:         The maximum depth to render. If `None`, render the full tree.
+        root_alias:        An alias for the root directory. If `None`, the basename of
+                           the root directory is used. In the example above, the root
+                           directory is was aliased to `<config.general.data.results>`.
+        directory_prefix:  The prefix to use for directories.
+        file_prefix:       The prefix to use for files.
+    
+    Returns: The directory tree as a string. If the root directory is ignored, `None`.
+    """
+
+    if any([
+        fnmatch.fnmatch(os.path.basename(root), pattern) for pattern in ignore
+    ]):
+        return None
+
+    root_name = os.path.basename(root) if root_alias is None else root_alias
+
+    if directory_prefix is None:
+        directory_prefix = ""
+    if file_prefix is None:
+        file_prefix = ""
+
+    if os.path.isdir(root):
+        out = f"{directory_prefix}{root_name}"
+        if max_depth == 0:
+            return out
+
+        sublists: list[str] = []
+        for item in sorted(os.listdir(root)):
+            sd = render_file_tree(
+                os.path.join(root, item),
+                ignore=ignore,
+                max_depth=(max_depth - 1) if max_depth is not None else None
+            )
+            if sd is not None:
+                sublists.append(sd)
+
+        sublists = sorted(sublists)
+        for i, item in enumerate(sublists):
+            for j, line in enumerate(item.split("\n")):
+                prefix: str
+                if i < (len(sublists) - 1):
+                    if j == 0:
+                        prefix = "├───"
+                    else:
+                        prefix = "│   "
+                else:
+                    if j == 0:
+                        prefix = "└───"
+                    else:
+                        prefix = "    "
+                out += f"\n{prefix} {line}"
+        return out
+    if os.path.isfile(root):
+        return f"{file_prefix}{root_name}"
+    return ""
