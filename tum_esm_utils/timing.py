@@ -226,3 +226,35 @@ def datetime_span_intersection(
         return None
     return (min_start, max_end)
 
+
+def date_span_intersection(
+    d_span_1: tuple[datetime.date, datetime.date],
+    d_span_2: tuple[datetime.date, datetime.date],
+) -> Optional[tuple[datetime.date, datetime.date]]:
+    """Check if two date spans overlap. This functions behaves
+    differently from `datetime_span_intersection` in that it
+    returns a single point as an intersection if the two date
+    spans overlap at a single date.
+    
+    Args:
+        d_span_1: The first date span (start, end).
+        d_span_2: The second date span (start, end).
+    
+    Returns:
+        The intersection of the two date spans or None if they do
+        not overlap.
+    """
+
+    dt_intersection = datetime_span_intersection(
+        (
+            datetime.datetime.combine(d_span_1[0], datetime.time.min),
+            datetime.datetime.combine(d_span_1[1], datetime.time.max)
+        ),
+        (
+            datetime.datetime.combine(d_span_2[0], datetime.time.min),
+            datetime.datetime.combine(d_span_2[1], datetime.time.max),
+        ),
+    )
+    if dt_intersection is None:
+        return None
+    return (dt_intersection[0].date(), dt_intersection[1].date())
