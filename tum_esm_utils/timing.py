@@ -192,3 +192,37 @@ def parse_iso_8601_datetime(s: str) -> datetime.datetime:
         return datetime.datetime.fromisoformat(s + ":00")
     else:
         raise ValueError(f"Invalid datetime string: {s}")
+
+
+def datetime_span_intersection(
+    dt_span_1: tuple[datetime.datetime, datetime.datetime],
+    dt_span_2: tuple[datetime.datetime, datetime.datetime],
+) -> Optional[tuple[datetime.datetime, datetime.datetime]]:
+    """Check if two datetime spans overlap.
+    
+    Args:
+        dt_span_1: The first datetime span (start, end).
+        dt_span_2: The second datetime span (start, end).
+    
+    Returns:
+        The intersection of the two datetime spans or None if they do
+        not overlap. Returns None if the intersection is a single point.
+    """
+
+    if dt_span_1[0] > dt_span_1[1]:
+        raise ValueError("Invalid dt_span_1: start time is after end time")
+    if dt_span_2[0] > dt_span_2[1]:
+        raise ValueError("Invalid dt_span_2: start time is after end time")
+
+    if dt_span_1[0] >= dt_span_2[1]:
+        return None
+
+    if dt_span_1[1] <= dt_span_2[0]:
+        return None
+
+    min_start = max(dt_span_1[0], dt_span_2[0])
+    max_end = min(dt_span_1[1], dt_span_2[1])
+    if min_start == max_end:
+        return None
+    return (min_start, max_end)
+
