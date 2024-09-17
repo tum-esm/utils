@@ -1229,6 +1229,57 @@ ISO 8601 supports time zones as `<time>Z`, `<time>±hh:mm`, `<time>±hhmm` and
 This function supports parsing alll ISO 8601 time formats.
 
 
+##### `datetime_span_intersection`
+
+```python
+def datetime_span_intersection(
+    dt_span_1: tuple[datetime.datetime,
+                     datetime.datetime], dt_span_2: tuple[datetime.datetime,
+                                                          datetime.datetime]
+) -> Optional[tuple[datetime.datetime, datetime.datetime]]
+```
+
+Check if two datetime spans overlap.
+
+**Arguments**:
+
+- `dt_span_1` - The first datetime span (start, end).
+- `dt_span_2` - The second datetime span (start, end).
+  
+
+**Returns**:
+
+  The intersection of the two datetime spans or None if they do
+  not overlap. Returns None if the intersection is a single point.
+
+
+##### `date_span_intersection`
+
+```python
+def date_span_intersection(
+    d_span_1: tuple[datetime.date,
+                    datetime.date], d_span_2: tuple[datetime.date,
+                                                    datetime.date]
+) -> Optional[tuple[datetime.date, datetime.date]]
+```
+
+Check if two date spans overlap. This functions behaves
+differently from `datetime_span_intersection` in that it
+returns a single point as an intersection if the two date
+spans overlap at a single date.
+
+**Arguments**:
+
+- `d_span_1` - The first date span (start, end).
+- `d_span_2` - The second date span (start, end).
+  
+
+**Returns**:
+
+  The intersection of the two date spans or None if they do
+  not overlap.
+
+
 ## `tum_esm_utils.validators`
 
 Implements validator utils for use with pydantic models.
