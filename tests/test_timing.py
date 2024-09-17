@@ -169,3 +169,34 @@ def test_datetime_span_intersection() -> None:
             dt_span_2, dt_span_1
         ) == expected, f"Test case {i}b failed"
 
+
+def test_date_span_intersection() -> None:
+    d: Callable[[int],
+                datetime.date] = lambda _d: datetime.date(2021, 1, _d + 1)
+
+    test_cases = [
+        # no overlap no gap
+        ((d(0), d(1)), (d(1), d(2)), (d(1), d(1))),
+
+        # no overlap with gap
+        ((d(5), d(9)), (d(12), d(15)), None),
+
+        # same size, partially overlapping
+        ((d(0), d(2)), (d(1), d(3)), (d(1), d(2))),
+
+        # same size t1 == t2
+        ((d(0), d(2)), (d(0), d(2)), (d(0), d(2))),
+
+        # one is inside the other
+        ((d(0), d(4)), (d(1), d(3)), (d(1), d(3))),
+
+        # one is inside the other and zero length
+        ((d(0), d(4)), (d(1), d(1)), (d(1), d(1))),
+    ]
+    for i, (dt_span_1, dt_span_2, expected) in enumerate(test_cases):
+        assert tum_esm_utils.timing.date_span_intersection(
+            dt_span_1, dt_span_2
+        ) == expected, f"Test case {i}a failed"
+        assert tum_esm_utils.timing.date_span_intersection(
+            dt_span_2, dt_span_1
+        ) == expected, f"Test case {i}b failed"
