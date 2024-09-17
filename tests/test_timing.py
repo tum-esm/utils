@@ -1,5 +1,6 @@
 from __future__ import annotations
 import time
+from typing import Callable
 import tum_esm_utils
 import datetime
 
@@ -134,3 +135,37 @@ def test_parse_iso_8601_datetime() -> None:
     dts[3] = dts[3] - datetime.timedelta(minutes=40)
 
     assert all([dt == dts[0] for dt in dts[1 :]])
+
+
+def test_datetime_span_intersection() -> None:
+    d: Callable[
+        [int],
+        datetime.datetime] = lambda _d: datetime.datetime(2021, 1, _d + 1)
+
+    test_cases = [
+        # no overlap no gap
+        ((d(0), d(1)), (d(1), d(2)), None),
+
+        # no overlap with gap
+        ((d(5), d(9)), (d(12), d(15)), None),
+
+        # same size, partially overlapping
+        ((d(0), d(2)), (d(1), d(3)), (d(1), d(2))),
+
+        # same size t1 == t2
+        ((d(0), d(2)), (d(0), d(2)), (d(0), d(2))),
+
+        # one is inside the other
+        ((d(0), d(4)), (d(1), d(3)), (d(1), d(3))),
+
+        # one is inside the other and zero length
+        ((d(0), d(4)), (d(1), d(1)), None),
+    ]
+    for i, (dt_span_1, dt_span_2, expected) in enumerate(test_cases):
+        assert tum_esm_utils.timing.datetime_span_intersection(
+            dt_span_1, dt_span_2
+        ) == expected, f"Test case {i}a failed"
+        assert tum_esm_utils.timing.datetime_span_intersection(
+            dt_span_2, dt_span_1
+        ) == expected, f"Test case {i}b failed"
+
