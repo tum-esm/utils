@@ -1367,3 +1367,32 @@ def as_identifier() -> str
 
 Return the version string as a number, i.e. MAJOR.MINOR.PATCH...
 
+
+## `StricterBaseModel` Objects
+
+```python
+class StricterBaseModel(pydantic.BaseModel)
+```
+
+The same as pydantic.BaseModel, but with stricter rules. It does not
+allow extra fields and validates assignments after initialization.
+
+
+## `StrictIPv4Adress` Objects
+
+```python
+class StrictIPv4Adress(pydantic.RootModel[str])
+```
+
+A pydantic model that validates an IPv4 address.
+
+Example usage:
+
+```python
+class MyModel(pyndatic.BaseModel):
+    ip: StrictIPv4Adress
+
+m = MyModel(ip='192.186.2.1')
+m = MyModel(ip='192.186.2.1:22')
+```
+

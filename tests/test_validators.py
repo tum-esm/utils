@@ -1,6 +1,7 @@
+import random
 import pydantic
 import tum_esm_utils
-from tum_esm_utils.validators import StrictFilePath, StrictDirectoryPath, Version
+from tum_esm_utils.validators import StrictFilePath, StrictDirectoryPath, Version, StrictIPv4Adress
 
 
 def test_strict_path_validators() -> None:
@@ -81,3 +82,62 @@ def test_version_validator() -> None:
     assert Version("10.6.9-alpha.4") < Version("10.6.9-rc.3")
     assert Version("10.6.9-rc.4") > Version("10.6.9-beta.3")
     assert Version("10.6.9-rc.4") < Version("10.6.9-rc.5")
+
+
+def test_ipv4_validator() -> None:
+    # validate bunch of valid IPv4 addresses
+    for i in range(10):
+        random_port = random.randint(0, 65535)
+        for valid_string in [
+            "192.168.1.1",
+            "10.0.0.1",
+            "172.16.0.1",
+            "8.8.8.8",
+            "1.1.1.1",
+            "123.45.67.89",
+            "255.255.255.255",
+            "0.0.0.0",
+            "192.0.2.1",
+            "198.51.100.1",
+            "203.0.113.1",
+            "192.168.0.100",
+            "10.10.10.10",
+            "172.31.255.249",
+            "169.254.0.1",
+        ]:
+            v = StrictIPv4Adress(f"{valid_string}")
+            v = StrictIPv4Adress(f"{valid_string}:{random_port}")
+
+    # validate bunch of invalid IPv4 addresses
+    for invalid_string in [
+        "192.168.1.256",  # Octet out of range
+        "10.0.0.999",  # Octet out of range
+        "172.16.0.256",  # Octet out of range
+        "8.8.8.8.8",  # Too many octets
+        "1.1.1",  # Too few octets
+        "123.45.67.89.0",  # Too many octets
+        "255.255.255.256",  # Octet out of range
+        "0.0.0.0.0",  # Too many octets
+        "192.0.2",  # Too few octets
+        "198.51.100.256",  # Octet out of range
+        "203.0.113.999",  # Octet out of range
+        "192.168.0.1000",  # Octet out of range
+        "10.10.10.10.10",  # Too many octets
+        "172.31.255.256",  # Octet out of range
+        "169.254.0.256",  # Octet out of range
+        "abc.def.ghi.jkl",  # Non-numeric octets
+        "123.456.78.90",  # Octet out of range
+        "192.168.1.-1",  # Negative octet
+        "192.168.1.1.",  # Trailing dot
+        ".192.168.1.1",  # Leading dot
+        "192.168..1.1",  # Double dot
+        "192.168.1.1:999999",  # Port out of range
+    ]:
+        try:
+            v = StrictIPv4Adress(invalid_string)
+        except pydantic.ValidationError:
+            pass
+        else:
+            raise AssertionError(
+                f"ValidationError not raised for invalid IPv4 address '{invalid_string}'"
+            )
