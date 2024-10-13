@@ -152,3 +152,37 @@ class Version(pydantic.RootModel[str]):
 
     def __ge__(self, other: Version) -> bool:
         return not (self < other)
+
+
+class StricterBaseModel(pydantic.BaseModel):
+    """The same as pydantic.BaseModel, but with stricter rules. It does not
+    allow extra fields and validates assignments after initialization."""
+
+    model_config = pydantic.ConfigDict(extra="forbid", validate_assignment=True)
+
+
+_single_byte_as_dec_regex = r"((\d)|([1-9]\d)|(1\d\d)|(2[0-4]\d)|(25[0-5]))"
+
+
+class StrictIPv4Adress(pydantic.RootModel[str]):
+    """A pydantic model that validates an IPv4 address.
+    
+    Example usage:
+    
+    ```python
+    class MyModel(pyndatic.BaseModel):
+        ip: StrictIPv4Adress
+
+    m = MyModel(ip='192.186.2.1')
+    m = MyModel(ip='192.186.2.1:22')
+    ```
+    """
+
+    root: str = pydantic.Field(
+        ...,
+        pattern="".join([
+            r"^", _single_byte_as_dec_regex, r"\.", _single_byte_as_dec_regex,
+            r"\.", _single_byte_as_dec_regex, r"\.", _single_byte_as_dec_regex,
+            r"(:\d{1,5})?", r"$"
+        ])
+    )
