@@ -106,7 +106,6 @@ def test_parse_timezone_string() -> None:
 
 
 def test_parse_iso_8601_datetime() -> None:
-
     strings = [
         "2021-01-01T00:00:00",
         "2021-01-01T00:00:00Z",
@@ -117,7 +116,11 @@ def test_parse_iso_8601_datetime() -> None:
     dts = [tum_esm_utils.timing.parse_iso_8601_datetime(s) for s in strings]
 
     assert dts[0].tzinfo is None
-    dts[0] = dts[0].astimezone(datetime.timezone.utc)
+    dts[0] = dts[0].astimezone()
+    local_utc_offset = dts[0].utcoffset().total_seconds()
+    dts[0] = (dts[0] + datetime.timedelta(seconds=local_utc_offset)).astimezone(
+        datetime.timezone.utc
+    )
 
     assert all([dt == dts[0] for dt in dts[1 :]])
 
