@@ -20,6 +20,7 @@ classifiers = [
     "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.11",
     "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
 ]
 keywords = [
     "tum",
@@ -43,7 +44,7 @@ dev = [
     "pytest>=8.1.1",
     "pydocstyle>=6.3.0",
     "yapf>=0.40.2",
-    "mypy>=1.9.0",
+    "mypy>=1.13.0",
     "pydoc-markdown>=4.8.2",
     "types-psutil>=5.9.5.20240316",
     "types-requests>=2.31.0.20240406",
