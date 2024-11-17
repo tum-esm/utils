@@ -1,7 +1,7 @@
 """Functions used for timing or time calculations.
 
 Implements: `date_range`, `ensure_section_duration`, `set_alarm`,
-`clear_alarm`, `wait_for_condition`"""
+`clear_alarm`, `wait_for_condition`, `ExponentialBackoff`"""
 
 from typing import Any, Callable, Generator, Optional
 import contextlib
@@ -9,6 +9,7 @@ import datetime
 import re
 import signal
 import time
+import math
 import pytz
 
 
@@ -258,3 +259,77 @@ def date_span_intersection(
     if dt_intersection is None:
         return None
     return (dt_intersection[0].date(), dt_intersection[1].date())
+
+
+class ExponentialBackoff:
+    """Exponential backoff e.g. when errors occur. First try again in 1 minute,
+    then 4 minutes, then 15 minutes, etc.. Usage:
+    
+    ```python
+    import src
+    exponential_backoff = ExponentialBackoff(logger.info)
+    while True:
+        try:
+            # do something
+            exponential_backoff.reset()
+        except Exception as e:
+            logger.exception(e)
+            exponential_backoff.sleep()
+    ```"""
+    def __init__(
+        self,
+        log_info: Optional[Callable[[str], None]] = None,
+        buckets: list[int] = [60, 240, 900, 3600, 14400],
+    ) -> None:
+        """Create a new exponential backoff object.
+
+        Args:
+            log_info: The function to call when logging information.
+            buckets:  The buckets to use for the exponential backoff.
+        """
+
+        self.buckets = buckets
+        self.bucket_index = 0  # index of the next wait time bucket
+        self.log_info = log_info
+
+    def sleep(self, max_sleep_time: Optional[float] = None) -> float:
+        """Wait and increase the wait time to the next bucket.
+        
+        Args:
+            max_sleep_time: The maximum time to sleep. If None, no maximum is set.
+        
+        Returns:
+            The amount of seconds waited.
+        """
+
+        sleep_seconds = float(self.buckets[self.bucket_index])
+        if max_sleep_time is not None:
+            sleep_seconds = min(sleep_seconds, max_sleep_time)
+
+        minutes = math.floor(sleep_seconds / 60)
+        seconds = sleep_seconds % 60
+
+        message = "waiting for"
+        if minutes > 0:
+            message += f" {minutes} minute(s)"
+            if seconds > 0:
+                message += f" and"
+        if seconds > 0:
+            message += f" {round(seconds, 2)} second(s)"
+        if self.log_info is not None:
+            self.log_info(message)
+
+        time.sleep(seconds)
+        for i in range(1, minutes, 1):
+            time.sleep(60)
+            if self.log_info is not None:
+                self.log_info(f"{minutes-i} minute(s) remaining")
+        time.sleep(60)
+
+        self.bucket_index = min(self.bucket_index + 1, len(self.buckets) - 1)
+        return sleep_seconds
+
+    def reset(self) -> None:
+        """Reset the waiting period to the first bucket"""
+
+        self.bucket_index = 0
