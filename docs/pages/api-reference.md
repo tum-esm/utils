@@ -1116,7 +1116,7 @@ duplicates by tracking occupied labels.
 Functions used for timing or time calculations.
 
 Implements: `date_range`, `ensure_section_duration`, `set_alarm`,
-`clear_alarm`, `wait_for_condition`
+`clear_alarm`, `wait_for_condition`, `ExponentialBackoff`
 
 
 ##### `date_range`
@@ -1278,6 +1278,70 @@ spans overlap at a single date.
 
   The intersection of the two date spans or None if they do
   not overlap.
+
+
+## `ExponentialBackoff` Objects
+
+```python
+class ExponentialBackoff()
+```
+
+Exponential backoff e.g. when errors occur. First try again in 1 minute,
+then 4 minutes, then 15 minutes, etc.. Usage:
+
+```python
+import src
+exponential_backoff = ExponentialBackoff(logger.info)
+while True:
+    try:
+        # do something
+        exponential_backoff.reset()
+    except Exception as e:
+        logger.exception(e)
+        exponential_backoff.sleep()
+```
+
+
+##### `__init__`
+
+```python
+def __init__(log_info: Optional[Callable[[str], None]] = None,
+             buckets: list[int] = [60, 240, 900, 3600, 14400]) -> None
+```
+
+Create a new exponential backoff object.
+
+**Arguments**:
+
+- `log_info` - The function to call when logging information.
+- `buckets` - The buckets to use for the exponential backoff.
+
+
+##### `sleep`
+
+```python
+def sleep(max_sleep_time: Optional[float] = None) -> float
+```
+
+Wait and increase the wait time to the next bucket.
+
+**Arguments**:
+
+- `max_sleep_time` - The maximum time to sleep. If None, no maximum is set.
+  
+
+**Returns**:
+
+  The amount of seconds waited.
+
+
+##### `reset`
+
+```python
+def reset() -> None
+```
+
+Reset the waiting period to the first bucket
 
 
 ## `tum_esm_utils.validators`
