@@ -266,11 +266,13 @@ class ExponentialBackoff:
     then 4 minutes, then 15 minutes, etc.. Usage:
     
     ```python
-    import src
-    exponential_backoff = ExponentialBackoff(logger.info)
+    exponential_backoff = ExponentialBackoff(
+        log_info=logger.info, buckets= [60, 240, 900, 3600, 14400]
+    )
+
     while True:
         try:
-            # do something
+            # do something that might fail
             exponential_backoff.reset()
         except Exception as e:
             logger.exception(e)
