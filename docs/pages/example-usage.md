@@ -300,3 +300,28 @@ pip install "tum-esm-utils[plotting]"
 # or
 pdm add "tum-esm-utils[plotting]"
 ```
+
+## Exponential Backoff
+
+When an error occurs in your code, it might be wise to wait a bit before trying again. Using the `ExponentialBackoff` class, you can
+make your code wait for a certain amount of time before trying again – with an exponential increase in waiting time on every retry. I.e.,
+first, wait 1 minute, then 4 minutes, then 15 minutes, etc..
+
+```python
+import tum_esm_utils
+
+logger = ...
+
+# both arguments are optional
+exponential_backoff = tum_esm_utils.timing.ExponentialBackoff(
+    log_info=logger.info, buckets= [60, 240, 900, 3600, 14400]
+)
+
+while True:
+    try:
+        # do something that might fail
+        exponential_backoff.reset()
+    except Exception as e:
+        logger.exception(e)
+        exponential_backoff.sleep()
+```
