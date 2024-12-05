@@ -43,12 +43,12 @@ documentation = "https://tum-esm-utils.netlify.app"
 dev = [
     "pytest>=8.1.1",
     "pydocstyle>=6.3.0",
-    "yapf>=0.40.2",
     "mypy>=1.13.0",
     "pydoc-markdown>=4.8.2",
     "types-psutil>=5.9.5.20240316",
     "types-requests>=2.31.0.20240406",
     "types-pytz>=2024.1.0.20240203",
+    "ruff>=0.8.1",
 ]
 plotting = ["matplotlib>=3.9.2", "numpy>=2.0.2"]
 polars = ["polars>=1.4.1"]
@@ -67,12 +67,8 @@ strict = true
 implicit_reexport = true
 plugins = ["pydantic.mypy"]
 
-[tool.yapf]
-based_on_style = "facebook"
-coalesce_brackets = true
-split_before_dict_set_generator = true
-each_dict_entry_on_separate_line = false
-spaces_around_subscript_colon = true
+[tool.ruff]
+line-length = 100
 
 [tool.pdm]
 distribution = true
