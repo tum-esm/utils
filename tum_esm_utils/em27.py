@@ -2,12 +2,12 @@
 
 Implements: `detect_corrupt_opus_files`, `load_proffast2_result`.
 
-This requires you to install this utils library with the optional `polars` dependency:
+This requires you to install this utils library with the optional `em27` dependency:
 
 ```bash
-pip install "tum_esm_utils[polars]"
+pip install "tum_esm_utils[em27]"
 # or
-pdm add "tum_esm_utils[polars]"
+pdm add "tum_esm_utils[em27]"
 ```"""
 
 from __future__ import annotations

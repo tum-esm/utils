@@ -22,7 +22,7 @@ from . import (
 # ignore import errors from the following submodules
 # because they requires extras to be installed
 
-# requires extra "polars"
+# requires extra "em27"
 try:
     from . import em27
 except ImportError:

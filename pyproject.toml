@@ -51,7 +51,8 @@ dev = [
     "ruff>=0.8.1",
 ]
 plotting = ["matplotlib>=3.9.2", "numpy>=2.0.2"]
-polars = ["polars>=1.4.1"]
+em27 = ["polars>=1.4.1"]
+polars = ["polars>=1.4.1"] # alias for em27 (will be removed with 3.0)
 all = ["matplotlib>=3.9.2", "numpy>=2.0.2", "polars>=1.4.1"]
 
 

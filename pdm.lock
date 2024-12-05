@@ -2,10 +2,10 @@
 # It is not intended for manual editing.
 
 [metadata]
-groups = ["default", "all", "dev", "plotting", "polars"]
+groups = ["default", "all", "dev", "em27", "plotting", "polars"]
 strategy = ["inherit_metadata"]
 lock_version = "4.5.0"
-content_hash = "sha256:4b5fa3a1fdc30cbd704f8ba5d2a891bde5991d4b7318fca54eee7bc9bf43e091"
+content_hash = "sha256:3e88674e011f27b24fade99d2dbd0ef48d1b5445f456291dbffe98ae1fa36545"
 
 [[metadata.targets]]
 requires_python = "~=3.10"
@@ -908,7 +908,7 @@ name = "polars"
 version = "1.16.0"
 requires_python = ">=3.9"
 summary = "Blazingly fast DataFrame library"
-groups = ["all", "polars"]
+groups = ["all", "em27", "polars"]
 files = [
     {file = "polars-1.16.0-cp39-abi3-macosx_10_12_x86_64.whl", hash = "sha256:072f5ff3b5fe05797c59890de0e464b34ede75a9735e7d7221622fa3a0616d8e"},
     {file = "polars-1.16.0-cp39-abi3-macosx_11_0_arm64.whl", hash = "sha256:ebaf7a1ea114b042fa9f1cd17d49436279eb30545dd74361a2f5e3febeb867cd"},
