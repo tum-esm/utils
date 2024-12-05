@@ -41,7 +41,6 @@ def read_opus_header(f: io.BufferedReader) -> types.OpusHeader:
     x = struct.unpack("<dIII", f.read(struct.calcsize("<dIII")))
     assert len(x) >= 4
     return types.OpusHeader(
-        magic_sequence=magic_sequence,
         version=x[0],
         dir_pointer=x[1],
         max_dir_size=x[2],

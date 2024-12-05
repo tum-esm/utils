@@ -31,7 +31,12 @@ class OpusFile(pydantic.BaseModel):
     header: types.OpusHeader
     channel_parameters: list[types.OpusChannelParameters]
     measurement_times: list[datetime.datetime]
-    interferogram: Optional[npt.NDArray[np.float64]] = None
+    interferogram: Optional[npt.NDArray[np.float64]] = pydantic.Field(default=None, exclude=True)
+
+    # serialization of measurement times
+    @pydantic.field_serializer("measurement_times")
+    def serialize_measurement_times(self, measurement_times: list[datetime.datetime]) -> list[str]:
+        return [t.isoformat() for t in measurement_times]
 
     @staticmethod
     def read(
@@ -126,7 +131,7 @@ class OpusFile(pydantic.BaseModel):
             assert (
                 len(block_indices["interferogram"]) == channel_count
             ), f"found {len(block_indices['interferogram'])} interferogram blocks, but {channel_count} DBTDSTAT blocks"
-            read_channel_count = 1 if not read_all_channels else channel_count
+            read_channel_count = channel_count if read_all_channels else 1
 
             # all channels share the same parameters, except for the spectrum
             channel_parameters = [parameters_ch1]
@@ -159,9 +164,7 @@ class OpusFile(pydantic.BaseModel):
             header=opus_header,
             channel_parameters=channel_parameters,
             measurement_times=[
-                parameters_ch1.parse_measurement_datetime(
-                    measurement_timestamp_mode=measurement_timestamp_mode
-                )
+                p.parse_measurement_datetime(measurement_timestamp_mode) for p in channel_parameters
             ],
             interferogram=interferogram,
         )

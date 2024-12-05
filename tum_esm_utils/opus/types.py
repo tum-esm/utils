@@ -13,7 +13,6 @@ import tum_esm_utils
 class OpusHeader(pydantic.BaseModel):
     """Object that contains all the information in the OPUS file header block."""
 
-    magic_sequence: bytes = pydantic.Field(..., description="Magic sequence to identify OPUS files")
     version: int = pydantic.Field(..., ge=0, description="File version")
     dir_pointer: int = pydantic.Field(
         ..., ge=0, description="File pointer to start of OPUS directory"
