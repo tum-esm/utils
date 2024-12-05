@@ -9,7 +9,7 @@ Feel free to use it in any other project ✨
 [![GitHub Workflow Status (with branch)](https://img.shields.io/github/actions/workflow/status/tum-esm/utils/test.yaml?branch=main&label=CI%20tests&labelColor=%230f172a&cacheSeconds=60)](https://github.com/tum-esm/utils/actions/workflows/test.yaml)
 [![Code Climate maintainability](https://img.shields.io/codeclimate/maintainability/tum-esm/utils?label=codeclimate%20maintainability%20rating&labelColor=%230f172a&cacheSeconds=60)](https://codeclimate.com/github/tum-esm/utils)<br/>
 [![GitHub](https://img.shields.io/github/license/tum-esm/utils?color=f59e0b&labelColor=%230f172a&cacheSeconds=60)](https://github.com/tum-esm/utils/blob/main/LICENSE)
-[![](https://img.shields.io/badge/DOI-10.5281/zenodo.14285078-%230ea5e9?labelColor=%230f172a)](https://doi.org/10.5281/zenodo.14285078)
+[![](https://img.shields.io/badge/DOI-10.5281/zenodo.14284949-%230ea5e9?labelColor=%230f172a)](https://doi.org/10.5281/zenodo.14284949)
 
 <br/>
 
