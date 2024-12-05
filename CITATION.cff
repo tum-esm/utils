@@ -1,0 +1,11 @@
+cff-version: 1.2.0
+message: "If you use this software, please cite it as below."
+authors:
+  - family-names: Makowski
+    given-names: Moritz
+    orcid: https://orcid.org/0000-0002-2948-2993
+  - family-names: Klappenbach
+    given-names: Friedrich
+    orcid: https://orcid.org/0000-0001-9455-6496
+title: "TUM ESM Utilities"
+license: "GPL-3.0"
