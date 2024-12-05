@@ -2,10 +2,10 @@
 # It is not intended for manual editing.
 
 [metadata]
-groups = ["default", "all", "dev", "em27", "plotting", "polars"]
+groups = ["default", "all", "dev", "em27", "opus", "plotting", "polars"]
 strategy = ["inherit_metadata"]
 lock_version = "4.5.0"
-content_hash = "sha256:3e88674e011f27b24fade99d2dbd0ef48d1b5445f456291dbffe98ae1fa36545"
+content_hash = "sha256:1f5b018ba27872dfcf156444d6fb816906c035b13dd17e4056b0f8f7898ff61b"
 
 [[metadata.targets]]
 requires_python = "~=3.10"
@@ -731,7 +731,7 @@ name = "numpy"
 version = "2.1.3"
 requires_python = ">=3.10"
 summary = "Fundamental package for array computing in Python"
-groups = ["all", "plotting"]
+groups = ["all", "opus", "plotting"]
 files = [
     {file = "numpy-2.1.3-cp310-cp310-macosx_10_9_x86_64.whl", hash = "sha256:c894b4305373b9c5576d7a12b473702afdf48ce5369c074ba304cc5ad8730dff"},
     {file = "numpy-2.1.3-cp310-cp310-macosx_11_0_arm64.whl", hash = "sha256:b47fbb433d3260adcd51eb54f92a2ffbc90a4595f8970ee00e064c644ac788f5"},

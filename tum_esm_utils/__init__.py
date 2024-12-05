@@ -33,3 +33,9 @@ try:
     from . import plotting
 except ImportError:
     pass
+
+# requires extra "opus"
+try:
+    from . import opus
+except ImportError:
+    pass
