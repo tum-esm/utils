@@ -15,14 +15,14 @@ def request_github_file(
 ) -> str:
     """Sends a request and returns the content of the response, as a string.
     Raises an HTTPError if the response status code is not 200.
-    
+
     Args:
         repository:    In the format "owner/repo".
         filepath:      The path to the file in the repository.
         access_token:  The GitHub access token. Only required if the repo is private.
         branch_name:   The branch name.
         timeout:       The request timeout in seconds.
-    
+
     Returns:
         The content of the file as a string.
     """
@@ -53,7 +53,7 @@ def request_gitlab_file(
 ) -> str:
     """Sends a request and returns the content of the response, as a string.
     Raises an HTTPError if the response status code is not 200.
-    
+
     Args:
         repository:    In the format "owner/repo".
         filepath:      The path to the file in the repository.
@@ -61,7 +61,7 @@ def request_gitlab_file(
         branch_name:   The branch name.
         hostname:      The GitLab hostname.
         timeout:       The request timeout in seconds.
-    
+
     Returns:
         The content of the file as a string.
     """

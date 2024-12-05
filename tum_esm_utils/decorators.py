@@ -17,16 +17,17 @@ class with_filelock:
     wait until other programs are done using it.
 
     See https://en.wikipedia.org/wiki/Semaphore_(programming).
-    
-    
+
+
     Credits for the typing of higher level decorators goes to
     https://github.com/python/mypy/issues/1551#issuecomment-253978622.
     """
+
     def __init__(self, lockfile_path: str, timeout: float = -1) -> None:
         """Create a new filelock decorator.
-        
+
         A timeout of -1 means that the code waits forever.
-        
+
         Args:
             lockfile_path: The path to the lockfile.
             timeout:       The time to wait for the lock in seconds."""

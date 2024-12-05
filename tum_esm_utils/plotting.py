@@ -31,28 +31,24 @@ def apply_better_defaults(font_family: Optional[str] = "Roboto") -> None:
         system_fonts = matplotlib.font_manager.findSystemFonts()
         matching_fonts = [font for font in system_fonts if font_family in font]
         if len(matching_fonts) == 0:
-            raise ValueError(
-                f"Font family '{font_family}' not found. System fonts: {system_fonts}"
-            )
+            raise ValueError(f"Font family '{font_family}' not found. System fonts: {system_fonts}")
         for font in matching_fonts:
             matplotlib.font_manager.fontManager.addfont(font)
-        plt.rcParams['font.sans-serif'] = [
-            font_family, *plt.rcParams['font.sans-serif']
-        ]
+        plt.rcParams["font.sans-serif"] = [font_family, *plt.rcParams["font.sans-serif"]]
 
-    plt.rcParams['figure.titleweight'] = 'bold'
-    plt.rcParams['axes.titleweight'] = 'semibold'
-    plt.rcParams['axes.labelweight'] = 'semibold'
-    plt.rcParams['axes.facecolor'] = TAILWIND_COLORS_HEX.SLATE_050
-    plt.rcParams['axes.edgecolor'] = TAILWIND_COLORS_HEX.SLATE_600
-    plt.rcParams['grid.color'] = TAILWIND_COLORS_HEX.SLATE_300
-    plt.rcParams['axes.axisbelow'] = True
-    plt.rcParams['xtick.color'] = TAILWIND_COLORS_HEX.SLATE_600
-    plt.rcParams['ytick.color'] = TAILWIND_COLORS_HEX.SLATE_600
-    plt.rcParams['xtick.labelcolor'] = "black"
-    plt.rcParams['ytick.labelcolor'] = "black"
-    plt.rcParams['scatter.edgecolors'] = "none"
-    matplotlib.style.use('fast')
+    plt.rcParams["figure.titleweight"] = "bold"
+    plt.rcParams["axes.titleweight"] = "semibold"
+    plt.rcParams["axes.labelweight"] = "semibold"
+    plt.rcParams["axes.facecolor"] = TAILWIND_COLORS_HEX.SLATE_050
+    plt.rcParams["axes.edgecolor"] = TAILWIND_COLORS_HEX.SLATE_600
+    plt.rcParams["grid.color"] = TAILWIND_COLORS_HEX.SLATE_300
+    plt.rcParams["axes.axisbelow"] = True
+    plt.rcParams["xtick.color"] = TAILWIND_COLORS_HEX.SLATE_600
+    plt.rcParams["ytick.color"] = TAILWIND_COLORS_HEX.SLATE_600
+    plt.rcParams["xtick.labelcolor"] = "black"
+    plt.rcParams["ytick.labelcolor"] = "black"
+    plt.rcParams["scatter.edgecolors"] = "none"
+    matplotlib.style.use("fast")
 
 
 @contextlib.contextmanager
@@ -66,7 +62,7 @@ def create_figure(
     dpi: int = 250,
 ) -> Generator[plt.Figure, None, None]:
     """Create a figure for plotting.
-    
+
     Usage:
 
     ```python
@@ -103,7 +99,7 @@ def add_subplot(
     **kwargs: dict[str, Any],
 ) -> plt.Axes:
     """Add a subplot to a figure.
-    
+
     Args:
         fig: The figure to add the subplot to.
         position: The position of the subplot. The tuple should contain three integers: the number of rows, the number of columns, and the index of the subplot.
@@ -111,10 +107,10 @@ def add_subplot(
         xlabel: The x-axis label of the subplot.
         ylabel: The y-axis label of the subplot.
         **kwargs: Additional keyword arguments for the subplot.
-    
+
     Returns:
         An axis object for the new subplot.
-        
+
     Raises:
         ValueError: If the index of the subplot is invalid."""
 
@@ -137,19 +133,24 @@ def add_subplot(
 
 def add_colorpatch_legend(
     fig: plt.Figure,
-    handles: list[tuple[str, Union[
-        str,
-        tuple[float, float, float],
-        tuple[float, float, float, float],
-    ]]],
+    handles: list[
+        tuple[
+            str,
+            Union[
+                str,
+                tuple[float, float, float],
+                tuple[float, float, float, float],
+            ],
+        ]
+    ],
     ncols: Optional[int] = None,
     location: str = "upper left",
 ) -> None:
     """Add a color patch legend to a figure.
-    
+
     Args:
         fig: The figure to add the legend to.
-        handles: A list of tuples containing the label and color of each patch 
+        handles: A list of tuples containing the label and color of each patch
             (e.g. `[("Label 1", "red"), ("Label 2", "blue")]`). You can pass any color
             that is accepted by matplotlib.
         ncols: The number of columns in the legend.
@@ -157,10 +158,7 @@ def add_colorpatch_legend(
     """
 
     fig.legend(
-        handles=[
-            matplotlib.patches.Patch(color=color, label=label)
-            for label, color in handles
-        ],
+        handles=[matplotlib.patches.Patch(color=color, label=label) for label, color in handles],
         ncol=len(handles) if ncols is None else ncols,
         loc=location,
     )

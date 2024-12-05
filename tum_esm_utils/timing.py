@@ -20,9 +20,7 @@ def date_range(
     """Returns a list of dates between from_date and to_date (inclusive)."""
     delta = to_date - from_date
     assert delta.days >= 0, "from_date must be before to_date"
-    return [
-        from_date + datetime.timedelta(days=i) for i in range(delta.days + 1)
-    ]
+    return [from_date + datetime.timedelta(days=i) for i in range(delta.days + 1)]
 
 
 @contextlib.contextmanager
@@ -48,10 +46,9 @@ def set_alarm(timeout: int, label: str) -> None:
     """Set an alarm that will raise a `TimeoutError` after
     `timeout` seconds. The message will be formatted as
     `{label} took too long (timed out after {timeout} seconds)`."""
+
     def alarm_handler(*args: Any) -> None:
-        raise TimeoutError(
-            f"{label} took too long (timed out after {timeout} seconds)"
-        )
+        raise TimeoutError(f"{label} took too long (timed out after {timeout} seconds)")
 
     signal.signal(signal.SIGALRM, alarm_handler)
     signal.alarm(timeout)
@@ -89,15 +86,11 @@ def parse_timezone_string(
     zone_string: str
 
     # parse the offset string
-    number_of_offset_signs = timezone_string.count("+") + timezone_string.count(
-        "-"
-    )
+    number_of_offset_signs = timezone_string.count("+") + timezone_string.count("-")
     if number_of_offset_signs == 0:
         zone_string = timezone_string
     elif number_of_offset_signs == 1:
-        s2 = timezone_string.split(
-            "+"
-        ) if "+" in timezone_string else timezone_string.split("-")
+        s2 = timezone_string.split("+") if "+" in timezone_string else timezone_string.split("-")
         assert len(s2) == 2
         zone_string = s2[0]
         offset_string = s2[1]
@@ -106,10 +99,9 @@ def parse_timezone_string(
         if re.match(r"^\d{1,2}(\.\d{1})?$", offset_string):
             offset = float(offset_string)
         elif re.match(r"^\d{2}:\d{2}$", offset_string):
-            offset = float(offset_string.split(":")[0]
-                          ) + float(offset_string.split(":")[1]) / 60
+            offset = float(offset_string.split(":")[0]) + float(offset_string.split(":")[1]) / 60
         elif re.match(r"^\d{4}$", offset_string):
-            offset = float(offset_string[: 2]) + float(offset_string[2 :]) / 60
+            offset = float(offset_string[:2]) + float(offset_string[2:]) / 60
         else:
             raise ValueError(f'Invalid offset string: "{offset_string}"')
         if "-" in timezone_string:
@@ -125,7 +117,9 @@ def parse_timezone_string(
             f'Unknown time zone: "{zone_string}", the available time zones are: {pytz.all_timezones}'
         )
     td = tz.utcoffset(dt)
-    assert td is not None, f'Zone "{zone_string}" requires a datetime object to calculate the offset.'
+    assert (
+        td is not None
+    ), f'Zone "{zone_string}" requires a datetime object to calculate the offset.'
     offset += td.total_seconds() / 3600
     return offset
 
@@ -139,7 +133,7 @@ def wait_for_condition(
     """Wait for the given condition to be true, or raise a TimeoutError
     if the condition is not met within the given timeout. The condition
     is passed as a function that will be called periodically.
-    
+
     Args:
         is_successful:             A function that returns True if the condition is met.
         timeout_message:           The message to include in the TimeoutError.
@@ -155,30 +149,20 @@ def wait_for_condition(
         time.sleep(check_interval_seconds)
 
 
-_ISO_8601_PATTERN_1 = re.compile(
-    r"^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(\.\d+)?$"
-)
-_ISO_8601_PATTERN_2 = re.compile(
-    r"^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(\.\d+)?Z$"
-)
-_ISO_8601_PATTERN_3 = re.compile(
-    r"^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(\.\d+)?(\+|-)\d{2}:\d{2}$"
-)
-_ISO_8601_PATTERN_4 = re.compile(
-    r"^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(\.\d+)?(\+|-)\d{4}$"
-)
-_ISO_8601_PATTERN_5 = re.compile(
-    r"^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(\.\d+)?(\+|-)\d{2}$"
-)
+_ISO_8601_PATTERN_1 = re.compile(r"^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(\.\d+)?$")
+_ISO_8601_PATTERN_2 = re.compile(r"^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(\.\d+)?Z$")
+_ISO_8601_PATTERN_3 = re.compile(r"^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(\.\d+)?(\+|-)\d{2}:\d{2}$")
+_ISO_8601_PATTERN_4 = re.compile(r"^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(\.\d+)?(\+|-)\d{4}$")
+_ISO_8601_PATTERN_5 = re.compile(r"^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(\.\d+)?(\+|-)\d{2}$")
 
 
 def parse_iso_8601_datetime(s: str) -> datetime.datetime:
     """Parse a datetime string from various formats and return a datetime object.
-    
+
     ISO 8601 supports time zones as `<time>Z`, `<time>±hh:mm`, `<time>±hhmm` and
     `<time>±hh`. However, only the second format is supported by `datetime.datetime.fromisoformat()`
     (`HH[:MM[:SS[.fff[fff]]]][+HH:MM[:SS[.ffffff]]]`).
-    
+
     This function supports parsing alll ISO 8601 time formats."""
 
     if _ISO_8601_PATTERN_1.match(s) is not None:
@@ -188,7 +172,7 @@ def parse_iso_8601_datetime(s: str) -> datetime.datetime:
     elif _ISO_8601_PATTERN_3.match(s) is not None:
         return datetime.datetime.fromisoformat(s)
     elif _ISO_8601_PATTERN_4.match(s) is not None:
-        return datetime.datetime.fromisoformat(s[:-2] + ":" + s[-2 :])
+        return datetime.datetime.fromisoformat(s[:-2] + ":" + s[-2:])
     elif _ISO_8601_PATTERN_5.match(s) is not None:
         return datetime.datetime.fromisoformat(s + ":00")
     else:
@@ -200,11 +184,11 @@ def datetime_span_intersection(
     dt_span_2: tuple[datetime.datetime, datetime.datetime],
 ) -> Optional[tuple[datetime.datetime, datetime.datetime]]:
     """Check if two datetime spans overlap.
-    
+
     Args:
         dt_span_1: The first datetime span (start, end).
         dt_span_2: The second datetime span (start, end).
-    
+
     Returns:
         The intersection of the two datetime spans or None if they do
         not overlap. Returns None if the intersection is a single point.
@@ -236,11 +220,11 @@ def date_span_intersection(
     differently from `datetime_span_intersection` in that it
     returns a single point as an intersection if the two date
     spans overlap at a single date.
-    
+
     Args:
         d_span_1: The first date span (start, end).
         d_span_2: The second date span (start, end).
-    
+
     Returns:
         The intersection of the two date spans or None if they do
         not overlap.
@@ -249,7 +233,7 @@ def date_span_intersection(
     dt_intersection = datetime_span_intersection(
         (
             datetime.datetime.combine(d_span_1[0], datetime.time.min),
-            datetime.datetime.combine(d_span_1[1], datetime.time.max)
+            datetime.datetime.combine(d_span_1[1], datetime.time.max),
         ),
         (
             datetime.datetime.combine(d_span_2[0], datetime.time.min),
@@ -264,7 +248,7 @@ def date_span_intersection(
 class ExponentialBackoff:
     """Exponential backoff e.g. when errors occur. First try again in 1 minute,
     then 4 minutes, then 15 minutes, etc.. Usage:
-    
+
     ```python
     exponential_backoff = ExponentialBackoff(
         log_info=logger.info, buckets= [60, 240, 900, 3600, 14400]
@@ -278,6 +262,7 @@ class ExponentialBackoff:
             logger.exception(e)
             exponential_backoff.sleep()
     ```"""
+
     def __init__(
         self,
         log_info: Optional[Callable[[str], None]] = None,
@@ -296,10 +281,10 @@ class ExponentialBackoff:
 
     def sleep(self, max_sleep_time: Optional[float] = None) -> float:
         """Wait and increase the wait time to the next bucket.
-        
+
         Args:
             max_sleep_time: The maximum time to sleep. If None, no maximum is set.
-        
+
         Returns:
             The amount of seconds waited.
         """

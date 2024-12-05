@@ -53,9 +53,7 @@ def get_dir_checksum(path: str) -> str:
     """Get the checksum of a directory using md5deep."""
 
     assert os.path.isdir(path), f"{path} is not a directory"
-    return tum_esm_utils.shell.run_shell_command(
-        f"md5deep -r -b {path} | sort -u | md5sum"
-    )
+    return tum_esm_utils.shell.run_shell_command(f"md5deep -r -b {path} | sort -u | md5sum")
 
 
 def get_file_checksum(path: str) -> str:
@@ -71,11 +69,11 @@ def get_file_checksum(path: str) -> str:
 
 def rel_to_abs_path(*path: str) -> str:
     """Convert a path relative to the caller's file to an absolute path.
-    
+
     Inside file `/home/somedir/somepath/somefile.py`, calling
     `rel_to_abs_path("..", "config", "config.json")` will
     return `/home/somedir/config/config.json`.
-    
+
     Credits to https://stackoverflow.com/a/59004672/8255842"""
 
     return os.path.normpath(
@@ -95,7 +93,7 @@ def read_last_n_lines(
 
     The function returns less than `n` lines if the file has less than `n` lines.
     The last element in the list is the last line of the file.
-    
+
     This function uses seeking in order not to read the full file. The simple
     approach of reading the last 10 lines would be:
 
@@ -106,7 +104,7 @@ def read_last_n_lines(
 
     However, this would read the full file and if we only need to read 10 lines
     out of a 2GB file, this would be a big waste of resources.
-    
+
     The `ignore_trailing_whitespace` option to crop off trailing whitespace, i.e.
     only return the last `n` lines that are not empty or only contain whitespace."""
 
@@ -151,7 +149,7 @@ def expect_file_contents(
 ) -> None:
     """Assert that the given file contains all of the required content
     blocks, and/or none of the forbidden content blocks.
-    
+
     Args:
         filepath:                 The path to the file.
         required_content_blocks:  A list of strings that must be present in the file.
@@ -177,9 +175,9 @@ def render_directory_tree(
     file_prefix: Optional[str] = "📄 ",
 ) -> Optional[str]:
     """Render a file tree as a string.
-    
+
     Example:
-    
+
     ```
     📁 <config.general.data.results>
     ├─── 📁 bundle
@@ -198,7 +196,7 @@ def render_directory_tree(
     │    ├─── 📁 algorithms
     ...
     ```
-    
+
     Args:
         root:              The root directory to render.
         ignore:            A list of patterns to ignore. If the basename of a directory
@@ -209,13 +207,11 @@ def render_directory_tree(
                            directory is was aliased to `<config.general.data.results>`.
         directory_prefix:  The prefix to use for directories.
         file_prefix:       The prefix to use for files.
-    
+
     Returns: The directory tree as a string. If the root directory is ignored, `None`.
     """
 
-    if any([
-        fnmatch.fnmatch(os.path.basename(root), pattern) for pattern in ignore
-    ]):
+    if any([fnmatch.fnmatch(os.path.basename(root), pattern) for pattern in ignore]):
         return None
 
     root_name = os.path.basename(root) if root_alias is None else root_alias
@@ -235,7 +231,7 @@ def render_directory_tree(
             sd = render_directory_tree(
                 os.path.join(root, item),
                 ignore=ignore,
-                max_depth=(max_depth - 1) if max_depth is not None else None
+                max_depth=(max_depth - 1) if max_depth is not None else None,
             )
             if sd is not None:
                 sublists.append(sd)
@@ -272,7 +268,7 @@ def list_directory(
     """List the contents of a directory based on certain criteria. Like `os.listdir`
     with superpowers. You can filter the list by a regex or you can ignore Unix shell
     style patterns like `*.lock`.
-    
+
     Args:
         path:                 The path to the directory.
         regex:                A regex pattern to match the item names against.
@@ -281,7 +277,7 @@ def list_directory(
         include_directories:  Whether to include directories in the output.
         include_files:        Whether to include files in the output.
         include_links:        Whether to include symbolic links in the output.
-    
+
     Returns: A list of items in the directory that match the criteria.
     """
 
@@ -290,10 +286,7 @@ def list_directory(
     if regex is not None:
         files = [f for f in files if re.match(regex, f)]
     if ignore is not None:
-        files = [
-            f for f in files
-            if not any([fnmatch.fnmatch(f, pattern) for pattern in ignore])
-        ]
+        files = [f for f in files if not any([fnmatch.fnmatch(f, pattern) for pattern in ignore])]
     if not include_directories:
         files = [f for f in files if not os.path.isdir(os.path.join(path, f))]
     if not include_files:

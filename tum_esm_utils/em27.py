@@ -20,9 +20,7 @@ import tum_esm_utils
 import polars as pl
 from tailwind_colors import TAILWIND_COLORS_HEX as TCH
 
-_PARSER_DIR = os.path.join(
-    os.path.dirname(os.path.abspath(__file__)), "opus_file_validator"
-)
+_PARSER_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "opus_file_validator")
 
 
 def _compile_fortran_code(
@@ -30,15 +28,13 @@ def _compile_fortran_code(
     fortran_compiler: Literal["gfortran", "gfortran-9"] = "gfortran",
     force_recompile: bool = False,
 ) -> None:
-    if force_recompile or (
-        not os.path.isfile(os.path.join(_PARSER_DIR, "opus_file_validator"))
-    ):
+    if force_recompile or (not os.path.isfile(os.path.join(_PARSER_DIR, "opus_file_validator"))):
         if not silent:
             print("compiling fortran code")
 
         command = (
-            f"{fortran_compiler} -nocpp -O3 -o ./opus_file_validator " +
-            f"glob_prepro6.F90 glob_OPUSparms6.F90 opus_file_validator.F90"
+            f"{fortran_compiler} -nocpp -O3 -o ./opus_file_validator "
+            + f"glob_prepro6.F90 glob_OPUSparms6.F90 opus_file_validator.F90"
         )
         p = subprocess.run(
             command,
@@ -52,8 +48,8 @@ def _compile_fortran_code(
             stdout = p.stdout.decode("utf-8", errors="replace").strip()
             stderr = p.stderr.decode("utf-8", errors="replace").strip()
             raise Exception(
-                f"command '{command}' failed with exit code {p.returncode}, " +
-                f"stderr: {stderr}, stout:{stdout}",
+                f"command '{command}' failed with exit code {p.returncode}, "
+                + f"stderr: {stderr}, stout:{stdout}",
             )
 
 
@@ -72,7 +68,7 @@ def detect_corrupt_opus_files(
     (https://www.imk-asf.kit.edu/english/3225.php). We use
     it because the retrieval using Proffast 2 will fail if
     there are corrupt interferograms in the input.
-    
+
     Args:
         ifg_directory:     The directory containing the interferograms.
         silent:            If set to False, print additional information.
@@ -89,18 +85,18 @@ def detect_corrupt_opus_files(
         timeout=30,
     ):
         _compile_fortran_code(
-            silent=silent,
-            fortran_compiler=fortran_compiler,
-            force_recompile=force_recompile
+            silent=silent, fortran_compiler=fortran_compiler, force_recompile=force_recompile
         )
 
     # list directory files
     filepaths = list(
-        sorted([
-            fp for fp in
-            [f"{ifg_directory}/{x}" for x in os.listdir(ifg_directory)]
-            if os.path.isfile(fp)
-        ])
+        sorted(
+            [
+                fp
+                for fp in [f"{ifg_directory}/{x}" for x in os.listdir(ifg_directory)]
+                if os.path.isfile(fp)
+            ]
+        )
     )
 
     # write input file for parser in a semaphore
@@ -118,9 +114,7 @@ def detect_corrupt_opus_files(
         with open(f"{_PARSER_DIR}/opus_file_validator.template.inp", "r") as f:
             template_content = f.read()
         with open(input_file_path, "w") as f:
-            f.write(
-                template_content.replace("%IFG_LIST%", "\n".join(filepaths))
-            )
+            f.write(template_content.replace("%IFG_LIST%", "\n".join(filepaths)))
 
     # run the parser
     process = subprocess.run(
@@ -135,17 +129,20 @@ def detect_corrupt_opus_files(
 
     if not process.returncode == 0:
         raise RuntimeError(
-            f"Opus File Parser failed with exit code {process.returncode}, " +
-            f"stderr: {stderr}, stdout: {stdout}",
+            f"Opus File Parser failed with exit code {process.returncode}, "
+            + f"stderr: {stderr}, stdout: {stdout}",
         )
 
     # locate the block of verification results
-    if ((stdout.count("--- Start verifying file integrities ---") != 1) or
-        (stdout.count("--- Done verifying file integrities ---") != 1)):
+    if (stdout.count("--- Start verifying file integrities ---") != 1) or (
+        stdout.count("--- Done verifying file integrities ---") != 1
+    ):
         raise Exception("This is a bug in the `tum_esm_utils` library")
-    verification_block = stdout.split(
-        "--- Start verifying file integrities ---"
-    )[1].split("--- Done verifying file integrities ---")[0].strip("\t\n ")
+    verification_block = (
+        stdout.split("--- Start verifying file integrities ---")[1]
+        .split("--- Done verifying file integrities ---")[0]
+        .strip("\t\n ")
+    )
 
     # parse the verification results
     results: dict[str, list[str]] = {}
@@ -157,14 +154,12 @@ def detect_corrupt_opus_files(
             is_corrupt = len(lines) > 2
             filepath = lines[0].split('"')[1]
             if is_corrupt:
-                results[os.path.basename(filepath)] = lines[1 :-1]
+                results[os.path.basename(filepath)] = lines[1:-1]
             checked_files.remove(filepath)
 
     # every file not mentioned in the verification results failed during reading it
     for filepath in checked_files:
-        results[os.path.basename(filepath)] = [
-            "File not even readible by the parser"
-        ]
+        results[os.path.basename(filepath)] = ["File not even readible by the parser"]
 
     # save the raw output for debugging purposes
     with open(os.path.join(_PARSER_DIR, "output.txt"), "w") as f:
@@ -174,8 +169,8 @@ def detect_corrupt_opus_files(
 
 
 @deprecated(
-    "This will be removed in the next breaking release. Please use " +
-    "the identical function `detect_corrupt_opus_files` instead."
+    "This will be removed in the next breaking release. Please use "
+    + "the identical function `detect_corrupt_opus_files` instead."
 )
 def detect_corrupt_ifgs(
     ifg_directory: str,
@@ -192,7 +187,7 @@ def detect_corrupt_ifgs(
     (https://www.imk-asf.kit.edu/english/3225.php). We use
     it because the retrieval using Proffast 2 will fail if
     there are corrupt interferograms in the input.
-    
+
     Args:
         ifg_directory:     The directory containing the interferograms.
         silent:            If set to False, print additional information.
@@ -215,16 +210,18 @@ def load_proffast2_result(path: str) -> pl.DataFrame:
 
     Args:
         path: The path to the Proffast 2 output file.
-    
+
     Returns:
         A polars DataFrame containing all columns.
     """
 
+    # fmt: off
     column_names = [
         "JulianDate", "UTtimeh", "gndP", "gndT", "latdeg", "londeg", "altim",
         "appSZA", "azimuth", "XH2O", "XAIR", "XCO2", "XCH4", "XCO2_STR", "XCO",
         "XCH4_S5P", "H2O", "O2", "CO2", "CH4", "CO", "CH4_S5P"
     ]
+    # fmt: on
     df = pl.read_csv(
         path,
         has_header=True,
@@ -233,19 +230,17 @@ def load_proffast2_result(path: str) -> pl.DataFrame:
             "UTC": pl.Datetime,
             " LocalTime": pl.Utf8,
             " spectrum": pl.Utf8,
-            **{f" {cn}": pl.Float32
-               for cn in column_names},
-        }
+            **{f" {cn}": pl.Float32 for cn in column_names},
+        },
     ).drop(" JulianDate", " UTtimeh")
-    return df.rename({
-        " LocalTime": "LocalTime",
-        " spectrum": "spectrum",
-        **{f" {cn}": cn
-           for cn in column_names if f" {cn}" in df.columns},
-    }).with_columns(
-        pl.col("LocalTime").str.strptime(
-            dtype=pl.Datetime, format=" %Y-%m-%d %H:%M:%S"
-        ),
+    return df.rename(
+        {
+            " LocalTime": "LocalTime",
+            " spectrum": "spectrum",
+            **{f" {cn}": cn for cn in column_names if f" {cn}" in df.columns},
+        }
+    ).with_columns(
+        pl.col("LocalTime").str.strptime(dtype=pl.Datetime, format=" %Y-%m-%d %H:%M:%S"),
     )
 
 
@@ -302,12 +297,12 @@ PROFFAST_MULTIPLIERS: dict[str, float] = {
     "XCO": 1000,
     "XCH4_S5P": 1000,
     "XAIR": 1,
-    "H2O": 1 / (6.022 * 10e+23),
-    "O2": 1 / (6.022 * 10e+23),
-    "CO2": 1 / (6.022 * 10e+23),
-    "CH4": 1 / (6.022 * 10e+23),
-    "CO": 1 / (6.022 * 10e+23),
-    "CH4_S5P": 1 / (6.022 * 10e+23),
+    "H2O": 1 / (6.022 * 10e23),
+    "O2": 1 / (6.022 * 10e23),
+    "CO2": 1 / (6.022 * 10e23),
+    "CH4": 1 / (6.022 * 10e23),
+    "CO": 1 / (6.022 * 10e23),
+    "CH4_S5P": 1 / (6.022 * 10e23),
 }
 """Multiplication factors for the EM27 data retrieved using Proffast to bring the data in a common unit."""
 

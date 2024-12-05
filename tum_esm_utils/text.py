@@ -14,11 +14,11 @@ import string
 
 def get_random_string(length: int, forbidden: list[str] = []) -> str:
     """Return a random string from lowercase letters.
-    
+
     Args:
         length:     The length of the random string.
         forbidden:  A list of strings that should not be generated.
-    
+
     Returns:
         A random string."""
 
@@ -43,7 +43,7 @@ def pad_string(
         min_width:    The minimum width of the text.
         pad_position: The position of the padding. Either "left" or "right".
         fill_char:    The character to use for padding.
-    
+
     Returns:
         The padded string."""
 
@@ -88,24 +88,24 @@ def insert_replacements(content: str, replacements: dict[str, str]) -> str:
 
 """Characters replaced by their ASCII counterparts in `simplify_string_characters`."""
 SIMPLE_STRING_REPLACEMENTS: dict[str, str] = {
-    'ö': 'oe',
-    'ø': 'o',
-    'ä': 'ae',
-    'å': 'a',
-    'ü': 'ue',
-    'ß': 'ss',
+    "ö": "oe",
+    "ø": "o",
+    "ä": "ae",
+    "å": "a",
+    "ü": "ue",
+    "ß": "ss",
     ",": "",
-    'é': 'e',
-    'ë': 'e',
+    "é": "e",
+    "ë": "e",
     ":": "-",
     "(": "-",
     ")": "-",
-    'š': "s",
-    '.': "-",
+    "š": "s",
+    ".": "-",
     "/": "-",
-    'ó': "o",
-    'ð': "d",
-    'á': "a",
+    "ó": "o",
+    "ð": "d",
+    "á": "a",
     "–": "-",
     "ł": "l",
     "‐": "-",
@@ -142,14 +142,14 @@ def simplify_string_characters(
 ) -> str:
     """Simplify a string by replacing special characters with their ASCII counterparts
     and removing unwanted characters.
-    
+
     For example, `simplify_string_characters("Héllo, wörld!")` will return `"hello-woerld"`.
-    
+
     Args:
         s: The string to simplify.
-        additional_replacements: A dictionary of additional replacements to apply. 
+        additional_replacements: A dictionary of additional replacements to apply.
                                  `{ "ö": "oe" }` will replace `ö` with `oe`.
-    
+
     Returns: The simplified string.
     """
 
@@ -166,22 +166,18 @@ def simplify_string_characters(
     allowed_chars = "abcdefghijklmnopqrstuvwxyz0123456789-_@"
     dirty = [c for c in s if c not in allowed_chars]
     if len(dirty) > 0:
-        raise Exception(
-            f"Found invalid non-replaced characters in name: {dirty} ({s})"
-        )
+        raise Exception(f"Found invalid non-replaced characters in name: {dirty} ({s})")
     return s
 
 
-def replace_consecutive_characters(
-    s: str, characters: list[str] = [" ", "-"]
-) -> str:
+def replace_consecutive_characters(s: str, characters: list[str] = [" ", "-"]) -> str:
     """Replace consecutiv characters in a string (e.g. "hello---world" -> "hello-world"
     or "hello   world" -> "hello world").
-    
+
     Args:
         s: The string to process.
         characters: A list of characters to replace duplicates of.
-    
+
     Returns:
         The string with duplicate characters replaced.
     """
@@ -192,6 +188,7 @@ def replace_consecutive_characters(
     return s
 
 
+# fmt: off
 CONTAINER_ADJECTIVES = set([
     "admiring", "adoring", "affectionate", "agitated", "amazing", "angry",
     "awesome", "beautiful", "blissful", "bold", "boring", "brave", "busy",
@@ -250,29 +247,31 @@ CONTAINER_NAMES = set([
     "wescoff", "wilbur", "wiles", "williams", "williamson", "wilson", "wing",
     "wozniak", "wright", "wu", "yalow", "yonath", "zhukovsky"
 ])
+# fmt: on
 
 
 class RandomLabelGenerator:
     """A class to generate random labels that follow the Docker style naming of
     containers, e.g `admiring-archimedes` or `happy-tesla`.
-    
+
     **Usage with tracking duplicates:**
-    
+
     ```python
     generator = RandomLabelGenerator()
     label = generator.generate()
     another_label = generator.generate()  # Will not be the same as `label`
     generator.free(label)  # Free the label to be used again
     ```
-    
+
     **Usage without tracking duplicates:**
-    
+
     ```python
     label = RandomLabelGenerator.generate_fully_random()
     ```
-    
+
     Source for the names and adjectives: https://github.com/moby/moby/blob/master/pkg/namesgenerator/names-generator.go
     """
+
     def __init__(
         self,
         occupied_labels: set[str] | list[str] = set(),
@@ -286,9 +285,7 @@ class RandomLabelGenerator:
         self.adjectives = set(adjectives)
         self.names = set(names)
         for label in occupied_labels:
-            assert re.match(
-                r"^[a-z]+-[a-z]+$", label
-            ), f"Invalid label: {label}"
+            assert re.match(r"^[a-z]+-[a-z]+$", label), f"Invalid label: {label}"
             adjective, name = label.split("-")
             assert adjective in adjectives, f"Invalid adjective: {adjective}"
             assert name in names, f"Invalid name: {name}"
@@ -297,23 +294,18 @@ class RandomLabelGenerator:
     def generate(self) -> str:
         """Generate a random label that is not already occupied."""
 
-        if len(self.occupied_labels
-              ) == (len(self.adjectives) * len(self.names)):
+        if len(self.occupied_labels) == (len(self.adjectives) * len(self.names)):
             raise RuntimeError("All possible labels are used")
 
-        min_usage_count = min(
-            self.adjective_usage_counts.items(), key=lambda x: x[1]
-        )[1]
+        min_usage_count = min(self.adjective_usage_counts.items(), key=lambda x: x[1])[1]
         available_adjectives = [
-            a for a, c in self.adjective_usage_counts.items()
-            if c == min_usage_count
+            a for a, c in self.adjective_usage_counts.items() if c == min_usage_count
         ]
         random_adjective = random.choice(available_adjectives)
 
-        used_names = set([
-            x.split("-")[1] for x in self.occupied_labels
-            if x.startswith(random_adjective + "-")
-        ])
+        used_names = set(
+            [x.split("-")[1] for x in self.occupied_labels if x.startswith(random_adjective + "-")]
+        )
         random_name = random.choice(list(self.names - used_names))
 
         new_label = f"{random_adjective}-{random_name}"
@@ -335,7 +327,7 @@ class RandomLabelGenerator:
         names: set[str] | list[str] = CONTAINER_NAMES,
     ) -> str:
         """Get a random label without tracking duplicates.
-        
+
         Use an instance of `RandomLabelGenerator` if you want to avoid
         duplicates by tracking occupied labels."""
 

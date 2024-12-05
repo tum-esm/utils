@@ -44,7 +44,7 @@ def get_disk_space(path: str = "/") -> float:
 
 def get_system_battery() -> Optional[int]:
     """Checks the system battery.
-    
+
     Returns:
         The battery state in percent if available, else None."""
 
@@ -72,9 +72,9 @@ def get_utc_offset() -> float:
     x = get_utc_offset()
     local time == utc time + x
     ```
-    
+
     Credits to https://stackoverflow.com/a/35058476/8255842
-    
+
     Returns:
         The UTC offset in hours."""
 

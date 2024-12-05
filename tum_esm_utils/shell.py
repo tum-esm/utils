@@ -13,6 +13,7 @@ import subprocess
 
 class CommandLineException(Exception):
     """Exception raised for errors in the command line."""
+
     def __init__(self, value: str, details: Optional[str] = None) -> None:
         self.value = value
         self.details = details
@@ -30,12 +31,12 @@ def run_shell_command(
     """runs a shell command and raises a `CommandLineException`
     if the return code is not zero, returns the stdout. Uses
     `/bin/bash` by default.
-    
+
     Args:
         command:           The command to run.
         working_directory: The working directory for the command.
         executable:        The shell executable to use.
-    
+
     Returns:
         The stdout of the command as a string."""
 
@@ -69,22 +70,19 @@ def get_hostname() -> str:
     return (raw.split(".")[0]) if ("." in raw) else raw
 
 
-def get_commit_sha(
-    variant: Literal["short", "long"] = "short"
-) -> Optional[str]:
+def get_commit_sha(variant: Literal["short", "long"] = "short") -> Optional[str]:
     """Get the current commit sha of the repository. Returns
     `None` if there is not git repository in any parent directory.
-    
+
     Args:
         variant:  "short" or "long" to specify the length of the sha.
-    
+
     Returns:
         The commit sha as a string, or `None` if there is no git
         repository in the parent directories."""
 
     p = subprocess.run(
-        ["git", "rev-parse", "--verify", "HEAD"] +
-        (["--short"] if variant == "short" else []),
+        ["git", "rev-parse", "--verify", "HEAD"] + (["--short"] if variant == "short" else []),
         stdout=subprocess.PIPE,
         stderr=subprocess.STDOUT,
     )
@@ -103,22 +101,19 @@ def change_file_permissions(file_path: str, permission_string: str) -> None:
     """Change a file's system permissions.
 
     Example permission_strings: `--x------`, `rwxr-xr-x`, `rw-r--r--`.
-    
+
     Args:
         file_path:         The path to the file.
         permission_string: The new permission string."""
 
-    assert _permission_string_pattern.match(
-        permission_string
-    ), "Invalid permission string"
+    assert _permission_string_pattern.match(permission_string), "Invalid permission string"
 
-    permission_str_to_bit: Callable[[str], int] = lambda p: sum([
-        int(c) for c in p.replace("r", "4").replace("w", "2").replace("x", "1").
-        replace("-", "0")
-    ])
+    permission_str_to_bit: Callable[[str], int] = lambda p: sum(
+        [int(c) for c in p.replace("r", "4").replace("w", "2").replace("x", "1").replace("-", "0")]
+    )
     os.chmod(
         file_path,
-        64 * permission_str_to_bit(permission_string[: 3]) +
-        8 * permission_str_to_bit(permission_string[3 : 6]) +
-        permission_str_to_bit(permission_string[6 :]),
+        64 * permission_str_to_bit(permission_string[:3])
+        + 8 * permission_str_to_bit(permission_string[3:6])
+        + permission_str_to_bit(permission_string[6:]),
     )

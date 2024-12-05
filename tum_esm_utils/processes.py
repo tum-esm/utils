@@ -12,7 +12,7 @@ import psutil
 
 def get_process_pids(script_path: str) -> list[int]:
     """Return a list of PIDs that have the given script as their entrypoint.
-    
+
     Args:
         script_path: The absolute path of the python file entrypoint."""
 
@@ -32,20 +32,18 @@ def get_process_pids(script_path: str) -> list[int]:
 
 
 def start_background_process(
-    interpreter_path: str,
-    script_path: str,
-    waiting_period: float = 0.5
+    interpreter_path: str, script_path: str, waiting_period: float = 0.5
 ) -> int:
     """Start a new background process with nohup with a given python
     interpreter and script path. The script paths parent directory
     will be used as the working directory for the process.
-    
+
     Args:
         interpreter_path: The absolute path of the python interpreter.
         script_path:      The absolute path of the python file entrypoint.
         waiting_period:   The waiting period in seconds after starting
                           the process.
-    
+
     Returns: The PID of the started process.
     """
 
@@ -70,10 +68,10 @@ def terminate_process(
 ) -> list[int]:
     """Terminate all processes that have the given script as their
     entrypoint. Returns the list of terminated PIDs.
-    
+
     If `termination_timeout` is not None, the processes will be
     terminated forcefully after the given timeout (in seconds).
-    
+
     Args:
         script_path:         The absolute path of the python file entrypoint.
         termination_timeout: The timeout in seconds after which the

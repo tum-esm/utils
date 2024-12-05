@@ -10,9 +10,9 @@ import pydantic
 
 class StrictFilePath(pydantic.RootModel[str]):
     """A pydantic model that validates a file path.
-    
+
     Example usage:
-    
+
     ```python
     class MyModel(pyndatic.BaseModel):
         path: StrictFilePath
@@ -32,22 +32,24 @@ class StrictFilePath(pydantic.RootModel[str]):
 
     root: str
 
-    @pydantic.field_validator('root')
+    @pydantic.field_validator("root")
     @classmethod
     def path_should_exist(cls, v: str, info: pydantic.ValidationInfo) -> str:
         ignore_path_existence = (
-            info.context.get('ignore-path-existence') == True
-        ) if isinstance(info.context, dict) else False
+            (info.context.get("ignore-path-existence") == True)
+            if isinstance(info.context, dict)
+            else False
+        )
         if (not ignore_path_existence) and (not os.path.isfile(v)):
-            raise ValueError('File does not exist')
+            raise ValueError("File does not exist")
         return v
 
 
 class StrictDirectoryPath(pydantic.RootModel[str]):
     """A pydantic model that validates a directory path.
-    
+
     Example usage:
-    
+
     ```python
     class MyModel(pyndatic.BaseModel):
         path: StrictDirectoryPath
@@ -67,14 +69,16 @@ class StrictDirectoryPath(pydantic.RootModel[str]):
 
     root: str
 
-    @pydantic.field_validator('root')
+    @pydantic.field_validator("root")
     @classmethod
     def path_should_exist(cls, v: str, info: pydantic.ValidationInfo) -> str:
         ignore_path_existence = (
-            info.context.get('ignore-path-existence') == True
-        ) if isinstance(info.context, dict) else False
+            (info.context.get("ignore-path-existence") == True)
+            if isinstance(info.context, dict)
+            else False
+        )
         if (not ignore_path_existence) and (not os.path.isdir(v)):
-            raise ValueError('Directory does not exist')
+            raise ValueError("Directory does not exist")
         return v
 
 
@@ -95,14 +99,9 @@ class Version(pydantic.RootModel[str]):
         """Return the version string as a number, i.e. MAJOR.MINOR.PATCH..."""
         return self.root
 
-    def _split(
-        self
-    ) -> tuple[int, int, int, Optional[tuple[Literal["alpha", "beta", "rc"],
-                                             int]]]:
+    def _split(self) -> tuple[int, int, int, Optional[tuple[Literal["alpha", "beta", "rc"], int]]]:
         """Split the version string into MAJOR, MINOR, PATCH, and TAG"""
-        version, tag = self.root.split("-") if "-" in self.root else (
-            self.root, ""
-        )
+        version, tag = self.root.split("-") if "-" in self.root else (self.root, "")
         major, minor, patch = map(int, version.split("."))
         if "-" in self.root:
             tags = tag.split(".")
@@ -166,9 +165,9 @@ _single_byte_as_dec_regex = r"((\d)|([1-9]\d)|(1\d\d)|(2[0-4]\d)|(25[0-5]))"
 
 class StrictIPv4Adress(pydantic.RootModel[str]):
     """A pydantic model that validates an IPv4 address.
-    
+
     Example usage:
-    
+
     ```python
     class MyModel(pyndatic.BaseModel):
         ip: StrictIPv4Adress
@@ -180,9 +179,18 @@ class StrictIPv4Adress(pydantic.RootModel[str]):
 
     root: str = pydantic.Field(
         ...,
-        pattern="".join([
-            r"^", _single_byte_as_dec_regex, r"\.", _single_byte_as_dec_regex,
-            r"\.", _single_byte_as_dec_regex, r"\.", _single_byte_as_dec_regex,
-            r"(:\d{1,5})?", r"$"
-        ])
+        pattern="".join(
+            [
+                r"^",
+                _single_byte_as_dec_regex,
+                r"\.",
+                _single_byte_as_dec_regex,
+                r"\.",
+                _single_byte_as_dec_regex,
+                r"\.",
+                _single_byte_as_dec_regex,
+                r"(:\d{1,5})?",
+                r"$",
+            ]
+        ),
     )
