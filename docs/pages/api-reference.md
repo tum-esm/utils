@@ -1519,3 +1519,63 @@ m = MyModel(ip='192.186.2.1')
 m = MyModel(ip='192.186.2.1:22')
 ```
 
+
+## `tum_esm_utils.opus`
+
+Functions for interacting with OPUS files.
+
+Implements: `OpusFile`.
+
+Read https://tccon-wiki.caltech.edu/Main/I2SAndOPUSHeaders for more information
+about the file parameters. This requires you to install this utils library with
+the optional `opus` dependency:
+
+```bash
+pip install "tum_esm_utils[opus]"
+## `or`
+pdm add "tum_esm_utils[opus]"
+```
+
+Credits to Friedrich Klappenbach (ge79wul@mytum.de) for decoding the OPUS file
+format.
+
+
+### `OpusFile` Objects
+
+```python
+class OpusFile(pydantic.BaseModel)
+```
+
+
+##### `read`
+
+```python
+@staticmethod
+def read(filepath: str,
+         measurement_timestamp_mode: Literal["start", "end"] = "start",
+         interferogram_mode: Literal["skip", "validate", "read"] = "read",
+         read_all_channels: bool = True) -> OpusFile
+```
+
+Read an interferogram file.
+
+**Arguments**:
+
+- `filepath` - Path to the OPUS file.
+- `measurement_timestamp_mode` - Whether the timestamps in the interferograms
+  indicate the start or end of the measurement
+- `interferogram_mode` - How to handle the interferogram data. "skip"
+  will not read the interferogram data, "validate"
+  will read the first and last block to check
+  for errors during writing, "read" will read
+  the entire interferogram. "read" takes about
+  11-12 times longer than "skip", "validate" is
+  about 20% slower than "skip".
+- `read_all_channels` - Whether to read all channels in the file or
+  only the first one.
+  
+
+**Returns**:
+
+  An OpusFile object, optionally containing the interferogram data (in read mode)
+

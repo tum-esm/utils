@@ -25,7 +25,7 @@ module_names = list(
             if (f.endswith(".py") and (f != "__init__.py"))
         ]
     )
-)
+) + ["opus"]
 print("Module names:", module_names)
 
 parsed_modules = ["--module=tum_esm_utils"]
