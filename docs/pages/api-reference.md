@@ -79,7 +79,7 @@ Datastructures not in the standard library.
 Implements: `RingList`, `merge_dicts`
 
 
-## `RingList` Objects
+### `RingList` Objects
 
 ```python
 class RingList()
@@ -176,7 +176,7 @@ Decorators that can be used wrap functions.
 Implements: `with_filelock`
 
 
-## `with_filelock` Objects
+### `with_filelock` Objects
 
 ```python
 class with_filelock()
@@ -216,12 +216,12 @@ Functions for interacting with EM27 interferograms.
 
 Implements: `detect_corrupt_opus_files`, `load_proffast2_result`.
 
-This requires you to install this utils library with the optional `polars` dependency:
+This requires you to install this utils library with the optional `em27` dependency:
 
 ```bash
-pip install "tum_esm_utils[polars]"
+pip install "tum_esm_utils[em27]"
 ## `or`
-pdm add "tum_esm_utils[polars]"
+pdm add "tum_esm_utils[em27]"
 ```
 
 
@@ -797,7 +797,7 @@ Implements: `run_shell_command`, `CommandLineException`,
 `get_hostname`, `get_commit_sha`, `change_file_permissions`
 
 
-## `CommandLineException` Objects
+### `CommandLineException` Objects
 
 ```python
 class CommandLineException(Exception)
@@ -1097,7 +1097,7 @@ or "hello   world" -> "hello world").
   The string with duplicate characters replaced.
 
 
-## `RandomLabelGenerator` Objects
+### `RandomLabelGenerator` Objects
 
 ```python
 class RandomLabelGenerator()
@@ -1337,7 +1337,7 @@ spans overlap at a single date.
   not overlap.
 
 
-## `ExponentialBackoff` Objects
+### `ExponentialBackoff` Objects
 
 ```python
 class ExponentialBackoff()
@@ -1410,7 +1410,7 @@ Implements validator utils for use with pydantic models.
 Implements: `StrictFilePath`, `StrictDirectoryPath`
 
 
-## `StrictFilePath` Objects
+### `StrictFilePath` Objects
 
 ```python
 class StrictFilePath(pydantic.RootModel[str])
@@ -1437,7 +1437,7 @@ m = MyModel.model_validate(
 ```
 
 
-## `StrictDirectoryPath` Objects
+### `StrictDirectoryPath` Objects
 
 ```python
 class StrictDirectoryPath(pydantic.RootModel[str])
@@ -1464,7 +1464,7 @@ m = MyModel.model_validate(
 ```
 
 
-## `Version` Objects
+### `Version` Objects
 
 ```python
 class Version(pydantic.RootModel[str])
@@ -1491,7 +1491,7 @@ def as_identifier() -> str
 Return the version string as a number, i.e. MAJOR.MINOR.PATCH...
 
 
-## `StricterBaseModel` Objects
+### `StricterBaseModel` Objects
 
 ```python
 class StricterBaseModel(pydantic.BaseModel)
@@ -1501,7 +1501,7 @@ The same as pydantic.BaseModel, but with stricter rules. It does not
 allow extra fields and validates assignments after initialization.
 
 
-## `StrictIPv4Adress` Objects
+### `StrictIPv4Adress` Objects
 
 ```python
 class StrictIPv4Adress(pydantic.RootModel[str])

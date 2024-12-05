@@ -2,9 +2,7 @@ from __future__ import annotations
 import os
 import tempfile
 
-PROJECT_DIR = os.path.dirname(
-    os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-)
+PROJECT_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 INDEX_SRC = os.path.join(PROJECT_DIR, "README.md")
 INDEX_DST = os.path.join(PROJECT_DIR, "docs", "pages", "index.md")
 API_DST = os.path.join(PROJECT_DIR, "docs", "pages", "api-reference.md")
@@ -20,10 +18,13 @@ with open(INDEX_DST, "w") as f:
 # generate automatic API reference and prettify output
 
 module_names = list(
-    sorted([
-        f[:-3] for f in os.listdir(os.path.join(PROJECT_DIR, "tum_esm_utils"))
-        if (f.endswith(".py") and (f != "__init__.py"))
-    ])
+    sorted(
+        [
+            f[:-3]
+            for f in os.listdir(os.path.join(PROJECT_DIR, "tum_esm_utils"))
+            if (f.endswith(".py") and (f != "__init__.py"))
+        ]
+    )
 )
 print("Module names:", module_names)
 
@@ -32,10 +33,7 @@ for m in module_names:
     parsed_modules.append(f"--module=tum_esm_utils.{m}")
 
 with tempfile.NamedTemporaryFile() as f:
-    os.system(
-        f"cd {PROJECT_DIR} && pydoc-markdown " + (" ").join(parsed_modules) +
-        f" > {f.name}"
-    )
+    os.system(f"cd {PROJECT_DIR} && pydoc-markdown " + (" ").join(parsed_modules) + f" > {f.name}")
     with open(f.name, "r") as f2:
         raw_api_reference_content = f2.read()
 
@@ -48,23 +46,19 @@ with tempfile.NamedTemporaryFile() as f:
             assert line_segments[0] == "#" * len(line_segments[0])
             if len(line_segments) == 2:
                 parsed_api_reference_content_lines.append(
-                    line_segments[0] + "# `" +
-                    line_segments[1].replace("\\_", "_") + "`"
+                    line_segments[0] + "# `" + line_segments[1].replace("\\_", "_") + "`"
                 )
             elif len(line_segments) == 3:
                 assert line_segments[2] == "Objects"
                 parsed_api_reference_content_lines.append(
-                    line_segments[0] + " `" +
-                    line_segments[1].replace("\\_", "_") + "` Objects"
+                    line_segments[0] + "# `" + line_segments[1].replace("\\_", "_") + "` Objects"
                 )
             else:
                 raise ValueError("Unexpected line format: " + line)
         else:
             parsed_api_reference_content_lines.append(line)
 
-    parsed_api_reference_content = "\n".join(
-        parsed_api_reference_content_lines[2 :]
-    )
+    parsed_api_reference_content = "\n".join(parsed_api_reference_content_lines[2:])
 
 with open(API_DST, "w") as f:
     f.write("# API Reference \n\n" + parsed_api_reference_content)
