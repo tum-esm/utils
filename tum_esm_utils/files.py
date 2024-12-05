@@ -26,6 +26,16 @@ def dump_file(path: str, content: str) -> None:
         f.write(content)
 
 
+def load_binary_file(path: str) -> bytes:
+    with open(path, "rb") as f:
+        return f.read()
+
+
+def dump_binary_file(path: str, content: bytes) -> None:
+    with open(path, "wb") as f:
+        f.write(content)
+
+
 def load_json_file(path: str) -> Any:
     with open(path, "r") as f:
         return json.load(f)
