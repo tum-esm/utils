@@ -17,31 +17,37 @@ import tum_esm_utils
 
 
 def load_file(path: str) -> str:
+    """Load the content of a file."""
     with open(path, "r") as f:
         return f.read()
 
 
 def dump_file(path: str, content: str) -> None:
+    """Dump content to a file."""
     with open(path, "w") as f:
         f.write(content)
 
 
 def load_binary_file(path: str) -> bytes:
+    """Load binary content of a file."""
     with open(path, "rb") as f:
         return f.read()
 
 
 def dump_binary_file(path: str, content: bytes) -> None:
+    """Dump binary content to a file."""
     with open(path, "wb") as f:
         f.write(content)
 
 
 def load_json_file(path: str) -> Any:
+    """Load the content of a JSON file."""
     with open(path, "r") as f:
         return json.load(f)
 
 
 def dump_json_file(path: str, content: Any, indent: Optional[int] = 4) -> None:
+    """Dump content to a JSON file."""
     with open(path, "w") as f:
         json.dump(content, f, indent=indent)
 

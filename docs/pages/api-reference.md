@@ -353,6 +353,60 @@ Implements: `load_file`, `dump_file`, `load_json_file`,
 `expect_file_contents`, `render_directory_tree`, `list_directory`
 
 
+##### `load_file`
+
+```python
+def load_file(path: str) -> str
+```
+
+Load the content of a file.
+
+
+##### `dump_file`
+
+```python
+def dump_file(path: str, content: str) -> None
+```
+
+Dump content to a file.
+
+
+##### `load_binary_file`
+
+```python
+def load_binary_file(path: str) -> bytes
+```
+
+Load binary content of a file.
+
+
+##### `dump_binary_file`
+
+```python
+def dump_binary_file(path: str, content: bytes) -> None
+```
+
+Dump binary content to a file.
+
+
+##### `load_json_file`
+
+```python
+def load_json_file(path: str) -> Any
+```
+
+Load the content of a JSON file.
+
+
+##### `dump_json_file`
+
+```python
+def dump_json_file(path: str, content: Any, indent: Optional[int] = 4) -> None
+```
+
+Dump content to a JSON file.
+
+
 ##### `get_parent_dir_path`
 
 ```python
@@ -641,11 +695,14 @@ Add a subplot to a figure.
 
 ```python
 def add_colorpatch_legend(fig: plt.Figure,
-                          handles: list[tuple[str, Union[
+                          handles: list[tuple[
                               str,
-                              tuple[float, float, float],
-                              tuple[float, float, float, float],
-                          ]]],
+                              Union[
+                                  str,
+                                  tuple[float, float, float],
+                                  tuple[float, float, float, float],
+                              ],
+                          ]],
                           ncols: Optional[int] = None,
                           location: str = "upper left") -> None
 ```
