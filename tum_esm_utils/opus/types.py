@@ -1,13 +1,4 @@
-# -*- coding: utf-8 -*-
-"""
-Created on Tue Feb 21 14:00:45 2023
-@author: Friedrich Klappenbach <ge79wul@mytum.de>
-
-Added static type hints that pass strict MyPy checks (2024-02-01)
-@author: Moritz Makowski <moritz.makowski@tum.de>
-
-Also see https://tccon-wiki.caltech.edu/Main/I2SAndOPUSHeaders for more parameter information
-"""
+"""Credits to Friedrich Klappenbach (ge79wul@mytum.de) for decoding the OPUS file format."""
 
 from __future__ import annotations
 from typing import Any, Literal, Optional

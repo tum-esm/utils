@@ -1,5 +1,7 @@
 """Functions for interacting with OPUS files.
 
+Also see https://tccon-wiki.caltech.edu/Main/I2SAndOPUSHeaders for more parameter information
+
 Implements: TODO
 
 This requires you to install this utils library with the optional `opus` dependency:
@@ -8,6 +10,8 @@ This requires you to install this utils library with the optional `opus` depende
 pip install "tum_esm_utils[opus]"
 # or
 pdm add "tum_esm_utils[opus]"
+
+Credits to Friedrich Klappenbach (ge79wul@mytum.de) for decoding the OPUS file format.
 ```"""
 
 from __future__ import annotations
