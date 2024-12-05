@@ -1,18 +1,19 @@
 """Functions for interacting with OPUS files.
 
-Also see https://tccon-wiki.caltech.edu/Main/I2SAndOPUSHeaders for more parameter information
+Implements: `OpusFile`.
 
-Implements: TODO
-
-This requires you to install this utils library with the optional `opus` dependency:
+Read https://tccon-wiki.caltech.edu/Main/I2SAndOPUSHeaders for more information
+about the file parameters. This requires you to install this utils library with
+the optional `opus` dependency:
 
 ```bash
 pip install "tum_esm_utils[opus]"
 # or
 pdm add "tum_esm_utils[opus]"
+```
 
-Credits to Friedrich Klappenbach (ge79wul@mytum.de) for decoding the OPUS file format.
-```"""
+Credits to Friedrich Klappenbach (ge79wul@mytum.de) for decoding the OPUS file
+format."""
 
 from __future__ import annotations
 from typing import Optional, Literal
@@ -25,6 +26,8 @@ from . import types, utils
 
 
 class OpusFile(pydantic.BaseModel):
+    model_config = pydantic.ConfigDict(arbitrary_types_allowed=True)
+
     header: types.OpusHeader
     channel_parameters: list[types.OpusChannelParameters]
     measurement_times: list[datetime.datetime]

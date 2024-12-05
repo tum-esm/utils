@@ -185,8 +185,8 @@ def read_interferogram(
         channel_ifg = np.multiply(
             np.array(
                 struct.unpack_from(
-                    format=f"<{spectrum_length}f",
-                    buffer=read_opus_block(f, ifg_opus_dirs[0], types.OpusDataBlock).raw_data,
+                    f"<{spectrum_length}f",
+                    read_opus_block(f, ifg_opus_dirs[0], types.OpusDataBlock).raw_data,
                     offset=0,
                 )
             ),
