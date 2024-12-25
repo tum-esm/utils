@@ -156,7 +156,9 @@ class OpusFile(pydantic.BaseModel):
                 interferogram = utils.read_interferogram(
                     f,
                     channel_parameters=channel_parameters,
-                    ifg_opus_dirs=[opus_dirs[i] for i in block_indices["interferogram"]],
+                    ifg_opus_dirs=[opus_dirs[i] for i in block_indices["interferogram"]][
+                        :read_channel_count
+                    ],
                     read_all_channels=read_all_channels,
                 )
 
