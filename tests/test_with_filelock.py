@@ -3,6 +3,8 @@ from typing import Optional
 import os
 import time
 import queue
+
+import pytest
 import tum_esm_utils
 import multiprocessing
 
@@ -49,6 +51,7 @@ def test_filelock_without_concurrency() -> None:
     assert f() == 1
 
 
+@pytest.mark.multithreaded
 def test_filelock_with_threading() -> None:
     """takes quite long because I had to increase `TIMEOUT_UNIT`
     to `3` for it to work on GitHub's CI small runners"""
@@ -70,6 +73,7 @@ def test_filelock_with_threading() -> None:
     assert count_queue_items(res_queue_th) == 1
 
 
+@pytest.mark.multithreaded
 def test_filelock_with_multiprocessing() -> None:
     """takes quite long because I had to increase `TIMEOUT_UNIT`
     to `3` for it to work on GitHub's CI small runners"""

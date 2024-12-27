@@ -1,10 +1,13 @@
 import os
 import tempfile
+
+import pytest
 import tum_esm_utils
 
 _PROJECT_DIR = tum_esm_utils.files.get_parent_dir_path(__file__, current_depth=2)
 
 
+@pytest.mark.quick
 def test_detect_corrupt_ifgs() -> None:
     """create a temporary directory with a file that
     is not an interferogram at all"""
@@ -30,6 +33,7 @@ def test_detect_corrupt_ifgs() -> None:
     )
 
 
+@pytest.mark.quick
 def test_load_proffast2_result() -> None:
     input_dir = tum_esm_utils.files.rel_to_abs_path("./data")
     files = [f for f in os.listdir(input_dir) if f.startswith("comb_inv") and f.endswith(".csv")]

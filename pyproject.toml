@@ -65,6 +65,10 @@ build-backend = "pdm.backend"
 
 [tool.pytest.ini_options]
 filterwarnings = ["ignore::pytest.PytestUnhandledThreadExceptionWarning"]
+markers = [
+    "quick: tests that run very quickly",
+    "multithreaded: tests that run on multiple threads",
+]
 
 [tool.mypy]
 strict = true

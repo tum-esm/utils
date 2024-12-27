@@ -1,6 +1,8 @@
 from __future__ import annotations
 import time
 from typing import Callable
+
+import pytest
 import tum_esm_utils
 import datetime
 
@@ -42,6 +44,7 @@ def test_clear_alarm() -> None:
 
 # write a unit test for the function `date_range` in `tum_esm_utils/text.py`
 # write a bunch of sample inputs and expected outputs
+@pytest.mark.quick
 def test_date_range() -> None:
     assert tum_esm_utils.timing.date_range(
         datetime.date(2021, 1, 1), datetime.date(2021, 1, 1)
@@ -86,6 +89,7 @@ def test_date_range() -> None:
     ]
 
 
+@pytest.mark.quick
 def test_parse_timezone_string() -> None:
     assert tum_esm_utils.timing.parse_timezone_string("CET", datetime.datetime(2000, 1, 1)) == 1
     assert tum_esm_utils.timing.parse_timezone_string("CET+3", datetime.datetime(2000, 1, 1)) == 4
@@ -101,6 +105,7 @@ def test_parse_timezone_string() -> None:
     assert tum_esm_utils.timing.parse_timezone_string("UTC-05.5") == -5.5
 
 
+@pytest.mark.quick
 def test_parse_iso_8601_datetime() -> None:
     strings = [
         "2021-01-01T00:00:00",
@@ -135,6 +140,7 @@ def test_parse_iso_8601_datetime() -> None:
     assert all([dt == dts[0] for dt in dts[1:]])
 
 
+@pytest.mark.quick
 def test_datetime_span_intersection() -> None:
     d: Callable[[int], datetime.datetime] = lambda _d: datetime.datetime(2021, 1, _d + 1)
 
@@ -161,6 +167,7 @@ def test_datetime_span_intersection() -> None:
         ), f"Test case {i}b failed"
 
 
+@pytest.mark.quick
 def test_date_span_intersection() -> None:
     d: Callable[[int], datetime.date] = lambda _d: datetime.date(2021, 1, _d + 1)
 

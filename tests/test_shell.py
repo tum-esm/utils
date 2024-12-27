@@ -1,8 +1,11 @@
 import os
 import tempfile
+
+import pytest
 import tum_esm_utils
 
 
+@pytest.mark.quick
 def test_change_file_permissions() -> None:
     with tempfile.TemporaryFile() as f:
         # try to change the permissions of the file

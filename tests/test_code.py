@@ -1,6 +1,8 @@
+import pytest
 import tum_esm_utils
 
 
+@pytest.mark.quick
 def test_request_github_file() -> None:
     c1 = tum_esm_utils.code.request_github_file(
         repository="tum-esm/em27-retrieval-pipeline",
