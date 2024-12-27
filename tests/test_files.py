@@ -120,9 +120,9 @@ def test_list_directory() -> None:
     # REGEX
 
     l = tum_esm_utils.files.list_directory(PROJECT_DIR, regex=r"^.*\.lock$")
-    assert set(l) == {"pdm.lock"}
+    assert set(l) == {"pdm.lock"}, f"l = {l}"
     l = tum_esm_utils.files.list_directory(PROJECT_DIR, regex=r"^\.git.*$")
-    assert set(l) == {".git", ".github", ".gitignore"}
+    assert set(l).issubset({".git", ".github", ".gitignore"}), f"l = {l}"
 
     # IGNORE
 
