@@ -12,9 +12,7 @@ def test_plotting() -> None:
         font_family="Roboto" if platform.system() == "Darwin" else None
     )
 
-    with tum_esm_utils.plotting.create_figure(
-        "/tmp/tum_esm_utils_plotting_test.png"
-    ) as fig:
+    with tum_esm_utils.plotting.create_figure("/tmp/tum_esm_utils_plotting_test.png") as fig:
         axis1 = tum_esm_utils.plotting.add_subplot(
             fig, (2, 1, 1), title="Test Plot", xlabel="X", ylabel="Y"
         )

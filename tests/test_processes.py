@@ -29,9 +29,7 @@ def test_ungraceful_process() -> None:
 
 
 def test_graceful_process() -> None:
-    expected_pid = start_background_process(
-        sys.executable, SCRIPT_PATH_WITH_GRACE
-    )
+    expected_pid = start_background_process(sys.executable, SCRIPT_PATH_WITH_GRACE)
     time.sleep(0.1)
 
     assert get_process_pids(SCRIPT_PATH_WITH_GRACE) == [expected_pid]
@@ -43,7 +41,6 @@ def test_graceful_process() -> None:
     assert get_process_pids(SCRIPT_PATH_WITH_GRACE) == [expected_pid]
 
     # hard kill works
-    assert terminate_process(SCRIPT_PATH_WITH_GRACE,
-                             termination_timeout=0) == [expected_pid]
+    assert terminate_process(SCRIPT_PATH_WITH_GRACE, termination_timeout=0) == [expected_pid]
     time.sleep(0.1)
     assert get_process_pids(SCRIPT_PATH_WITH_GRACE) == []

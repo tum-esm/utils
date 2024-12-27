@@ -7,14 +7,10 @@ PROJECT_DIR = tum_esm_utils.files.get_parent_dir_path(__file__, current_depth=2)
 
 
 def test_get_parent_dir_path() -> None:
-    parent_dir = tum_esm_utils.files.get_parent_dir_path(
-        __file__, current_depth=1
-    )
+    parent_dir = tum_esm_utils.files.get_parent_dir_path(__file__, current_depth=1)
     assert parent_dir == os.path.dirname(os.path.abspath(__file__))
 
-    parent_parent_dir = tum_esm_utils.files.get_parent_dir_path(
-        __file__, current_depth=2
-    )
+    parent_parent_dir = tum_esm_utils.files.get_parent_dir_path(__file__, current_depth=2)
     assert parent_parent_dir == os.path.dirname(parent_dir)
 
 
@@ -24,17 +20,13 @@ def test_rel_to_abs_path() -> None:
     a3 = tum_esm_utils.files.rel_to_abs_path("tests", "data/some.csv")
     a4 = tum_esm_utils.files.rel_to_abs_path("tests/data", "some.csv")
     a5 = tum_esm_utils.files.rel_to_abs_path("tests/data/", "some.csv")
-    a6 = tum_esm_utils.files.rel_to_abs_path(
-        "..", "tests", "tests", "data", "some.csv"
-    )
+    a6 = tum_esm_utils.files.rel_to_abs_path("..", "tests", "tests", "data", "some.csv")
     a7 = tum_esm_utils.files.rel_to_abs_path(
         "..", "tests", "tests", "data", "..", "data", "some.csv"
     )
     assert a1 == a2 == a3 == a4 == a5 == a6 == a7
 
-    expected = os.path.join(
-        os.path.dirname(os.path.abspath(__file__)), "tests", "data", "some.csv"
-    )
+    expected = os.path.join(os.path.dirname(os.path.abspath(__file__)), "tests", "data", "some.csv")
     assert a1 == expected
 
 
@@ -99,9 +91,7 @@ def test_read_last_n_lines() -> None:
 
 
 def test_render_directory_tree() -> None:
-    ignore = [
-        ".git", ".github", ".vscode", ".venv", "dist", ".pdm-build", "docs"
-    ]
+    ignore = [".git", ".github", ".vscode", ".venv", "dist", ".pdm-build", "docs"]
 
     expect = ["📁 tests", "📁 tum_esm_utils", "📄 test_files.py", "📄 .gitignore"]
     tree = tum_esm_utils.files.render_directory_tree(PROJECT_DIR, ignore=ignore)
@@ -112,9 +102,7 @@ def test_render_directory_tree() -> None:
     for e in expect:
         assert e in tree
 
-    tree = tum_esm_utils.files.render_directory_tree(
-        PROJECT_DIR, ignore=ignore, max_depth=1
-    )
+    tree = tum_esm_utils.files.render_directory_tree(PROJECT_DIR, ignore=ignore, max_depth=1)
     assert tree is not None
     print(tree)
     ignore.append("📄 test_files.py")
@@ -138,9 +126,7 @@ def test_list_directory() -> None:
 
     # IGNORE
 
-    l = tum_esm_utils.files.list_directory(
-        PROJECT_DIR, ignore=[".git", ".github"]
-    )
+    l = tum_esm_utils.files.list_directory(PROJECT_DIR, ignore=[".git", ".github"])
     assert set(l) == set(os.listdir(PROJECT_DIR)) - {".git", ".github"}
 
     l = tum_esm_utils.files.list_directory(PROJECT_DIR, ignore=["*.toml"])
@@ -153,7 +139,5 @@ def test_list_directory() -> None:
     )
     assert set(l) == {f for f in os.listdir(PROJECT_DIR) if os.path.isfile(f)}
 
-    l = tum_esm_utils.files.list_directory(
-        PROJECT_DIR, include_files=False, include_links=False
-    )
+    l = tum_esm_utils.files.list_directory(PROJECT_DIR, include_files=False, include_links=False)
     assert set(l) == {f for f in os.listdir(PROJECT_DIR) if os.path.isdir(f)}

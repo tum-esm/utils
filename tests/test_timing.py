@@ -87,12 +87,8 @@ def test_date_range() -> None:
 
 
 def test_parse_timezone_string() -> None:
-    assert tum_esm_utils.timing.parse_timezone_string(
-        "CET", datetime.datetime(2000, 1, 1)
-    ) == 1
-    assert tum_esm_utils.timing.parse_timezone_string(
-        "CET+3", datetime.datetime(2000, 1, 1)
-    ) == 4
+    assert tum_esm_utils.timing.parse_timezone_string("CET", datetime.datetime(2000, 1, 1)) == 1
+    assert tum_esm_utils.timing.parse_timezone_string("CET+3", datetime.datetime(2000, 1, 1)) == 4
     assert tum_esm_utils.timing.parse_timezone_string("GMT+2") == 2
     assert tum_esm_utils.timing.parse_timezone_string("UTC-2") == -2
     assert tum_esm_utils.timing.parse_timezone_string("UTC+2.0") == 2
@@ -122,7 +118,7 @@ def test_parse_iso_8601_datetime() -> None:
         datetime.timezone.utc
     )
 
-    assert all([dt == dts[0] for dt in dts[1 :]])
+    assert all([dt == dts[0] for dt in dts[1:]])
 
     strings = [
         "2019-07-05T03:01:11Z",
@@ -133,73 +129,59 @@ def test_parse_iso_8601_datetime() -> None:
     dts = [tum_esm_utils.timing.parse_iso_8601_datetime(s) for s in strings]
 
     assert dts[0].tzinfo is not None
-    dts[0] = dts[0].astimezone(datetime.timezone.utc
-                              ) - datetime.timedelta(hours=3, minutes=40)
+    dts[0] = dts[0].astimezone(datetime.timezone.utc) - datetime.timedelta(hours=3, minutes=40)
     dts[3] = dts[3] - datetime.timedelta(minutes=40)
 
-    assert all([dt == dts[0] for dt in dts[1 :]])
+    assert all([dt == dts[0] for dt in dts[1:]])
 
 
 def test_datetime_span_intersection() -> None:
-    d: Callable[
-        [int],
-        datetime.datetime] = lambda _d: datetime.datetime(2021, 1, _d + 1)
+    d: Callable[[int], datetime.datetime] = lambda _d: datetime.datetime(2021, 1, _d + 1)
 
     test_cases = [
         # no overlap no gap
         ((d(0), d(1)), (d(1), d(2)), None),
-
         # no overlap with gap
         ((d(5), d(9)), (d(12), d(15)), None),
-
         # same size, partially overlapping
         ((d(0), d(2)), (d(1), d(3)), (d(1), d(2))),
-
         # same size t1 == t2
         ((d(0), d(2)), (d(0), d(2)), (d(0), d(2))),
-
         # one is inside the other
         ((d(0), d(4)), (d(1), d(3)), (d(1), d(3))),
-
         # one is inside the other and zero length
         ((d(0), d(4)), (d(1), d(1)), None),
     ]
     for i, (dt_span_1, dt_span_2, expected) in enumerate(test_cases):
-        assert tum_esm_utils.timing.datetime_span_intersection(
-            dt_span_1, dt_span_2
-        ) == expected, f"Test case {i}a failed"
-        assert tum_esm_utils.timing.datetime_span_intersection(
-            dt_span_2, dt_span_1
-        ) == expected, f"Test case {i}b failed"
+        assert (
+            tum_esm_utils.timing.datetime_span_intersection(dt_span_1, dt_span_2) == expected
+        ), f"Test case {i}a failed"
+        assert (
+            tum_esm_utils.timing.datetime_span_intersection(dt_span_2, dt_span_1) == expected
+        ), f"Test case {i}b failed"
 
 
 def test_date_span_intersection() -> None:
-    d: Callable[[int],
-                datetime.date] = lambda _d: datetime.date(2021, 1, _d + 1)
+    d: Callable[[int], datetime.date] = lambda _d: datetime.date(2021, 1, _d + 1)
 
     test_cases = [
         # no overlap no gap
         ((d(0), d(1)), (d(1), d(2)), (d(1), d(1))),
-
         # no overlap with gap
         ((d(5), d(9)), (d(12), d(15)), None),
-
         # same size, partially overlapping
         ((d(0), d(2)), (d(1), d(3)), (d(1), d(2))),
-
         # same size t1 == t2
         ((d(0), d(2)), (d(0), d(2)), (d(0), d(2))),
-
         # one is inside the other
         ((d(0), d(4)), (d(1), d(3)), (d(1), d(3))),
-
         # one is inside the other and zero length
         ((d(0), d(4)), (d(1), d(1)), (d(1), d(1))),
     ]
     for i, (dt_span_1, dt_span_2, expected) in enumerate(test_cases):
-        assert tum_esm_utils.timing.date_span_intersection(
-            dt_span_1, dt_span_2
-        ) == expected, f"Test case {i}a failed"
-        assert tum_esm_utils.timing.date_span_intersection(
-            dt_span_2, dt_span_1
-        ) == expected, f"Test case {i}b failed"
+        assert (
+            tum_esm_utils.timing.date_span_intersection(dt_span_1, dt_span_2) == expected
+        ), f"Test case {i}a failed"
+        assert (
+            tum_esm_utils.timing.date_span_intersection(dt_span_2, dt_span_1) == expected
+        ), f"Test case {i}b failed"

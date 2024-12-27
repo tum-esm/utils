@@ -17,6 +17,4 @@ def test_static_types() -> None:
 
     for path in ["tests/", "tum_esm_utils/"]:
         print(f"Checking {path} ...")
-        assert os.system(
-            f"cd {PROJECT_DIR} && {sys.executable} -m mypy {path}"
-        ) == 0
+        assert os.system(f"cd {PROJECT_DIR} && {sys.executable} -m mypy {path}") == 0

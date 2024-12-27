@@ -20,7 +20,7 @@ def test_request_github_file() -> None:
         repository="coccon-kit/proffastpylot",
         filepath="README.md",
         branch_name="master",
-        hostname="gitlab.eudat.eu"
+        hostname="gitlab.eudat.eu",
     )
     assert len(c3.replace(" ", "")) > 0, "String c3 is empty"
 
@@ -28,6 +28,6 @@ def test_request_github_file() -> None:
         repository="coccon-kit/proffastpylot",
         filepath="prfpylot/ILSList.csv",
         branch_name="master",
-        hostname="gitlab.eudat.eu"
+        hostname="gitlab.eudat.eu",
     )
     assert len(c4.replace(" ", "")) > 0, "String c4 is empty"

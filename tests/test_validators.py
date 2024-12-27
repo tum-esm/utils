@@ -40,8 +40,12 @@ def test_strict_path_validators() -> None:
 
 def test_version_validator() -> None:
     for valid_string in [
-        "0.0.0", "1.2.3", "1.2.3-alpha.1", "1.2.3-alpha.30", "1.2.3-beta.2",
-        "1.2.3-rc.70"
+        "0.0.0",
+        "1.2.3",
+        "1.2.3-alpha.1",
+        "1.2.3-alpha.30",
+        "1.2.3-beta.2",
+        "1.2.3-rc.70",
     ]:
         v = Version(valid_string)
         assert v.as_identifier() == valid_string
