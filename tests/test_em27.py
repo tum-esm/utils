@@ -7,7 +7,6 @@ import tum_esm_utils
 _PROJECT_DIR = tum_esm_utils.files.get_parent_dir_path(__file__, current_depth=2)
 
 
-@pytest.mark.quick
 def test_detect_corrupt_ifgs() -> None:
     """create a temporary directory with a file that
     is not an interferogram at all"""
