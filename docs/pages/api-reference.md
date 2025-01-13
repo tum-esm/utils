@@ -596,6 +596,232 @@ def distance_between_angles(angle_1: float, angle_2: float) -> float
 Calculate the directional distance (in degrees) between two angles.
 
 
+## `tum_esm_utils.opus`
+
+Functions for interacting with OPUS files.
+
+Implements: `OpusFile`, `OpusHTTPInterface`.
+
+Read https://tccon-wiki.caltech.edu/Main/I2SAndOPUSHeaders for more information
+about the file parameters. This requires you to install this utils library with
+the optional `opus` dependency:
+
+```bash
+pip install "tum_esm_utils[opus]"
+## `or`
+pdm add "tum_esm_utils[opus]"
+```
+
+Credits to Friedrich Klappenbach (friedrich.klappenbach@tum.de) for decoding the OPUS file
+format.
+
+
+## `tum_esm_utils.opus.file_interface`
+
+Functions for interacting with OPUS files.
+
+
+### `OpusFile` Objects
+
+```python
+class OpusFile(pydantic.BaseModel)
+```
+
+Interact with OPUS spectrum files.
+
+Credits to Friedrich Klappenbach (friedrich.klappenbach@tum.de) for decoding the OPUS file format.
+
+
+##### `read`
+
+```python
+@staticmethod
+def read(filepath: str,
+         measurement_timestamp_mode: Literal["start", "end"] = "start",
+         interferogram_mode: Literal["skip", "validate", "read"] = "read",
+         read_all_channels: bool = True) -> OpusFile
+```
+
+Read an interferogram file.
+
+**Arguments**:
+
+- `filepath` - Path to the OPUS file.
+- `measurement_timestamp_mode` - Whether the timestamps in the interferograms
+  indicate the start or end of the measurement
+- `interferogram_mode` - How to handle the interferogram data. "skip"
+  will not read the interferogram data, "validate"
+  will read the first and last block to check
+  for errors during writing, "read" will read
+  the entire interferogram. "read" takes about
+  11-12 times longer than "skip", "validate" is
+  about 20% slower than "skip".
+- `read_all_channels` - Whether to read all channels in the file or
+  only the first one.
+  
+
+**Returns**:
+
+  An OpusFile object, optionally containing the interferogram data (in read mode)
+
+
+## `tum_esm_utils.opus.http_interface`
+
+Provides a HTTP interface to OPUS.
+
+
+### `OpusHTTPInterface` Objects
+
+```python
+class OpusHTTPInterface()
+```
+
+Interface to the OPUS HTTP interface.
+
+It uses the socket library, because the HTTP interface of OPUS does not
+reuturn valid HTTP/1 or HTTP/2 headers. It opens and closes a new socket
+because OPUS closes the socket after the answer has been sent.
+
+**Raises**:
+
+- `ConnectionError` - If the connection to the OPUS HTTP interface fails or
+  if the response is invalid.
+
+
+##### `request`
+
+```python
+@staticmethod
+@tenacity.retry(
+    retry=tenacity.retry_if_exception_type(ConnectionError),
+    reraise=True,
+    stop=tenacity.stop_after_attempt(3),
+    wait=tenacity.wait_fixed(5),
+)
+def request(request: str) -> list[str]
+```
+
+Send a request to the OPUS HTTP interface and return the answer.
+
+This function will retry the request up to 3 times and wait 5 seconds
+inbetween retries.
+
+
+##### `get_version_extended`
+
+```python
+@staticmethod
+def get_version_extended() -> str
+```
+
+Get the version number of OPUS via the HTTP interface.
+
+
+##### `is_working`
+
+```python
+@staticmethod
+def is_working() -> bool
+```
+
+Check if the OPUS HTTP interface is working. Does NOT raise a ConnectionError
+but only returns `True` or `False`.
+
+
+##### `get_main_thread_id`
+
+```python
+@staticmethod
+def get_main_thread_id() -> int
+```
+
+Get the main thread ID of OPUS.
+
+
+##### `some_macro_is_running`
+
+```python
+@staticmethod
+def some_macro_is_running() -> bool
+```
+
+Check if any macro is currently running in OPUS.
+
+In theory, we could also check whether the correct macro is running using
+`READ_PARAMETER MPT` and `READ_PARAMETER MFN`. However, these variables do
+not seem to be updated right away, so we cannot rely on them.
+
+
+##### `get_loaded_experiment`
+
+```python
+@staticmethod
+def get_loaded_experiment() -> str
+```
+
+Get the path to the currently loaded experiment.
+
+
+##### `load_experiment`
+
+```python
+@staticmethod
+def load_experiment(experiment_path: str) -> None
+```
+
+Load an experiment file into OPUS.
+
+
+##### `start_macro`
+
+```python
+@staticmethod
+def start_macro(macro_path: str) -> int
+```
+
+Start a macro in OPUS. Returns the macro ID.
+
+
+##### `macro_is_running`
+
+```python
+@staticmethod
+def macro_is_running(macro_id: int) -> bool
+```
+
+Check if the given macro is running.
+
+
+##### `stop_macro`
+
+```python
+@staticmethod
+def stop_macro(macro_path: str) -> None
+```
+
+Stop a macro in OPUS.
+
+
+##### `unload_all_files`
+
+```python
+@staticmethod
+def unload_all_files() -> None
+```
+
+Unload all files in OPUS. This should be done before closing it.
+
+
+##### `close_opus`
+
+```python
+@staticmethod
+def close_opus() -> None
+```
+
+Close OPUS.
+
+
 ## `tum_esm_utils.plotting`
 
 Better defaults for matplotlib plots and utilities for creating and saving figures.
@@ -1518,64 +1744,4 @@ class MyModel(pyndatic.BaseModel):
 m = MyModel(ip='192.186.2.1')
 m = MyModel(ip='192.186.2.1:22')
 ```
-
-
-## `tum_esm_utils.opus`
-
-Functions for interacting with OPUS files.
-
-Implements: `OpusFile`.
-
-Read https://tccon-wiki.caltech.edu/Main/I2SAndOPUSHeaders for more information
-about the file parameters. This requires you to install this utils library with
-the optional `opus` dependency:
-
-```bash
-pip install "tum_esm_utils[opus]"
-## `or`
-pdm add "tum_esm_utils[opus]"
-```
-
-Credits to Friedrich Klappenbach (ge79wul@mytum.de) for decoding the OPUS file
-format.
-
-
-### `OpusFile` Objects
-
-```python
-class OpusFile(pydantic.BaseModel)
-```
-
-
-##### `read`
-
-```python
-@staticmethod
-def read(filepath: str,
-         measurement_timestamp_mode: Literal["start", "end"] = "start",
-         interferogram_mode: Literal["skip", "validate", "read"] = "read",
-         read_all_channels: bool = True) -> OpusFile
-```
-
-Read an interferogram file.
-
-**Arguments**:
-
-- `filepath` - Path to the OPUS file.
-- `measurement_timestamp_mode` - Whether the timestamps in the interferograms
-  indicate the start or end of the measurement
-- `interferogram_mode` - How to handle the interferogram data. "skip"
-  will not read the interferogram data, "validate"
-  will read the first and last block to check
-  for errors during writing, "read" will read
-  the entire interferogram. "read" takes about
-  11-12 times longer than "skip", "validate" is
-  about 20% slower than "skip".
-- `read_all_channels` - Whether to read all channels in the file or
-  only the first one.
-  
-
-**Returns**:
-
-  An OpusFile object, optionally containing the interferogram data (in read mode)
 
