@@ -27,16 +27,24 @@ class OpusHTTPInterface:
         stop=tenacity.stop_after_attempt(3),
         wait=tenacity.wait_fixed(5),
     )
-    def request(request: str) -> list[str]:
+    def request(request: str, timeout: float = 10.0) -> list[str]:
         """Send a request to the OPUS HTTP interface and return the answer.
 
-        This function will retry the request up to 3 times and wait 5 seconds
-        inbetween retries."""
+        The request will wait up to `timeout` seconds. This function will
+        retry the request up to 3 times and wait 5 seconds inbetween retries."""
+
+        return OpusHTTPInterface.request_without_retry(request, timeout=timeout)
+
+    @staticmethod
+    def request_without_retry(request: str, timeout: float = 10.0) -> list[str]:
+        """Send a request to the OPUS HTTP interface and return the answer.
+
+        The request will wait up to `timeout` seconds."""
 
         answer_lines: Optional[list[str]] = None
         try:
             s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-            s.settimeout(10)
+            s.settimeout(timeout)
             s.connect(("localhost", 80))
             url = f"/OpusCommand.htm?{request.replace(' ', '%20')}"
             s.sendall(f"GET {url}\r\nHost: localhost\r\n\r\n".encode("utf-8"))
@@ -52,8 +60,19 @@ class OpusHTTPInterface:
             )
 
     @staticmethod
+    def get_version() -> str:
+        """Get the version number, like `20190310`"""
+
+        answer = OpusHTTPInterface.request("GET_VERSION")
+        try:
+            assert len(answer) == 1
+            return answer[0]
+        except:
+            raise ConnectionError(f"Invalid response from OPUS HTTP interface: {answer}")
+
+    @staticmethod
     def get_version_extended() -> str:
-        """Get the version number of OPUS via the HTTP interface."""
+        """Get the extended version number, like `8.2 Build: 8, 2, 28 20190310`."""
 
         answer = OpusHTTPInterface.request("GET_VERSION_EXTENDED")
         try:
@@ -64,8 +83,8 @@ class OpusHTTPInterface:
 
     @staticmethod
     def is_working() -> bool:
-        """Check if the OPUS HTTP interface is working. Does NOT raise a ConnectionError
-        but only returns `True` or `False`."""
+        """Check if the OPUS HTTP interface is working. Does NOT raise a
+        `ConnectionError` but only returns `True` or `False`."""
 
         try:
             answer = OpusHTTPInterface.request("COMMAND_SAY hello")
@@ -77,7 +96,8 @@ class OpusHTTPInterface:
 
     @staticmethod
     def get_main_thread_id() -> int:
-        """Get the main thread ID of OPUS."""
+        """Get the process ID of the main thread of OPUS. This can be used if
+        any other threads are running"""
 
         answer = OpusHTTPInterface.request("FIND_FUNCTION 0")
         try:
@@ -89,7 +109,7 @@ class OpusHTTPInterface:
 
     @staticmethod
     def some_macro_is_running() -> bool:
-        """Check if any macro is currently running in OPUS.
+        """Check if any macro is currently running.
 
         In theory, we could also check whether the correct macro is running using
         `READ_PARAMETER MPT` and `READ_PARAMETER MFN`. However, these variables do
@@ -165,7 +185,7 @@ class OpusHTTPInterface:
 
     @staticmethod
     def load_experiment(experiment_path: str) -> None:
-        """Load an experiment file into OPUS."""
+        """Load an experiment file."""
 
         answer = OpusHTTPInterface.request(f"LOAD_EXPERIMENT {experiment_path}")
         try:
@@ -177,7 +197,7 @@ class OpusHTTPInterface:
 
     @staticmethod
     def start_macro(macro_path: str) -> int:
-        """Start a macro in OPUS. Returns the macro ID."""
+        """Start a macro. Returns the macro ID."""
 
         answer = OpusHTTPInterface.request(f"RUN_MACRO {macro_path}")
         try:
@@ -204,7 +224,7 @@ class OpusHTTPInterface:
 
     @staticmethod
     def stop_macro(macro_path: str) -> None:
-        """Stop a macro in OPUS."""
+        """Stop a macro."""
 
         answer = OpusHTTPInterface.request(f"KILL_MACRO {os.path.basename(macro_path)}")
         try:
@@ -215,7 +235,7 @@ class OpusHTTPInterface:
 
     @staticmethod
     def unload_all_files() -> None:
-        """Unload all files in OPUS. This should be done before closing it."""
+        """Unload all files. This should be done before closing it."""
 
         answer = OpusHTTPInterface.request("COMMAND_LINE UnloadAll()")
         try:
