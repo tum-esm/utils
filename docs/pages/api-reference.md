@@ -847,10 +847,10 @@ It seems that 0 means "there is no result yet", i.e. the macro is still running
 
 ```python
 @staticmethod
-def stop_macro(macro_path: str) -> None
+def stop_macro(macro_path_or_id: str | int) -> None
 ```
 
-Stop a macro.
+Stop a macro given by its path or ID.
 
 
 ##### `unload_all_files`

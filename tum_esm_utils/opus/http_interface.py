@@ -207,9 +207,14 @@ class OpusHTTPInterface:
             raise ConnectionError(f"Invalid response from OPUS HTTP interface: {answer}")
 
     @staticmethod
-    def stop_macro(macro_path: str) -> None:
-        """Stop a macro."""
-        OpusHTTPInterface.request(f"KILL_MACRO {os.path.basename(macro_path)}", expect_ok=True)
+    def stop_macro(macro_path_or_id: str | int) -> None:
+        """Stop a macro given by its path or ID."""
+        if isinstance(macro_path_or_id, int):
+            OpusHTTPInterface.request(f"KILL_MACRO {macro_path_or_id}", expect_ok=True)
+        else:
+            OpusHTTPInterface.request(
+                f"KILL_MACRO {os.path.basename(macro_path_or_id)}", expect_ok=True
+            )
 
     @staticmethod
     def unload_all_files() -> None:
