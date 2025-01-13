@@ -1,6 +1,4 @@
-"""Utilities for interacting with OPUS files.
-
-Credits to Friedrich Klappenbach (ge79wul@mytum.de) for decoding the OPUS file format."""
+"""Utilities for interacting with OPUS files."""
 
 from __future__ import annotations
 from typing import Optional, TypeVar

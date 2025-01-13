@@ -13,16 +13,26 @@ class OpusHTTPInterface:
 
     It uses the socket library, because the HTTP interface of OPUS does not
     reuturn valid HTTP/1 or HTTP/2 headers. It opens and closes a new socket
-    because OPUS closes the socket after the answer has been sent."""
+    because OPUS closes the socket after the answer has been sent.
+
+    Raises:
+        ConnectionError: If the connection to the OPUS HTTP interface fails or
+                         if the response is invalid.
+    """
 
     @staticmethod
     @tenacity.retry(
         retry=tenacity.retry_if_exception_type(ConnectionError),
         reraise=True,
         stop=tenacity.stop_after_attempt(3),
-        wait=tenacity.wait_fixed(10),
+        wait=tenacity.wait_fixed(5),
     )
-    def _request(request: str) -> list[str]:
+    def request(request: str) -> list[str]:
+        """Send a request to the OPUS HTTP interface and return the answer.
+
+        This function will retry the request up to 3 times and wait 5 seconds
+        inbetween retries."""
+
         answer_lines: Optional[list[str]] = None
         try:
             s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -42,10 +52,10 @@ class OpusHTTPInterface:
             )
 
     @staticmethod
-    def get_version_number() -> str:
+    def get_version_extended() -> str:
         """Get the version number of OPUS via the HTTP interface."""
 
-        answer = OpusHTTPInterface._request("GET_VERSION_EXTENDED")
+        answer = OpusHTTPInterface.request("GET_VERSION_EXTENDED")
         try:
             assert len(answer) == 1
             return answer[0]
@@ -58,7 +68,7 @@ class OpusHTTPInterface:
         but only returns `True` or `False`."""
 
         try:
-            answer = OpusHTTPInterface._request("COMMAND_SAY hello")
+            answer = OpusHTTPInterface.request("COMMAND_SAY hello")
             assert len(answer) == 1
             assert answer[0] == "hello"
             return True
@@ -69,7 +79,7 @@ class OpusHTTPInterface:
     def get_main_thread_id() -> int:
         """Get the main thread ID of OPUS."""
 
-        answer = OpusHTTPInterface._request("FIND_FUNCTION 0")
+        answer = OpusHTTPInterface.request("FIND_FUNCTION 0")
         try:
             assert len(answer) == 2
             assert answer[0] == "OK"
@@ -105,7 +115,7 @@ class OpusHTTPInterface:
         # check twice for any thread that is executing a common function
         for i in range(2):
             for function in common_functions:
-                answer = OpusHTTPInterface._request(f"FIND_FUNCTION {function}")
+                answer = OpusHTTPInterface.request(f"FIND_FUNCTION {function}")
                 try:
                     assert len(answer) >= 1
                     assert answer[0] == "OK"
@@ -128,7 +138,7 @@ class OpusHTTPInterface:
         """Get the path to the currently loaded experiment."""
 
         # Set the parameter mode (opus vs. file parameters)
-        answer1 = OpusHTTPInterface._request("OPUS_PARAMETERS")
+        answer1 = OpusHTTPInterface.request("OPUS_PARAMETERS")
         try:
             assert len(answer1) == 1
             assert answer1[0] == "OK"
@@ -136,7 +146,7 @@ class OpusHTTPInterface:
             raise ConnectionError(f"Invalid response from OPUS HTTP interface: {answer1}")
 
         # Get the path to the experiment file
-        xpp_answer = OpusHTTPInterface._request("READ_PARAMETER XPP")
+        xpp_answer = OpusHTTPInterface.request("READ_PARAMETER XPP")
         try:
             assert len(xpp_answer) == 2
             assert xpp_answer[0] == "OK"
@@ -144,7 +154,7 @@ class OpusHTTPInterface:
             raise ConnectionError(f"Invalid response from OPUS HTTP interface: {xpp_answer}")
 
         # Get the name of the experiment file
-        exp_answer = OpusHTTPInterface._request("READ_PARAMETER EXP")
+        exp_answer = OpusHTTPInterface.request("READ_PARAMETER EXP")
         try:
             assert len(exp_answer) == 2
             assert exp_answer[0] == "OK"
@@ -157,7 +167,7 @@ class OpusHTTPInterface:
     def load_experiment(experiment_path: str) -> None:
         """Load an experiment file into OPUS."""
 
-        answer = OpusHTTPInterface._request(f"LOAD_EXPERIMENT {experiment_path}")
+        answer = OpusHTTPInterface.request(f"LOAD_EXPERIMENT {experiment_path}")
         try:
             assert answer is not None
             assert len(answer) == 1
@@ -169,7 +179,7 @@ class OpusHTTPInterface:
     def start_macro(macro_path: str) -> int:
         """Start a macro in OPUS. Returns the macro ID."""
 
-        answer = OpusHTTPInterface._request(f"RUN_MACRO {macro_path}")
+        answer = OpusHTTPInterface.request(f"RUN_MACRO {macro_path}")
         try:
             assert len(answer) == 2
             assert answer[0] == "OK"
@@ -181,7 +191,7 @@ class OpusHTTPInterface:
     def macro_is_running(macro_id: int) -> bool:
         """Check if the given macro is running."""
 
-        answer = OpusHTTPInterface._request(f"MACRO_RESULTS {macro_id}")
+        answer = OpusHTTPInterface.request(f"MACRO_RESULTS {macro_id}")
         # The OPUS documentation is ambiguous about the return value. It
         # seems that 0 means "there is no result yet", i.e. the macro is
         # still running
@@ -196,7 +206,7 @@ class OpusHTTPInterface:
     def stop_macro(macro_path: str) -> None:
         """Stop a macro in OPUS."""
 
-        answer = OpusHTTPInterface._request(f"KILL_MACRO {os.path.basename(macro_path)}")
+        answer = OpusHTTPInterface.request(f"KILL_MACRO {os.path.basename(macro_path)}")
         try:
             assert len(answer) == 1
             assert answer[0] == "OK"
@@ -207,7 +217,7 @@ class OpusHTTPInterface:
     def unload_all_files() -> None:
         """Unload all files in OPUS. This should be done before closing it."""
 
-        answer = OpusHTTPInterface._request("COMMAND_LINE UnloadAll()")
+        answer = OpusHTTPInterface.request("COMMAND_LINE UnloadAll()")
         try:
             assert len(answer) >= 1
             assert answer[0] == "OK"
@@ -218,7 +228,7 @@ class OpusHTTPInterface:
     def close_opus() -> None:
         """Close OPUS."""
 
-        answer = OpusHTTPInterface._request("CLOSE_OPUS")
+        answer = OpusHTTPInterface.request("CLOSE_OPUS")
         try:
             assert len(answer) >= 1
             assert answer[0] == "OK"

@@ -17,15 +17,24 @@ with open(INDEX_DST, "w") as f:
 
 # generate automatic API reference and prettify output
 
-module_names = list(
-    sorted(
-        [
-            f[:-3]
-            for f in os.listdir(os.path.join(PROJECT_DIR, "tum_esm_utils"))
-            if (f.endswith(".py") and (f != "__init__.py"))
-        ]
-    )
-) + ["opus"]
+module_names = [
+    "code",
+    "datastructures",
+    "decorators",
+    "em27",
+    "files",
+    "mathematics",
+    "opus",
+    "opus.file_interface",
+    "opus.http_interface",
+    "plotting",
+    "processes",
+    "shell",
+    "system",
+    "text",
+    "timing",
+    "validators",
+]
 print("Module names:", module_names)
 
 parsed_modules = ["--module=tum_esm_utils"]

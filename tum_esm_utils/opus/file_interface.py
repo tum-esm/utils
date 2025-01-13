@@ -1,19 +1,4 @@
-"""Functions for interacting with OPUS files.
-
-Implements: `OpusFile`.
-
-Read https://tccon-wiki.caltech.edu/Main/I2SAndOPUSHeaders for more information
-about the file parameters. This requires you to install this utils library with
-the optional `opus` dependency:
-
-```bash
-pip install "tum_esm_utils[opus]"
-# or
-pdm add "tum_esm_utils[opus]"
-```
-
-Credits to Friedrich Klappenbach (ge79wul@mytum.de) for decoding the OPUS file
-format."""
+"""Functions for interacting with OPUS files."""
 
 from __future__ import annotations
 from typing import Optional, Literal
@@ -26,7 +11,9 @@ from . import types, utils
 
 
 class OpusFile(pydantic.BaseModel):
-    """Interact with OPUS spectrum files."""
+    """Interact with OPUS spectrum files.
+
+    Credits to Friedrich Klappenbach (friedrich.klappenbach@tum.de) for decoding the OPUS file format."""
 
     model_config = pydantic.ConfigDict(arbitrary_types_allowed=True)
 
