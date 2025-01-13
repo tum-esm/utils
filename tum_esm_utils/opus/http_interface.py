@@ -1,7 +1,7 @@
 """Provides a HTTP interface to OPUS."""
 
 from __future__ import annotations
-from typing import Optional
+from typing import Literal, Optional
 import os
 import time
 import socket
@@ -157,31 +157,10 @@ class OpusHTTPInterface:
     def get_loaded_experiment() -> str:
         """Get the path to the currently loaded experiment."""
 
-        # Set the parameter mode (opus vs. file parameters)
-        answer1 = OpusHTTPInterface.request("OPUS_PARAMETERS")
-        try:
-            assert len(answer1) == 1
-            assert answer1[0] == "OK"
-        except:
-            raise ConnectionError(f"Invalid response from OPUS HTTP interface: {answer1}")
-
-        # Get the path to the experiment file
-        xpp_answer = OpusHTTPInterface.request("READ_PARAMETER XPP")
-        try:
-            assert len(xpp_answer) == 2
-            assert xpp_answer[0] == "OK"
-        except:
-            raise ConnectionError(f"Invalid response from OPUS HTTP interface: {xpp_answer}")
-
-        # Get the name of the experiment file
-        exp_answer = OpusHTTPInterface.request("READ_PARAMETER EXP")
-        try:
-            assert len(exp_answer) == 2
-            assert exp_answer[0] == "OK"
-        except:
-            raise ConnectionError(f"Invalid response from OPUS HTTP interface: {exp_answer}")
-
-        return os.path.join(xpp_answer[1], exp_answer[1])
+        OpusHTTPInterface.set_parameter_mode("opus")
+        xpp_value = OpusHTTPInterface.read_parameter("XPP")
+        exp_value = OpusHTTPInterface.read_parameter("EXP")
+        return os.path.join(xpp_value, exp_value)
 
     @staticmethod
     def load_experiment(experiment_path: str) -> None:
@@ -251,6 +230,40 @@ class OpusHTTPInterface:
         answer = OpusHTTPInterface.request("CLOSE_OPUS")
         try:
             assert len(answer) >= 1
+            assert answer[0] == "OK"
+        except:
+            raise ConnectionError(f"Invalid response from OPUS HTTP interface: {answer}")
+
+    @staticmethod
+    def set_parameter_mode(variant: Literal["file", "opus"]) -> None:
+        """Set the parameter mode to `FILE_PARAMETERS` or `OPUS_PARAMETERS`."""
+
+        answer = OpusHTTPInterface.request(f"{variant.upper()}_PARAMETERS")
+        try:
+            assert len(answer) == 1
+            assert answer[0] == "OK"
+        except:
+            raise ConnectionError(f"Invalid response from OPUS HTTP interface: {answer}")
+
+    @staticmethod
+    def read_parameter(parameter: str) -> str:
+        """Read the value of a parameter."""
+
+        answer = OpusHTTPInterface.request(f"READ_PARAMETER {parameter}")
+        try:
+            assert len(answer) == 2
+            assert answer[0] == "OK"
+            return answer[1]
+        except:
+            raise ConnectionError(f"Invalid response from OPUS HTTP interface: {answer}")
+
+    @staticmethod
+    def write_parameter(parameter: str, value: str | int | float) -> None:
+        """Update the value of a parameter."""
+
+        answer = OpusHTTPInterface.request(f"WRITE_PARAMETER {parameter} {value}")
+        try:
+            assert len(answer) == 1
             assert answer[0] == "OK"
         except:
             raise ConnectionError(f"Invalid response from OPUS HTTP interface: {answer}")
