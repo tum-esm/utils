@@ -27,19 +27,48 @@ class OpusHTTPInterface:
         stop=tenacity.stop_after_attempt(3),
         wait=tenacity.wait_fixed(5),
     )
-    def request(request: str, timeout: float = 10.0) -> list[str]:
+    def request(
+        request: str,
+        timeout: float = 10.0,
+        expect_ok: bool = False,
+    ) -> list[str]:
         """Send a request to the OPUS HTTP interface and return the answer.
 
-        The request will wait up to `timeout` seconds. This function will
-        retry the request up to 3 times and wait 5 seconds inbetween retries."""
+        Commands will be send to `GET http://localhost/OpusCommand.htm?<request>`.
+        This function will retry the request up to 3 times and wait 5 seconds
+        inbetween retries.
 
-        return OpusHTTPInterface.request_without_retry(request, timeout=timeout)
+        Args:
+            request:    The request to send.
+            timeout:    The time to wait for the answer.
+            expect_ok:  Whether the first line of the answer should be "OK".
+
+        Returns:
+            The answer lines.
+        """
+
+        return OpusHTTPInterface.request_without_retry(
+            request, timeout=timeout, expect_ok=expect_ok
+        )
 
     @staticmethod
-    def request_without_retry(request: str, timeout: float = 10.0) -> list[str]:
+    def request_without_retry(
+        request: str,
+        timeout: float = 10.0,
+        expect_ok: bool = False,
+    ) -> list[str]:
         """Send a request to the OPUS HTTP interface and return the answer.
 
-        The request will wait up to `timeout` seconds."""
+        Commands will be send to `GET http://localhost/OpusCommand.htm?<request>`.
+
+        Args:
+            request:    The request to send.
+            timeout:    The time to wait for the answer.
+            expect_ok:  Whether the first line of the answer should be "OK".
+
+        Returns:
+            The answer lines.
+        """
 
         answer_lines: Optional[list[str]] = None
         try:
@@ -51,6 +80,9 @@ class OpusHTTPInterface:
             answer = s.recv(4096).decode("utf-8").strip("\r\n\t ")
             answer_lines = [l.strip(" \r\t") for l in answer.split("\n")]
             answer_lines = [l for l in answer_lines if len(l) > 0]
+            if expect_ok:
+                assert len(answer_lines) >= 1
+                assert answer_lines[0] == "OK"
             s.close()
             return answer_lines
         except:
@@ -61,11 +93,9 @@ class OpusHTTPInterface:
 
     @staticmethod
     def get_version() -> str:
-        """Get the version number, like `20190310`"""
-
+        """Get the version number, like `20190310`."""
         answer = OpusHTTPInterface.request("GET_VERSION")
         try:
-            assert len(answer) == 1
             return answer[0]
         except:
             raise ConnectionError(f"Invalid response from OPUS HTTP interface: {answer}")
@@ -73,10 +103,8 @@ class OpusHTTPInterface:
     @staticmethod
     def get_version_extended() -> str:
         """Get the extended version number, like `8.2 Build: 8, 2, 28 20190310`."""
-
         answer = OpusHTTPInterface.request("GET_VERSION_EXTENDED")
         try:
-            assert len(answer) == 1
             return answer[0]
         except:
             raise ConnectionError(f"Invalid response from OPUS HTTP interface: {answer}")
@@ -85,10 +113,8 @@ class OpusHTTPInterface:
     def is_working() -> bool:
         """Check if the OPUS HTTP interface is working. Does NOT raise a
         `ConnectionError` but only returns `True` or `False`."""
-
         try:
             answer = OpusHTTPInterface.request("COMMAND_SAY hello")
-            assert len(answer) == 1
             assert answer[0] == "hello"
             return True
         except:
@@ -96,13 +122,9 @@ class OpusHTTPInterface:
 
     @staticmethod
     def get_main_thread_id() -> int:
-        """Get the process ID of the main thread of OPUS. This can be used if
-        any other threads are running"""
-
-        answer = OpusHTTPInterface.request("FIND_FUNCTION 0")
+        """Get the process ID of the main thread of OPUS."""
+        answer = OpusHTTPInterface.request("FIND_FUNCTION 0", expect_ok=True)
         try:
-            assert len(answer) == 2
-            assert answer[0] == "OK"
             return int(answer[1])
         except:
             raise ConnectionError(f"Invalid response from OPUS HTTP interface: {answer}")
@@ -135,10 +157,8 @@ class OpusHTTPInterface:
         # check twice for any thread that is executing a common function
         for i in range(2):
             for function in common_functions:
-                answer = OpusHTTPInterface.request(f"FIND_FUNCTION {function}")
+                answer = OpusHTTPInterface.request(f"FIND_FUNCTION {function}", expect_ok=True)
                 try:
-                    assert len(answer) >= 1
-                    assert answer[0] == "OK"
                     for thread_id in answer[1:]:
                         active_thread_ids.add(int(thread_id))
                 except:
@@ -156,7 +176,6 @@ class OpusHTTPInterface:
     @staticmethod
     def get_loaded_experiment() -> str:
         """Get the path to the currently loaded experiment."""
-
         OpusHTTPInterface.set_parameter_mode("opus")
         xpp_value = OpusHTTPInterface.read_parameter("XPP")
         exp_value = OpusHTTPInterface.read_parameter("EXP")
@@ -165,38 +184,24 @@ class OpusHTTPInterface:
     @staticmethod
     def load_experiment(experiment_path: str) -> None:
         """Load an experiment file."""
-
-        answer = OpusHTTPInterface.request(f"LOAD_EXPERIMENT {experiment_path}")
-        try:
-            assert answer is not None
-            assert len(answer) == 1
-            assert answer[0] == "OK"
-        except:
-            raise ConnectionError(f"Invalid response from OPUS HTTP interface: {answer}")
+        OpusHTTPInterface.request(f"LOAD_EXPERIMENT {experiment_path}", expect_ok=True)
 
     @staticmethod
     def start_macro(macro_path: str) -> int:
         """Start a macro. Returns the macro ID."""
-
-        answer = OpusHTTPInterface.request(f"RUN_MACRO {macro_path}")
+        answer = OpusHTTPInterface.request(f"RUN_MACRO {macro_path}", expect_ok=True)
         try:
-            assert len(answer) == 2
-            assert answer[0] == "OK"
             return int(answer[1])
         except:
             raise ConnectionError(f"Invalid response from OPUS HTTP interface: {answer}")
 
     @staticmethod
     def macro_is_running(macro_id: int) -> bool:
-        """Check if the given macro is running."""
-
-        answer = OpusHTTPInterface.request(f"MACRO_RESULTS {macro_id}")
-        # The OPUS documentation is ambiguous about the return value. It
-        # seems that 0 means "there is no result yet", i.e. the macro is
-        # still running
+        """Check if the given macro is running. It runs `MACRO_RESULTS <macro_id>`
+        under the hood. The OPUS documentation is ambiguous about the return value.
+        It seems that 0 means "there is no result yet", i.e. the macro is still running"""
+        answer = OpusHTTPInterface.request(f"MACRO_RESULTS {macro_id}", expect_ok=True)
         try:
-            assert len(answer) == 2
-            assert answer[0] == "OK"
             return int(answer[1]) == 0
         except:
             raise ConnectionError(f"Invalid response from OPUS HTTP interface: {answer}")
@@ -204,55 +209,28 @@ class OpusHTTPInterface:
     @staticmethod
     def stop_macro(macro_path: str) -> None:
         """Stop a macro."""
-
-        answer = OpusHTTPInterface.request(f"KILL_MACRO {os.path.basename(macro_path)}")
-        try:
-            assert len(answer) == 1
-            assert answer[0] == "OK"
-        except:
-            raise ConnectionError(f"Invalid response from OPUS HTTP interface: {answer}")
+        OpusHTTPInterface.request(f"KILL_MACRO {os.path.basename(macro_path)}", expect_ok=True)
 
     @staticmethod
     def unload_all_files() -> None:
         """Unload all files. This should be done before closing it."""
-
-        answer = OpusHTTPInterface.request("COMMAND_LINE UnloadAll()")
-        try:
-            assert len(answer) >= 1
-            assert answer[0] == "OK"
-        except:
-            raise ConnectionError(f"Invalid response from OPUS HTTP interface: {answer}")
+        OpusHTTPInterface.command_line("UnloadAll()")
 
     @staticmethod
     def close_opus() -> None:
         """Close OPUS."""
-
-        answer = OpusHTTPInterface.request("CLOSE_OPUS")
-        try:
-            assert len(answer) >= 1
-            assert answer[0] == "OK"
-        except:
-            raise ConnectionError(f"Invalid response from OPUS HTTP interface: {answer}")
+        OpusHTTPInterface.request("CLOSE_OPUS", expect_ok=True)
 
     @staticmethod
     def set_parameter_mode(variant: Literal["file", "opus"]) -> None:
         """Set the parameter mode to `FILE_PARAMETERS` or `OPUS_PARAMETERS`."""
-
-        answer = OpusHTTPInterface.request(f"{variant.upper()}_PARAMETERS")
-        try:
-            assert len(answer) == 1
-            assert answer[0] == "OK"
-        except:
-            raise ConnectionError(f"Invalid response from OPUS HTTP interface: {answer}")
+        OpusHTTPInterface.request(f"{variant.upper()}_PARAMETERS", expect_ok=True)
 
     @staticmethod
     def read_parameter(parameter: str) -> str:
         """Read the value of a parameter."""
-
-        answer = OpusHTTPInterface.request(f"READ_PARAMETER {parameter}")
+        answer = OpusHTTPInterface.request(f"READ_PARAMETER {parameter}", expect_ok=True)
         try:
-            assert len(answer) == 2
-            assert answer[0] == "OK"
             return answer[1]
         except:
             raise ConnectionError(f"Invalid response from OPUS HTTP interface: {answer}")
@@ -260,22 +238,13 @@ class OpusHTTPInterface:
     @staticmethod
     def write_parameter(parameter: str, value: str | int | float) -> None:
         """Update the value of a parameter."""
-
-        answer = OpusHTTPInterface.request(f"WRITE_PARAMETER {parameter} {value}")
-        try:
-            assert len(answer) == 1
-            assert answer[0] == "OK"
-        except:
-            raise ConnectionError(f"Invalid response from OPUS HTTP interface: {answer}")
+        OpusHTTPInterface.request(f"WRITE_PARAMETER {parameter} {value}", expect_ok=True)
 
     @staticmethod
     def get_language() -> str:
         """Get the current language."""
-
-        answer = OpusHTTPInterface.request("GET_LANGUAGE")
+        answer = OpusHTTPInterface.request("GET_LANGUAGE", expect_ok=True)
         try:
-            assert len(answer) == 2
-            assert answer[0] == "OK"
             return answer[1]
         except:
             raise ConnectionError(f"Invalid response from OPUS HTTP interface: {answer}")
@@ -283,11 +252,8 @@ class OpusHTTPInterface:
     @staticmethod
     def get_username() -> str:
         """Get the current username."""
-
-        answer = OpusHTTPInterface.request("GET_USERNAME")
+        answer = OpusHTTPInterface.request("GET_USERNAME", expect_ok=True)
         try:
-            assert len(answer) == 2
-            assert answer[0] == "OK"
             return answer[1]
         except:
             raise ConnectionError(f"Invalid response from OPUS HTTP interface: {answer}")
@@ -295,11 +261,8 @@ class OpusHTTPInterface:
     @staticmethod
     def get_path(literal: Literal["opus", "base", "data", "work"]) -> str:
         """Get the path to the given directory."""
-
-        answer = OpusHTTPInterface.request(f"GET_{literal.upper()}PATH")
+        answer = OpusHTTPInterface.request(f"GET_{literal.upper()}PATH", expect_ok=True)
         try:
-            assert len(answer) == 2
-            assert answer[0] == "OK"
             return answer[1]
         except:
             raise ConnectionError(f"Invalid response from OPUS HTTP interface: {answer}")
@@ -307,10 +270,10 @@ class OpusHTTPInterface:
     @staticmethod
     def set_processing_mode(mode: Literal["command", "execute", "request"]) -> None:
         """Set the processing mode to `COMMAND_MODE`, `EXECUTE_MODE`, or `REQUEST_MODE`."""
+        OpusHTTPInterface.request(f"SET_{mode.upper()}_MODE", expect_ok=True)
 
-        answer = OpusHTTPInterface.request(f"SET_{mode.upper()}_MODE")
-        try:
-            assert len(answer) == 1
-            assert answer[0] == "OK"
-        except:
-            raise ConnectionError(f"Invalid response from OPUS HTTP interface: {answer}")
+    @staticmethod
+    def command_line(command: str) -> Optional[str]:
+        """Execute a command line command, i.e. `COMMAND_LINE <command>`."""
+        answer = OpusHTTPInterface.request(f"COMMAND_LINE {command}", expect_ok=True)
+        return None if len(answer) == 1 else answer[1]
