@@ -5,7 +5,7 @@
 groups = ["default", "all", "dev", "em27", "opus", "plotting", "polars"]
 strategy = ["inherit_metadata"]
 lock_version = "4.5.0"
-content_hash = "sha256:1f5b018ba27872dfcf156444d6fb816906c035b13dd17e4056b0f8f7898ff61b"
+content_hash = "sha256:884a3b33843aa7ca4b2ab0e2987180d85e70f975d4623bec19a878ff04053065"
 
 [[metadata.targets]]
 requires_python = "~=3.10"
@@ -1244,6 +1244,17 @@ groups = ["default"]
 files = [
     {file = "tailwind_colors-1.3.0-py3-none-any.whl", hash = "sha256:aa047acfe2037302016028b1c0ef65585c33d983945de704acf7ef8b665f729e"},
     {file = "tailwind_colors-1.3.0.tar.gz", hash = "sha256:8b9360937afa65e657ec9c3311264d2339e8f6463659050b6ac1e2efa6a7179e"},
+]
+
+[[package]]
+name = "tenacity"
+version = "9.0.0"
+requires_python = ">=3.8"
+summary = "Retry code until it succeeds"
+groups = ["opus"]
+files = [
+    {file = "tenacity-9.0.0-py3-none-any.whl", hash = "sha256:93de0c98785b27fcf659856aa9f54bfbd399e29969b0621bc7f762bd441b4539"},
+    {file = "tenacity-9.0.0.tar.gz", hash = "sha256:807f37ca97d62aa361264d497b0e31e92b8027044942bfa756160d908320d73b"},
 ]
 
 [[package]]
