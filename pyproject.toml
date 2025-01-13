@@ -56,8 +56,8 @@ dev = [
 plotting = ["matplotlib>=3.9.2", "numpy>=2.0.2"]
 em27 = ["polars>=1.4.1"]
 polars = ["polars>=1.4.1"] # alias for em27 (will be removed with 3.0)
-all = ["matplotlib>=3.9.2", "numpy>=2.0.2", "polars>=1.4.1"]
 opus = ["numpy>=2.1.3", "tenacity>=9.0.0"]
+all = ["matplotlib>=3.9.2", "numpy>=2.0.2", "polars>=1.4.1", "tenacity>=9.0.0"]
 
 [build-system]
 requires = ["pdm-backend"]
