@@ -325,3 +325,30 @@ while True:
         logger.exception(e)
         exponential_backoff.sleep()
 ```
+
+## OPUS HTTP Interface
+
+When you start OPUS with `/HTTPSERVER=on opus.exe`, you can control OPUS via HTTP. We recommend using the HTTP interface over the DDE interface, because the DDE standard is at its end-of-life for decades now.
+
+```python
+import time
+from tum_esm_utils.opus import OpusHTTPInterface
+
+version = OpusHTTPInterface.get_version()
+language = OpusHTTPInterface.get_language()
+username = OpusHTTPInterface.get_username()
+
+OpusHTTPInterface.load_experiment("somepath.xmp")
+macro_id = OpusHTTPInterface.start_macro("somepath.mtx")
+time.sleep(5)
+
+assert OpusHTTPInterface.macro_is_running(macro_id)
+time.sleep(5)
+
+OpusHTTPInterface.stop_macro(macro_id)
+time.sleep(5)
+
+assert not OpusHTTPInterface.macro_is_running(macro_id)
+```
+
+Have a look at the API reference, what commands, we implemented. Use the `OpusHTTPInterface.request` or `OpusHTTPInterface.request_without_retry` to send any command using the HTTP interface.
