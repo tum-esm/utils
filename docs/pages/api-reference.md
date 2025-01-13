@@ -698,13 +698,62 @@ because OPUS closes the socket after the answer has been sent.
     stop=tenacity.stop_after_attempt(3),
     wait=tenacity.wait_fixed(5),
 )
-def request(request: str) -> list[str]
+def request(request: str,
+            timeout: float = 10.0,
+            expect_ok: bool = False) -> list[str]
 ```
 
 Send a request to the OPUS HTTP interface and return the answer.
 
+Commands will be send to `GET http://localhost/OpusCommand.htm?<request>`.
 This function will retry the request up to 3 times and wait 5 seconds
 inbetween retries.
+
+**Arguments**:
+
+- `request` - The request to send.
+- `timeout` - The time to wait for the answer.
+- `expect_ok` - Whether the first line of the answer should be "OK".
+  
+
+**Returns**:
+
+  The answer lines.
+
+
+##### `request_without_retry`
+
+```python
+@staticmethod
+def request_without_retry(request: str,
+                          timeout: float = 10.0,
+                          expect_ok: bool = False) -> list[str]
+```
+
+Send a request to the OPUS HTTP interface and return the answer.
+
+Commands will be send to `GET http://localhost/OpusCommand.htm?<request>`.
+
+**Arguments**:
+
+- `request` - The request to send.
+- `timeout` - The time to wait for the answer.
+- `expect_ok` - Whether the first line of the answer should be "OK".
+  
+
+**Returns**:
+
+  The answer lines.
+
+
+##### `get_version`
+
+```python
+@staticmethod
+def get_version() -> str
+```
+
+Get the version number, like `20190310`.
 
 
 ##### `get_version_extended`
@@ -714,7 +763,7 @@ inbetween retries.
 def get_version_extended() -> str
 ```
 
-Get the version number of OPUS via the HTTP interface.
+Get the extended version number, like `8.2 Build: 8, 2, 28 20190310`.
 
 
 ##### `is_working`
@@ -724,8 +773,8 @@ Get the version number of OPUS via the HTTP interface.
 def is_working() -> bool
 ```
 
-Check if the OPUS HTTP interface is working. Does NOT raise a ConnectionError
-but only returns `True` or `False`.
+Check if the OPUS HTTP interface is working. Does NOT raise a
+`ConnectionError` but only returns `True` or `False`.
 
 
 ##### `get_main_thread_id`
@@ -735,7 +784,7 @@ but only returns `True` or `False`.
 def get_main_thread_id() -> int
 ```
 
-Get the main thread ID of OPUS.
+Get the process ID of the main thread of OPUS.
 
 
 ##### `some_macro_is_running`
@@ -745,7 +794,7 @@ Get the main thread ID of OPUS.
 def some_macro_is_running() -> bool
 ```
 
-Check if any macro is currently running in OPUS.
+Check if any macro is currently running.
 
 In theory, we could also check whether the correct macro is running using
 `READ_PARAMETER MPT` and `READ_PARAMETER MFN`. However, these variables do
@@ -769,7 +818,7 @@ Get the path to the currently loaded experiment.
 def load_experiment(experiment_path: str) -> None
 ```
 
-Load an experiment file into OPUS.
+Load an experiment file.
 
 
 ##### `start_macro`
@@ -779,7 +828,7 @@ Load an experiment file into OPUS.
 def start_macro(macro_path: str) -> int
 ```
 
-Start a macro in OPUS. Returns the macro ID.
+Start a macro. Returns the macro ID.
 
 
 ##### `macro_is_running`
@@ -789,7 +838,9 @@ Start a macro in OPUS. Returns the macro ID.
 def macro_is_running(macro_id: int) -> bool
 ```
 
-Check if the given macro is running.
+Check if the given macro is running. It runs `MACRO_RESULTS <macro_id>`
+under the hood. The OPUS documentation is ambiguous about the return value.
+It seems that 0 means "there is no result yet", i.e. the macro is still running
 
 
 ##### `stop_macro`
@@ -799,7 +850,7 @@ Check if the given macro is running.
 def stop_macro(macro_path: str) -> None
 ```
 
-Stop a macro in OPUS.
+Stop a macro.
 
 
 ##### `unload_all_files`
@@ -809,7 +860,7 @@ Stop a macro in OPUS.
 def unload_all_files() -> None
 ```
 
-Unload all files in OPUS. This should be done before closing it.
+Unload all files. This should be done before closing it.
 
 
 ##### `close_opus`
@@ -820,6 +871,87 @@ def close_opus() -> None
 ```
 
 Close OPUS.
+
+
+##### `set_parameter_mode`
+
+```python
+@staticmethod
+def set_parameter_mode(variant: Literal["file", "opus"]) -> None
+```
+
+Set the parameter mode to `FILE_PARAMETERS` or `OPUS_PARAMETERS`.
+
+
+##### `read_parameter`
+
+```python
+@staticmethod
+def read_parameter(parameter: str) -> str
+```
+
+Read the value of a parameter.
+
+
+##### `write_parameter`
+
+```python
+@staticmethod
+def write_parameter(parameter: str, value: str | int | float) -> None
+```
+
+Update the value of a parameter.
+
+
+##### `get_language`
+
+```python
+@staticmethod
+def get_language() -> str
+```
+
+Get the current language.
+
+
+##### `get_username`
+
+```python
+@staticmethod
+def get_username() -> str
+```
+
+Get the current username.
+
+
+##### `get_path`
+
+```python
+@staticmethod
+def get_path(literal: Literal["opus", "base", "data", "work"]) -> str
+```
+
+Get the path to the given directory.
+
+
+##### `set_processing_mode`
+
+```python
+@staticmethod
+def set_processing_mode(
+        mode: Literal["command", "execute", "request"]) -> None
+```
+
+Set the processing mode to `COMMAND_MODE`, `EXECUTE_MODE`, or `REQUEST_MODE`.
+
+
+##### `command_line`
+
+```python
+@staticmethod
+def command_line(command: str) -> Optional[str]
+```
+
+Execute a command line command, i.e. `COMMAND_LINE <command>`.
 
 
 ## `tum_esm_utils.plotting`
