@@ -267,3 +267,50 @@ class OpusHTTPInterface:
             assert answer[0] == "OK"
         except:
             raise ConnectionError(f"Invalid response from OPUS HTTP interface: {answer}")
+
+    @staticmethod
+    def get_language() -> str:
+        """Get the current language."""
+
+        answer = OpusHTTPInterface.request("GET_LANGUAGE")
+        try:
+            assert len(answer) == 2
+            assert answer[0] == "OK"
+            return answer[1]
+        except:
+            raise ConnectionError(f"Invalid response from OPUS HTTP interface: {answer}")
+
+    @staticmethod
+    def get_username() -> str:
+        """Get the current username."""
+
+        answer = OpusHTTPInterface.request("GET_USERNAME")
+        try:
+            assert len(answer) == 2
+            assert answer[0] == "OK"
+            return answer[1]
+        except:
+            raise ConnectionError(f"Invalid response from OPUS HTTP interface: {answer}")
+
+    @staticmethod
+    def get_path(literal: Literal["opus", "base", "data", "work"]) -> str:
+        """Get the path to the given directory."""
+
+        answer = OpusHTTPInterface.request(f"GET_{literal.upper()}PATH")
+        try:
+            assert len(answer) == 2
+            assert answer[0] == "OK"
+            return answer[1]
+        except:
+            raise ConnectionError(f"Invalid response from OPUS HTTP interface: {answer}")
+
+    @staticmethod
+    def set_processing_mode(mode: Literal["command", "execute", "request"]) -> None:
+        """Set the processing mode to `COMMAND_MODE`, `EXECUTE_MODE`, or `REQUEST_MODE`."""
+
+        answer = OpusHTTPInterface.request(f"SET_{mode.upper()}_MODE")
+        try:
+            assert len(answer) == 1
+            assert answer[0] == "OK"
+        except:
+            raise ConnectionError(f"Invalid response from OPUS HTTP interface: {answer}")
