@@ -208,7 +208,12 @@ class OpusHTTPInterface:
 
     @staticmethod
     def stop_macro(macro_path_or_id: str | int) -> None:
-        """Stop a macro given by its path or ID."""
+        """Stop a macro given by its path or ID.
+
+        Stopping a macro by its ID only works for our OPUS 8.X installations,
+        but not our OPUS 7.X installations. Hence, it is recommended to always
+        stop it by path."""
+
         if isinstance(macro_path_or_id, int):
             OpusHTTPInterface.request(f"KILL_MACRO {macro_path_or_id}", expect_ok=True)
         else:
