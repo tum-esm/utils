@@ -23,6 +23,24 @@ def date_range(
     return [from_date + datetime.timedelta(days=i) for i in range(delta.days + 1)]
 
 
+def time_range(
+    from_time: datetime.time,
+    to_time: datetime.time,
+    time_step: datetime.timedelta,
+) -> list[datetime.time]:
+    """Returns a list of times between from_time and to_time (inclusive)."""
+    # timedeltas only possible on dates
+    assert from_time <= to_time, "from_time must be less equal to_time"
+    _d = datetime.date(2000, 1, 1)
+    _datetimes = [datetime.datetime.combine(_d, from_time)]
+    while True:
+        next_dt = _datetimes[-1] + time_step
+        if next_dt.time() > to_time:
+            break
+        _datetimes.append(next_dt)
+    return [d.time() for d in _datetimes]
+
+
 @contextlib.contextmanager
 def ensure_section_duration(duration: float) -> Generator[None, None, None]:
     """Make sure that the duration of the section is at least the given duration.
@@ -117,9 +135,9 @@ def parse_timezone_string(
             f'Unknown time zone: "{zone_string}", the available time zones are: {pytz.all_timezones}'
         )
     td = tz.utcoffset(dt)
-    assert (
-        td is not None
-    ), f'Zone "{zone_string}" requires a datetime object to calculate the offset.'
+    assert td is not None, (
+        f'Zone "{zone_string}" requires a datetime object to calculate the offset.'
+    )
     offset += td.total_seconds() / 3600
     return offset
 
@@ -310,7 +328,7 @@ class ExponentialBackoff:
         for i in range(1, minutes, 1):
             time.sleep(60)
             if self.log_info is not None:
-                self.log_info(f"{minutes-i} minute(s) remaining")
+                self.log_info(f"{minutes - i} minute(s) remaining")
         time.sleep(60)
 
         self.bucket_index = min(self.bucket_index + 1, len(self.buckets) - 1)
