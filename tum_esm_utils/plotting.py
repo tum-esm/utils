@@ -16,6 +16,7 @@ import contextlib
 import matplotlib.pyplot as plt
 import matplotlib.font_manager
 import matplotlib.patches
+import matplotlib.gridspec
 from tailwind_colors import TAILWIND_COLORS_HEX
 
 
@@ -92,7 +93,7 @@ def create_figure(
 
 def add_subplot(
     fig: plt.Figure,
-    position: tuple[int, int, int],
+    position: tuple[int, int, int] | matplotlib.gridspec.SubplotSpec,
     title: Optional[str] = None,
     xlabel: Optional[str] = None,
     ylabel: Optional[str] = None,
@@ -100,12 +101,21 @@ def add_subplot(
 ) -> plt.Axes:
     """Add a subplot to a figure.
 
+    Use a gridspec for more control:
+
+    ```python
+    gs = matplotlib.gridspec.GridSpec(4, 1, height_ratios=[1, 2, 2, 2])
+    add_subplot(fig, gs[0], ...)
+    ```
+
     Args:
-        fig: The figure to add the subplot to.
-        position: The position of the subplot. The tuple should contain three integers: the number of rows, the number of columns, and the index of the subplot.
-        title: The title of the subplot.
-        xlabel: The x-axis label of the subplot.
-        ylabel: The y-axis label of the subplot.
+        fig:      The figure to add the subplot to.
+        position: The position of the subplot. The tuple should contain three
+                  integers (rows, columns, index). You can also pass a gridspec
+                  subplot spec.
+        title:    The title of the subplot.
+        xlabel:   The x-axis label of the subplot.
+        ylabel:   The y-axis label of the subplot.
         **kwargs: Additional keyword arguments for the subplot.
 
     Returns:
@@ -114,12 +124,16 @@ def add_subplot(
     Raises:
         ValueError: If the index of the subplot is invalid."""
 
-    if (position[2] < 1) or (position[2] > (position[0] * position[1])):
-        raise ValueError(
-            "Invalid subplot index. The index must be between 1 and the number of rows times the number of columns."
-        )
+    axis: plt.Axes
+    if isinstance(position, matplotlib.gridspec.SubplotSpec):
+        axis = fig.add_subplot(position, **kwargs)
+    else:
+        if (position[2] < 1) or (position[2] > (position[0] * position[1])):
+            raise ValueError(
+                "Invalid subplot index. The index must be between 1 and the number of rows times the number of columns."
+            )
+        axis = fig.add_subplot(position[0], position[1], position[2], **kwargs)
 
-    axis = fig.add_subplot(position[0], position[1], position[2], **kwargs)
     if title is not None:
         axis.set_title(title)
     if xlabel is not None:
