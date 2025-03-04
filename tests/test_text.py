@@ -111,9 +111,9 @@ def test_container_name_generation() -> None:
         label = tum_esm_utils.text.RandomLabelGenerator.generate_fully_random()
         assert label_pattern.match(label), f"Invalid label: {label}"
         adjective, name = label.split("-")
-        assert (
-            adjective in tum_esm_utils.text.CONTAINER_ADJECTIVES
-        ), f"Invalid adjective: {adjective}"
+        assert adjective in tum_esm_utils.text.CONTAINER_ADJECTIVES, (
+            f"Invalid adjective: {adjective}"
+        )
         assert name in tum_esm_utils.text.CONTAINER_NAMES, f"Invalid name: {name}"
 
     used_labels = set()

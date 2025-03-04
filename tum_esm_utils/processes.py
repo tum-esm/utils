@@ -55,9 +55,9 @@ def start_background_process(
     time.sleep(waiting_period)
 
     new_pids = get_process_pids(script_path)
-    assert (
-        len(new_pids) == 1
-    ), f"multiple processes found ({new_pids}), when there should only be one"
+    assert len(new_pids) == 1, (
+        f"multiple processes found ({new_pids}), when there should only be one"
+    )
 
     return new_pids[0]
 

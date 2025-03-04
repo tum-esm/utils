@@ -42,8 +42,6 @@ def test_clear_alarm() -> None:
     func()
 
 
-# write a unit test for the function `date_range` in `tum_esm_utils/text.py`
-# write a bunch of sample inputs and expected outputs
 @pytest.mark.quick
 def test_date_range() -> None:
     assert tum_esm_utils.timing.date_range(
@@ -222,12 +220,12 @@ def test_datetime_span_intersection() -> None:
         ((d(0), d(4)), (d(1), d(1)), None),
     ]
     for i, (dt_span_1, dt_span_2, expected) in enumerate(test_cases):
-        assert (
-            tum_esm_utils.timing.datetime_span_intersection(dt_span_1, dt_span_2) == expected
-        ), f"Test case {i}a failed"
-        assert (
-            tum_esm_utils.timing.datetime_span_intersection(dt_span_2, dt_span_1) == expected
-        ), f"Test case {i}b failed"
+        assert tum_esm_utils.timing.datetime_span_intersection(dt_span_1, dt_span_2) == expected, (
+            f"Test case {i}a failed"
+        )
+        assert tum_esm_utils.timing.datetime_span_intersection(dt_span_2, dt_span_1) == expected, (
+            f"Test case {i}b failed"
+        )
 
 
 @pytest.mark.quick
@@ -249,9 +247,9 @@ def test_date_span_intersection() -> None:
         ((d(0), d(4)), (d(1), d(1)), (d(1), d(1))),
     ]
     for i, (dt_span_1, dt_span_2, expected) in enumerate(test_cases):
-        assert (
-            tum_esm_utils.timing.date_span_intersection(dt_span_1, dt_span_2) == expected
-        ), f"Test case {i}a failed"
-        assert (
-            tum_esm_utils.timing.date_span_intersection(dt_span_2, dt_span_1) == expected
-        ), f"Test case {i}b failed"
+        assert tum_esm_utils.timing.date_span_intersection(dt_span_1, dt_span_2) == expected, (
+            f"Test case {i}a failed"
+        )
+        assert tum_esm_utils.timing.date_span_intersection(dt_span_2, dt_span_1) == expected, (
+            f"Test case {i}b failed"
+        )

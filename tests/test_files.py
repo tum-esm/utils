@@ -39,7 +39,7 @@ def test_read_last_n_lines() -> None:
         filepath = os.path.join(d, "file.txt")
         with open(filepath, "w") as f:
             for i in range(10):
-                f.write(f"{i} {'c'*(i+1)}\n")
+                f.write(f"{i} {'c' * (i + 1)}\n")
 
         r1 = tum_esm_utils.files.read_last_n_lines(
             filepath,
@@ -67,7 +67,7 @@ def test_read_last_n_lines() -> None:
 
         with open(filepath, "w") as f:
             for i in range(3):
-                f.write(f"{i} {'c'*(i+1)}\n")
+                f.write(f"{i} {'c' * (i + 1)}\n")
 
         r3 = tum_esm_utils.files.read_last_n_lines(
             filepath,
