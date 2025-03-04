@@ -90,6 +90,69 @@ def test_date_range() -> None:
 
 
 @pytest.mark.quick
+def test_time_range() -> None:
+    ts = tum_esm_utils.timing.time_range(
+        datetime.time(12, 0),
+        datetime.time(13, 0),
+        datetime.timedelta(minutes=10),
+    )
+    assert ts == [
+        datetime.time(12, 0),
+        datetime.time(12, 10),
+        datetime.time(12, 20),
+        datetime.time(12, 30),
+        datetime.time(12, 40),
+        datetime.time(12, 50),
+        datetime.time(13, 0),
+    ]
+
+    ts = tum_esm_utils.timing.time_range(
+        datetime.time(12, 0),
+        datetime.time(13, 0),
+        datetime.timedelta(minutes=15),
+    )
+    assert ts == [
+        datetime.time(12, 0),
+        datetime.time(12, 15),
+        datetime.time(12, 30),
+        datetime.time(12, 45),
+        datetime.time(13, 0),
+    ]
+
+    ts = tum_esm_utils.timing.time_range(
+        datetime.time(12, 0),
+        datetime.time(12, 0),
+        datetime.timedelta(minutes=30),
+    )
+    assert ts == [datetime.time(12, 0)]
+
+    ts = tum_esm_utils.timing.time_range(
+        datetime.time(12, 0),
+        datetime.time(15, 0),
+        datetime.timedelta(hours=1),
+    )
+    assert ts == [
+        datetime.time(12, 0),
+        datetime.time(13, 0),
+        datetime.time(14, 0),
+        datetime.time(15, 0),
+    ]
+
+    ts = tum_esm_utils.timing.time_range(
+        datetime.time(12, 0),
+        datetime.time(18, 30),
+        datetime.timedelta(minutes=90),
+    )
+    assert ts == [
+        datetime.time(12, 0),
+        datetime.time(13, 30),
+        datetime.time(15, 0),
+        datetime.time(16, 30),
+        datetime.time(18, 0),
+    ]
+
+
+@pytest.mark.quick
 def test_parse_timezone_string() -> None:
     assert tum_esm_utils.timing.parse_timezone_string("CET", datetime.datetime(2000, 1, 1)) == 1
     assert tum_esm_utils.timing.parse_timezone_string("CET+3", datetime.datetime(2000, 1, 1)) == 4
