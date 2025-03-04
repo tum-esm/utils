@@ -852,6 +852,10 @@ def stop_macro(macro_path_or_id: str | int) -> None
 
 Stop a macro given by its path or ID.
 
+Stopping a macro by its ID only works for our OPUS 8.X installations,
+but not our OPUS 7.X installations. Hence, it is recommended to always
+stop it by path.
+
 
 ##### `unload_all_files`
 
@@ -1020,7 +1024,8 @@ with create_figure("path/to/figure.png", title="Title") as fig:
 
 ```python
 def add_subplot(fig: plt.Figure,
-                position: tuple[int, int, int],
+                position: tuple[int, int, int]
+                | matplotlib.gridspec.SubplotSpec,
                 title: Optional[str] = None,
                 xlabel: Optional[str] = None,
                 ylabel: Optional[str] = None,
@@ -1029,10 +1034,20 @@ def add_subplot(fig: plt.Figure,
 
 Add a subplot to a figure.
 
+Use a gridspec for more control:
+
+
+```python
+gs = matplotlib.gridspec.GridSpec(4, 1, height_ratios=[1, 2, 2, 2])
+add_subplot(fig, gs[0], ...)
+```
+
 **Arguments**:
 
 - `fig` - The figure to add the subplot to.
-- `position` - The position of the subplot. The tuple should contain three integers: the number of rows, the number of columns, and the index of the subplot.
+- `position` - The position of the subplot. The tuple should contain three
+  integers (rows, columns, index). You can also pass a gridspec
+  subplot spec.
 - `title` - The title of the subplot.
 - `xlabel` - The x-axis label of the subplot.
 - `ylabel` - The y-axis label of the subplot.
@@ -1542,6 +1557,16 @@ def date_range(from_date: datetime.date,
 ```
 
 Returns a list of dates between from_date and to_date (inclusive).
+
+
+##### `time_range`
+
+```python
+def time_range(from_time: datetime.time, to_time: datetime.time,
+               time_step: datetime.timedelta) -> list[datetime.time]
+```
+
+Returns a list of times between from_time and to_time (inclusive).
 
 
 ##### `ensure_section_duration`
