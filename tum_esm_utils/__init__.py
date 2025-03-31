@@ -39,3 +39,9 @@ try:
     from . import opus
 except ImportError:
     pass
+
+# requires extra "modeling"
+try:
+    from . import column
+except ImportError:
+    pass
