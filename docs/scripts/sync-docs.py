@@ -22,6 +22,7 @@ with open(INDEX_DST, "w") as f:
 module_names = [
     "code",
     "column",
+    "column.astronomy",
     "column.averaging_kernel",
     "column.ncep_profiles",
     "datastructures",
