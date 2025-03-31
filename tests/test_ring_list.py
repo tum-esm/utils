@@ -2,6 +2,7 @@ import pytest
 import tum_esm_utils
 
 
+@pytest.mark.order(3)
 @pytest.mark.quick
 def test_ring_list() -> None:
     ring_list = tum_esm_utils.datastructures.RingList(4)

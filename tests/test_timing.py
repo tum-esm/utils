@@ -9,6 +9,7 @@ import datetime
 DURATION = 0.75
 
 
+@pytest.mark.order(4)
 def test_ensure_section_duration() -> None:
     times: list[float] = []
     for _ in range(3):
@@ -20,6 +21,7 @@ def test_ensure_section_duration() -> None:
     assert (times[2] - times[1] - DURATION) < 0.02
 
 
+@pytest.mark.order(4)
 def test_set_alarm() -> None:
     def func() -> None:
         time.sleep(1.5)
@@ -33,6 +35,7 @@ def test_set_alarm() -> None:
         raise AssertionError("TimeoutError not raised")
 
 
+@pytest.mark.order(4)
 def test_clear_alarm() -> None:
     def func() -> None:
         time.sleep(1.5)
@@ -42,6 +45,7 @@ def test_clear_alarm() -> None:
     func()
 
 
+@pytest.mark.order(3)
 @pytest.mark.quick
 def test_date_range() -> None:
     assert tum_esm_utils.timing.date_range(
@@ -87,6 +91,7 @@ def test_date_range() -> None:
     ]
 
 
+@pytest.mark.order(3)
 @pytest.mark.quick
 def test_time_range() -> None:
     ts = tum_esm_utils.timing.time_range(
@@ -150,6 +155,7 @@ def test_time_range() -> None:
     ]
 
 
+@pytest.mark.order(3)
 @pytest.mark.quick
 def test_parse_timezone_string() -> None:
     assert tum_esm_utils.timing.parse_timezone_string("CET", datetime.datetime(2000, 1, 1)) == 1
@@ -166,6 +172,7 @@ def test_parse_timezone_string() -> None:
     assert tum_esm_utils.timing.parse_timezone_string("UTC-05.5") == -5.5
 
 
+@pytest.mark.order(3)
 @pytest.mark.quick
 def test_parse_iso_8601_datetime() -> None:
     strings = [
@@ -201,6 +208,7 @@ def test_parse_iso_8601_datetime() -> None:
     assert all([dt == dts[0] for dt in dts[1:]])
 
 
+@pytest.mark.order(3)
 @pytest.mark.quick
 def test_datetime_span_intersection() -> None:
     d: Callable[[int], datetime.datetime] = lambda _d: datetime.datetime(2021, 1, _d + 1)
@@ -228,6 +236,7 @@ def test_datetime_span_intersection() -> None:
         )
 
 
+@pytest.mark.order(3)
 @pytest.mark.quick
 def test_date_span_intersection() -> None:
     d: Callable[[int], datetime.date] = lambda _d: datetime.date(2021, 1, _d + 1)

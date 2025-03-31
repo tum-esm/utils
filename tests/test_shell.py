@@ -5,6 +5,7 @@ import pytest
 import tum_esm_utils
 
 
+@pytest.mark.order(3)
 @pytest.mark.quick
 def test_change_file_permissions() -> None:
     with tempfile.TemporaryFile() as f:

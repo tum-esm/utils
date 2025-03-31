@@ -1,14 +1,15 @@
 import re
-
 import pytest
 import tum_esm_utils
 
 
+@pytest.mark.order(3)
 @pytest.mark.quick
 def test_get_random_string() -> None:
     assert len(tum_esm_utils.text.get_random_string(length=5)) == 5
 
 
+@pytest.mark.order(3)
 @pytest.mark.quick
 def test_pad_string() -> None:
     assert (
@@ -21,6 +22,7 @@ def test_pad_string() -> None:
     )
 
 
+@pytest.mark.order(3)
 @pytest.mark.quick
 def test_is_date_string() -> None:
     assert tum_esm_utils.text.is_date_string("20230101")
@@ -28,6 +30,7 @@ def test_is_date_string() -> None:
     assert not tum_esm_utils.text.is_date_string("20230132")
 
 
+@pytest.mark.order(3)
 @pytest.mark.quick
 def test_is_rfc3339_datetime_string() -> None:
     assert not tum_esm_utils.text.is_rfc3339_datetime_string(
@@ -50,6 +53,7 @@ def test_is_rfc3339_datetime_string() -> None:
     )
 
 
+@pytest.mark.order(3)
 @pytest.mark.quick
 def test_insert_replacements() -> None:
     assert (
@@ -58,6 +62,7 @@ def test_insert_replacements() -> None:
     )
 
 
+@pytest.mark.order(3)
 @pytest.mark.quick
 def test_simplify_string_characters() -> None:
     assert tum_esm_utils.text.simplify_string_characters("Héllö wörld!") == "helloe-woerld"
@@ -81,6 +86,7 @@ def test_simplify_string_characters() -> None:
     )
 
 
+@pytest.mark.order(3)
 @pytest.mark.quick
 def test_replace_consecutive_characters() -> None:
     assert tum_esm_utils.text.replace_consecutive_characters("he--llo---world") == "he-llo-world"
@@ -96,6 +102,7 @@ def test_replace_consecutive_characters() -> None:
     )
 
 
+@pytest.mark.order(3)
 @pytest.mark.quick
 def test_container_adjectives_and_names() -> None:
     min_ord, max_ord = ord("a"), ord("z")
@@ -104,6 +111,7 @@ def test_container_adjectives_and_names() -> None:
             assert min_ord <= ord(c) <= max_ord, f"Invalid character: {c}"
 
 
+@pytest.mark.order(3)
 @pytest.mark.quick
 def test_container_name_generation() -> None:
     label_pattern = re.compile(r"^[a-z]+-[a-z]+$")

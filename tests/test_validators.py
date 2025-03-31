@@ -5,6 +5,7 @@ import tum_esm_utils
 from tum_esm_utils.validators import StrictFilePath, StrictDirectoryPath, Version, StrictIPv4Adress
 
 
+@pytest.mark.order(3)
 @pytest.mark.quick
 def test_strict_path_validators() -> None:
     class Config(pydantic.BaseModel):
@@ -40,6 +41,7 @@ def test_strict_path_validators() -> None:
     )
 
 
+@pytest.mark.order(3)
 @pytest.mark.quick
 def test_version_validator() -> None:
     for valid_string in [
@@ -91,6 +93,7 @@ def test_version_validator() -> None:
     assert Version("10.6.9-rc.4") < Version("10.6.9-rc.5")
 
 
+@pytest.mark.order(3)
 @pytest.mark.quick
 def test_ipv4_validator() -> None:
     # validate bunch of valid IPv4 addresses

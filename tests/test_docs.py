@@ -15,6 +15,7 @@ DOCS_PAGES_DIR = os.path.join(PROJECT_DIR, "docs", "pages")
 FILENAMES = ["index.md", "api-reference.md"]
 
 
+@pytest.mark.order(2)
 @pytest.mark.quick
 def test_documentation_sync() -> None:
     checksums_before: List[str] = []

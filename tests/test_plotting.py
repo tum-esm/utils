@@ -1,8 +1,11 @@
 import os
 import platform
+
+import pytest
 import tum_esm_utils
 
 
+@pytest.mark.order(4)
 def test_plotting() -> None:
     figure_path = "/tmp/tum_esm_utils_plotting_test.png"
     if os.path.exists(figure_path):

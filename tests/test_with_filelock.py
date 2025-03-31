@@ -44,6 +44,7 @@ def f(delay: int = 0, q: Optional[queue.Queue[int]] = None) -> int:
     return 1
 
 
+@pytest.mark.order(4)
 def test_filelock_without_concurrency() -> None:
     assert f() == 1
 
@@ -51,6 +52,7 @@ def test_filelock_without_concurrency() -> None:
     assert f() == 1
 
 
+@pytest.mark.order(4)
 @pytest.mark.multithreaded
 def test_filelock_with_threading() -> None:
     """takes quite long because I had to increase `TIMEOUT_UNIT`
@@ -73,6 +75,7 @@ def test_filelock_with_threading() -> None:
     assert count_queue_items(res_queue_th) == 1
 
 
+@pytest.mark.order(4)
 @pytest.mark.multithreaded
 def test_filelock_with_multiprocessing() -> None:
     """takes quite long because I had to increase `TIMEOUT_UNIT`

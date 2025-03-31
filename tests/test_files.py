@@ -7,6 +7,7 @@ import tum_esm_utils
 PROJECT_DIR = tum_esm_utils.files.get_parent_dir_path(__file__, current_depth=2)
 
 
+@pytest.mark.order(3)
 @pytest.mark.quick
 def test_get_parent_dir_path() -> None:
     parent_dir = tum_esm_utils.files.get_parent_dir_path(__file__, current_depth=1)
@@ -16,6 +17,7 @@ def test_get_parent_dir_path() -> None:
     assert parent_parent_dir == os.path.dirname(parent_dir)
 
 
+@pytest.mark.order(3)
 @pytest.mark.quick
 def test_rel_to_abs_path() -> None:
     a1 = tum_esm_utils.files.rel_to_abs_path("tests/data/some.csv")
@@ -33,6 +35,7 @@ def test_rel_to_abs_path() -> None:
     assert a1 == expected
 
 
+@pytest.mark.order(3)
 @pytest.mark.quick
 def test_read_last_n_lines() -> None:
     with tempfile.TemporaryDirectory() as d:
@@ -94,9 +97,10 @@ def test_read_last_n_lines() -> None:
         assert r5 == ["0 c", "1 cc", "2 ccc"]
 
 
+@pytest.mark.order(3)
 @pytest.mark.quick
 def test_render_directory_tree() -> None:
-    ignore = [".git", ".github", ".vscode", ".venv", "dist", ".pdm-build", "docs"]
+    ignore = [".git", ".github", ".vscode", ".venv", "dist", ".pdm-build", "docs", ".mypy_cache"]
 
     expect = ["📁 tests", "📁 tum_esm_utils", "📄 test_files.py", "📄 .gitignore"]
     tree = tum_esm_utils.files.render_directory_tree(PROJECT_DIR, ignore=ignore)
@@ -118,6 +122,7 @@ def test_render_directory_tree() -> None:
         assert e in tree
 
 
+@pytest.mark.order(3)
 @pytest.mark.quick
 def test_list_directory() -> None:
     l = tum_esm_utils.files.list_directory(PROJECT_DIR)
