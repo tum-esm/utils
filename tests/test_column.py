@@ -1,9 +1,39 @@
+import datetime
 import os
+import random
 import numpy as np
 import pytest
 import tum_esm_utils
 
 base = tum_esm_utils.files.rel_to_abs_path("./data/column")
+
+
+@pytest.mark.order(3)
+def test_astronomy() -> None:
+    f = tum_esm_utils.files.rel_to_abs_path("../tum_esm_utils/column/de421.bsp")
+    if os.path.isfile(f):
+        os.remove(f)
+    astronomy = tum_esm_utils.column.astronomy.Astronomy()
+    assert os.path.isfile(f)
+    lat = 48.151
+    lon = 11.369
+    alt = 539
+    for year in range(2020, 2051):
+        elevation, azimuth = astronomy.get_sun_position(
+            lat,
+            lon,
+            alt,
+            datetime.datetime(
+                year=year,
+                month=random.randint(1, 12),
+                day=random.randint(1, 28),
+                hour=random.randint(0, 23),
+                minute=random.randint(0, 59),
+                second=random.randint(0, 59),
+            ).astimezone(datetime.timezone.utc),
+        )
+        assert -90 <= elevation <= 90
+        assert 0 <= azimuth <= 360
 
 
 @pytest.mark.order(3)
