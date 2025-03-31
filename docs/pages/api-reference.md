@@ -72,6 +72,122 @@ Raises an HTTPError if the response status code is not 200.
   The content of the file as a string.
 
 
+## `tum_esm_utils.column`
+
+Functions related to column observation data.
+
+
+## `tum_esm_utils.column.averaging_kernel`
+
+Functions to store, load and apply a column averaging kernel.
+
+
+### `ColumnAveragingKernel` Objects
+
+```python
+class ColumnAveragingKernel()
+```
+
+A class to store, load and apply a column averaging kernel.
+
+
+##### `__init__`
+
+```python
+def __init__(szas: np.ndarray[Any, Any],
+             pressures: np.ndarray[Any, Any],
+             aks: Optional[np.ndarray[Any, Any]] = None) -> None
+```
+
+Initialize the ColumnAveragingKernel.
+
+**Arguments**:
+
+- `szas` - The solar zenith angles (SZAs) in degrees.
+- `pressures` - The pressures in hPa.
+- `aks` - The averaging kernels. If None, a zero array is created.
+
+
+##### `apply`
+
+```python
+def apply(szas: np.ndarray[Any, Any],
+          pressures: np.ndarray[Any, Any]) -> np.ndarray[Any, Any]
+```
+
+Compute the averaging kernel for a given set of szas and pressures.
+
+
+```python
+ak.apply(
+    szas=np.array([0, 10, 20]),
+    pressures=np.array([900, 800, 700])
+)
+```
+
+**Returns**:
+
+  
+```
+[
+   AK @  0° SZA and 900 hPa,
+   AK @ 10° SZA and 800 hPa,
+   AK @ 20° SZA and 700 hPa
+]
+```
+
+
+##### `dump`
+
+```python
+def dump(filepath: str) -> None
+```
+
+Dump the ColumnAveragingKernel to a JSON file.
+
+
+##### `load`
+
+```python
+@staticmethod
+def load(filepath: str) -> ColumnAveragingKernel
+```
+
+Load the ColumnAveragingKernel from a JSON file.
+
+
+## `tum_esm_utils.column.ncep_profiles`
+
+Functions to read NCEP profiles.
+
+
+##### `load_ggg2020_map`
+
+```python
+def load_ggg2020_map(filepath: str) -> pl.DataFrame
+```
+
+Load the Atmospheric profile from a GGG2020 map file.
+
+
+##### `load_ggg2020_mod`
+
+```python
+def load_ggg2020_mod(filepath: str) -> pl.DataFrame
+```
+
+Load the Atmospheric profile from a GGG2020 mod file.
+
+
+##### `load_ggg2020_vmr`
+
+```python
+def load_ggg2020_vmr(filepath: str) -> pl.DataFrame
+```
+
+Load the Atmospheric profile from a GGG2020 vmr file.
+
+
 ## `tum_esm_utils.datastructures`
 
 Datastructures not in the standard library.

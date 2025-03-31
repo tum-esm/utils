@@ -2,6 +2,8 @@ from __future__ import annotations
 import os
 import tempfile
 
+import tum_esm_utils
+
 PROJECT_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 INDEX_SRC = os.path.join(PROJECT_DIR, "README.md")
 INDEX_DST = os.path.join(PROJECT_DIR, "docs", "pages", "index.md")
@@ -19,6 +21,9 @@ with open(INDEX_DST, "w") as f:
 
 module_names = [
     "code",
+    "column",
+    "column.averaging_kernel",
+    "column.ncep_profiles",
     "datastructures",
     "decorators",
     "em27",
@@ -42,9 +47,9 @@ for m in module_names:
     parsed_modules.append(f"--module=tum_esm_utils.{m}")
 
 with tempfile.NamedTemporaryFile() as f:
-    os.system(f"cd {PROJECT_DIR} && pydoc-markdown " + (" ").join(parsed_modules) + f" > {f.name}")
-    with open(f.name, "r") as f2:
-        raw_api_reference_content = f2.read()
+    command = f"pydoc-markdown " + (" ").join(parsed_modules)
+    os.system(f"cd {PROJECT_DIR} && {command} > {f.name}")
+    raw_api_reference_content = tum_esm_utils.files.load_file(f.name)
 
     parsed_api_reference_content_lines: list[str] = []
     for line in raw_api_reference_content.split("\n"):

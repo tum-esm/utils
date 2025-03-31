@@ -1,3 +1,5 @@
+"""Functions to read NCEP profiles."""
+
 import polars as pl
 
 
@@ -28,6 +30,7 @@ vmr_column_offsets = [0, *([sum(vmr_column_widths[:i]) for i in range(1, len(vmr
 
 
 def load_ggg2020_map(filepath: str) -> pl.DataFrame:
+    """Load the Atmospheric profile from a GGG2020 map file."""
     return (
         pl.read_csv(
             filepath,
@@ -57,6 +60,8 @@ def load_ggg2020_map(filepath: str) -> pl.DataFrame:
 
 
 def load_ggg2020_mod(filepath: str) -> pl.DataFrame:
+    """Load the Atmospheric profile from a GGG2020 mod file."""
+
     return (
         pl.read_csv(
             filepath,
@@ -83,6 +88,7 @@ def load_ggg2020_mod(filepath: str) -> pl.DataFrame:
 
 
 def load_ggg2020_vmr(filepath: str) -> pl.DataFrame:
+    """Load the Atmospheric profile from a GGG2020 vmr file."""
     return (
         pl.read_csv(
             filepath,
