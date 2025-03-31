@@ -59,8 +59,8 @@ plotting = ["matplotlib>=3.9.2", "numpy>=2.2.4"]
 em27 = ["polars>=1.26.0"]
 polars = ["polars>=1.26.0"] # alias for em27 (will be removed with 3.0)
 opus = ["numpy>=2.2.4", "tenacity>=9.0.0"]
-all = ["matplotlib>=3.9.2", "numpy>=2.2.4", "polars>=1.26.0", "tenacity>=9.0.0"]
-modeling = ["polars>=1.26.0", "scipy>=1.15.2"]
+all = ["matplotlib>=3.9.2", "numpy>=2.2.4", "polars>=1.26.0", "tenacity>=9.0.0", "scipy>=1.15.2", "skyfield>=1.52"]
+modeling = ["polars>=1.26.0", "scipy>=1.15.2", "skyfield>=1.52"]
 
 [build-system]
 requires = ["pdm-backend"]
@@ -75,6 +75,10 @@ addopts = "--exitfirst --verbose --durations=0 --no-header"
 strict = true
 implicit_reexport = true
 plugins = ["pydantic.mypy"]
+
+[[tool.mypy.overrides]]
+module = ["skyfield.*"]
+ignore_missing_imports = true
 
 [tool.ruff]
 line-length = 100
