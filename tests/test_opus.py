@@ -2,10 +2,10 @@ import numpy as np
 import pytest
 import tum_esm_utils
 
-IFG1 = tum_esm_utils.files.rel_to_abs_path("./data/md20220409s0e00a.0198")
-IFG2 = tum_esm_utils.files.rel_to_abs_path("./data/md20220409s0e00a.0199")
-IFG3 = tum_esm_utils.files.rel_to_abs_path("./data/md20220409s0e00a.0200")
-IFG4 = tum_esm_utils.files.rel_to_abs_path("./data/ma20240514s0e00a.0975")
+IFG1 = tum_esm_utils.files.rel_to_abs_path("./data/ifgs/md20220409s0e00a.0198")
+IFG2 = tum_esm_utils.files.rel_to_abs_path("./data/ifgs/md20220409s0e00a.0199")
+IFG3 = tum_esm_utils.files.rel_to_abs_path("./data/ifgs/md20220409s0e00a.0200")
+IFG4 = tum_esm_utils.files.rel_to_abs_path("./data/ifgs/ma20240514s0e00a.0975")
 
 
 @pytest.mark.order(3)
