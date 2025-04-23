@@ -5,7 +5,7 @@
 groups = ["default", "all", "dev", "em27", "modeling", "opus", "plotting", "polars"]
 strategy = ["inherit_metadata"]
 lock_version = "4.5.0"
-content_hash = "sha256:295e039c008b39912bc4755ec6a36ea5d8a5960d24f88e370068f8bd47ccc19b"
+content_hash = "sha256:d8296cf76ed55a02414e326dc778038ce947be7d3a740956cdd8fb8d38983706"
 
 [[metadata.targets]]
 requires_python = "~=3.10"
