@@ -157,10 +157,11 @@ class OpusHTTPInterface:
         # check twice for any thread that is executing a common function
         for i in range(2):
             for function in common_functions:
-                answer = OpusHTTPInterface.request(f"FIND_FUNCTION {function}", expect_ok=True)
+                answer = OpusHTTPInterface.request(f"FIND_FUNCTION {function}")
                 try:
-                    for thread_id in answer[1:]:
-                        active_thread_ids.add(int(thread_id))
+                    if answer[0] == "OK":
+                        for thread_id in answer[1:]:
+                            active_thread_ids.add(int(thread_id))
                 except:
                     raise ConnectionError(f"Invalid response from OPUS HTTP interface: {answer}")
             if i == 0:
