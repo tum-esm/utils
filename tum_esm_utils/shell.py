@@ -81,16 +81,19 @@ def get_commit_sha(variant: Literal["short", "long"] = "short") -> Optional[str]
         The commit sha as a string, or `None` if there is no git
         repository in the parent directories."""
 
-    p = subprocess.run(
-        ["git", "rev-parse", "--verify", "HEAD"] + (["--short"] if variant == "short" else []),
-        stdout=subprocess.PIPE,
-        stderr=subprocess.STDOUT,
-    )
-    stdout = p.stdout.decode().strip("\n ")
-    if (p.returncode != 0) or ("fatal: not a git repository" in stdout):
+    try:
+        p = subprocess.run(
+            ["git", "rev-parse", "--verify", "HEAD"] + (["--short"] if variant == "short" else []),
+            stdout=subprocess.PIPE,
+            stderr=subprocess.STDOUT,
+        )
+        stdout = p.stdout.decode().strip("\n ")
+        assert p.returncode == 0
+        assert "fatal: not a git repository" not in stdout
+        assert len(stdout) > 0
+    except:
         return None
 
-    assert len(stdout) > 0
     return stdout
 
 
