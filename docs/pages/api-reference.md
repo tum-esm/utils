@@ -43,6 +43,29 @@ Raises an HTTPError if the response status code is not 200.
   The content of the file as a string.
 
 
+##### `download_github_release_asset`
+
+```python
+def download_github_release_asset(repository: str,
+                                  asset_name: str,
+                                  dst_dir: str,
+                                  final_name: Optional[str] = None,
+                                  access_token: Optional[str] = None,
+                                  force: bool = False) -> None
+```
+
+Downloads a specific asset from the latest release of a GitHub repository.
+
+**Arguments**:
+
+- `repository` - In the format "owner/repo".
+- `asset_name` - The name of the asset to download.
+- `dst_dir` - The directory where the asset will be saved.
+- `final_name` - Optional final name for the downloaded asset. If None, uses `asset_name`.
+- `access_token` - The GitHub access token. Only required if the repo is private.
+- `force` - If True, forces the download even if the file already exists.
+
+
 ##### `request_gitlab_file`
 
 ```python
