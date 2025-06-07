@@ -95,7 +95,9 @@ def download_github_release_asset(
                 url = asset["url"]
                 break
     if url is None:
-        raise RuntimeError("Asset not found in any release.")
+        raise RuntimeError(
+            f"Asset '{asset_name}' not found in any release of repository '{repository}'."
+        )
 
     tum_esm_utils.shell.run_shell_command(
         f"curl -L "
