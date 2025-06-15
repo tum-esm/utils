@@ -4,6 +4,7 @@ Implements: `get_cpu_usage`, `get_memory_usage`, `get_disk_space`,
 `get_system_battery`, `get_last_boot_time`, `get_utc_offset`"""
 
 from __future__ import annotations
+import os
 from typing import Any, Optional
 import time
 import psutil
@@ -19,6 +20,7 @@ def get_cpu_usage() -> list[float]:
     return psutil.cpu_percent(interval=1, percpu=True)
 
 
+# FIXME: with next breaking release, merge this function with the other memory_usage function below
 def get_memory_usage() -> float:
     """Checks the memory usage of the system.
 
@@ -28,6 +30,12 @@ def get_memory_usage() -> float:
     p = psutil.virtual_memory().percent
     assert isinstance(p, float)
     return p
+
+
+def get_physical_memory_usage() -> float:
+    """Returns the memory usage (physical memory) of the current process in MB."""
+
+    return psutil.Process(os.getpid()).memory_info().rss / (1024 * 1024)  # type: ignore
 
 
 def get_disk_space(path: str = "/") -> float:

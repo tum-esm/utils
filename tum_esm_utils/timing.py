@@ -338,3 +338,20 @@ class ExponentialBackoff:
         """Reset the waiting period to the first bucket"""
 
         self.bucket_index = 0
+
+
+@contextlib.contextmanager
+def timed_section(label: str) -> Generator[None, None, None]:
+    """Time a section of code and print the duration.
+    Usage example:
+
+    ```python
+    with timed_section("my_section"):
+        do_something()
+    ```
+    """
+
+    start = time.time()
+    yield
+    end = time.time()
+    print(f"{label}: {end - start:6.3f}s")

@@ -3,7 +3,7 @@
 Implements: `RingList`, `merge_dicts`"""
 
 from __future__ import annotations
-from typing import Any
+from typing import Any, TypeVar
 
 
 class RingList:
@@ -107,3 +107,15 @@ def merge_dicts(old_object: Any, new_object: Any) -> Any:
         return updated_dict
     else:
         return new_object
+
+
+T = TypeVar("T")
+
+
+def concat_lists(*lists: list[T]) -> list[T]:
+    """Concatenates multiple lists into one list."""
+
+    result: list[T] = []
+    for lst in lists:
+        result.extend(lst)
+    return result
