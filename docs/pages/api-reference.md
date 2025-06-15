@@ -339,6 +339,15 @@ merge_dicts(
 ```
 
 
+##### `concat_lists`
+
+```python
+def concat_lists(*lists: list[T]) -> list[T]
+```
+
+Concatenates multiple lists into one list.
+
+
 ## `tum_esm_utils.decorators`
 
 Decorators that can be used wrap functions.
@@ -1455,6 +1464,15 @@ Checks the memory usage of the system.
   The memory usage in percent.
 
 
+##### `get_physical_memory_usage`
+
+```python
+def get_physical_memory_usage() -> float
+```
+
+Returns the memory usage (physical memory) of the current process in MB.
+
+
 ##### `get_disk_space`
 
 ```python
@@ -1954,6 +1972,22 @@ def reset() -> None
 ```
 
 Reset the waiting period to the first bucket
+
+
+##### `timed_section`
+
+```python
+@contextlib.contextmanager
+def timed_section(label: str) -> Generator[None, None, None]
+```
+
+Time a section of code and print the duration.
+Usage example:
+
+```python
+with timed_section("my_section"):
+    do_something()
+```
 
 
 ## `tum_esm_utils.validators`
