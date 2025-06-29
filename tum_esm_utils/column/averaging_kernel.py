@@ -2,7 +2,6 @@
 
 from __future__ import annotations
 from typing import Any, Optional
-import scipy.interpolate
 import numpy as np
 import tum_esm_utils
 
@@ -22,6 +21,8 @@ class ColumnAveragingKernel:
             pressures: The pressures in hPa.
             aks: The averaging kernels. If None, a zero array is created.
         """
+
+        import scipy.interpolate
 
         self.szas = szas
         self.pressures = pressures
@@ -56,6 +57,8 @@ class ColumnAveragingKernel:
         ]
         ```
         """
+
+        import scipy.interpolate
 
         if self.spline is None:
             self.spline = scipy.interpolate.RectBivariateSpline(

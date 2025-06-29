@@ -5,7 +5,6 @@ Implements: `request_github_file`, `request_gitlab_file`"""
 import json
 import os
 from typing import Optional
-import requests
 
 import tum_esm_utils
 
@@ -30,6 +29,8 @@ def request_github_file(
     Returns:
         The content of the file as a string.
     """
+
+    import requests
 
     headers = {
         "Accept": "application/text",
@@ -136,6 +137,8 @@ def request_gitlab_file(
     Returns:
         The content of the file as a string.
     """
+
+    import requests
 
     auth_param: str = ""
     if access_token is not None:

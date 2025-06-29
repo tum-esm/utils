@@ -1,6 +1,5 @@
 from typing import Any
 import datetime
-import skyfield.api
 import tum_esm_utils
 
 
@@ -9,6 +8,8 @@ class Astronomy:
 
     def __init__(self) -> None:
         """Initializes the Astronomy class, downloads the latest `de421.bsp` dataset."""
+
+        import skyfield.api
 
         self.planets: Any = skyfield.api.Loader(tum_esm_utils.files.rel_to_abs_path("."))(
             "de421.bsp"
@@ -25,6 +26,8 @@ class Astronomy:
         dt: datetime.datetime,
     ) -> tuple[float, float]:
         """Computes current sun elevation and azimuth in degrees."""
+
+        import skyfield.api
 
         skyfield_dt = self.timescale.from_datetime(dt)
         skyfield_location = self.earth + skyfield.api.wgs84.latlon(

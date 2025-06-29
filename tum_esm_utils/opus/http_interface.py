@@ -4,7 +4,6 @@ from __future__ import annotations
 from typing import Literal, Optional
 import os
 import time
-import socket
 import tenacity
 
 
@@ -69,6 +68,8 @@ class OpusHTTPInterface:
         Returns:
             The answer lines.
         """
+
+        import socket
 
         answer_lines: Optional[list[str]] = None
         try:

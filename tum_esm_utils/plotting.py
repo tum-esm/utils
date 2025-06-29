@@ -14,8 +14,6 @@ from typing import Generator, Optional, Any, Union
 import contextlib
 
 import matplotlib.pyplot as plt
-import matplotlib.font_manager
-import matplotlib.patches
 import matplotlib.gridspec
 from tailwind_colors import TAILWIND_COLORS_HEX
 
@@ -27,6 +25,8 @@ def apply_better_defaults(font_family: Optional[str] = "Roboto") -> None:
         font_family: The font family to use for the plots. If None, the default
                         settings are not changed.
     """
+
+    import matplotlib.font_manager
 
     if font_family is not None:
         system_fonts = matplotlib.font_manager.findSystemFonts()
@@ -170,6 +170,8 @@ def add_colorpatch_legend(
         ncols: The number of columns in the legend.
         location: The location of the legend.
     """
+
+    import matplotlib.patches
 
     fig.legend(
         handles=[matplotlib.patches.Patch(color=color, label=label) for label, color in handles],
