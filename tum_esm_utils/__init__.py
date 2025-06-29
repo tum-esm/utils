@@ -5,43 +5,46 @@ GitHub Repository https://github.com/tum-esm/utils
 Documentation: https://tum-esm-utils.netlify.app
 PyPI: https://pypi.org/project/tum-esm-utils"""
 
-from . import (
-    code,
-    datastructures,
-    decorators,
-    files,
-    mathematics,
-    processes,
-    shell,
-    system,
-    text,
-    timing,
-    validators,
-)
+import os
 
-# ignore import errors from the following submodules
-# because they requires extras to be installed
+if os.getenv("TUM_ESM_UTILS_EXPLICIT_IMPORTS") != "1":
+    from . import (
+        code,
+        datastructures,
+        decorators,
+        files,
+        mathematics,
+        processes,
+        shell,
+        system,
+        text,
+        timing,
+        validators,
+    )
 
-# requires extra "em27"
-try:
-    from . import em27
-except ImportError:
-    pass
+    # ignore import errors from the following submodules
+    # because they requires extras to be installed
 
-# requires extra "plotting"
-try:
-    from . import plotting
-except ImportError:
-    pass
+    # requires extra "em27"
+    try:
+        from . import em27
+    except ImportError:
+        pass
 
-# requires extra "opus"
-try:
-    from . import opus
-except ImportError:
-    pass
+    # requires extra "plotting"
+    try:
+        from . import plotting
+    except ImportError:
+        pass
 
-# requires extra "modeling"
-try:
-    from . import column
-except ImportError:
-    pass
+    # requires extra "opus"
+    try:
+        from . import opus
+    except ImportError:
+        pass
+
+    # requires extra "modeling"
+    try:
+        from . import column
+    except ImportError:
+        pass
