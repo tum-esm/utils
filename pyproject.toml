@@ -1,6 +1,6 @@
 [project]
 name = "tum_esm_utils"
-version = "2.8.0"
+version = "2.8.1"
 description = "Python utilities by the Professorship of Environmental Sensing and Modeling at the Technical University of Munich"
 authors = [
     { name = "Moritz Makowski", email = "moritz.makowski@tum.de" },
