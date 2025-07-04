@@ -358,6 +358,15 @@ def concat_lists(*lists: list[T]) -> list[T]
 Concatenates multiple lists into one list.
 
 
+##### `chunk_list`
+
+```python
+def chunk_list(xs: list[T], n: int) -> list[list[T]]
+```
+
+Split a list into chunks of size n.
+
+
 ## `tum_esm_utils.decorators`
 
 Decorators that can be used wrap functions.
