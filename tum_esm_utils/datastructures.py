@@ -119,3 +119,12 @@ def concat_lists(*lists: list[T]) -> list[T]:
     for lst in lists:
         result.extend(lst)
     return result
+
+
+def chunk_list(xs: list[T], n: int) -> list[list[T]]:
+    """Split a list into chunks of size n."""
+
+    chunks: list[list[T]] = []
+    for i in range(0, len(xs), n):
+        chunks.append(xs[i : min(i + n, len(xs))])
+    return chunks

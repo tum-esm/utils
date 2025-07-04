@@ -146,3 +146,19 @@ def test_concat_lists() -> None:
     assert tum_esm_utils.datastructures.concat_lists([1, 2], [3, 4], [], [5]) == [1, 2, 3, 4, 5]
     assert tum_esm_utils.datastructures.concat_lists([1, 2], [3, 4], [5, 6]) == [1, 2, 3, 4, 5, 6]
 
+
+@pytest.mark.order(3)
+@pytest.mark.quick
+def test_chunk_list() -> None:
+    assert tum_esm_utils.datastructures.chunk_list([], 1) == []
+    assert tum_esm_utils.datastructures.chunk_list([1], 1) == [[1]]
+    assert tum_esm_utils.datastructures.chunk_list([1, 2], 1) == [[1], [2]]
+    assert tum_esm_utils.datastructures.chunk_list([1, 2, 3], 1) == [[1], [2], [3]]
+    assert tum_esm_utils.datastructures.chunk_list([1, 2, 3], 2) == [[1, 2], [3]]
+    assert tum_esm_utils.datastructures.chunk_list([1, 2, 3], 3) == [[1, 2, 3]]
+    assert tum_esm_utils.datastructures.chunk_list([1, 2, 3], 4) == [[1, 2, 3]]
+    assert tum_esm_utils.datastructures.chunk_list([1, 2, 3, 4], 2) == [[1, 2], [3, 4]]
+    assert tum_esm_utils.datastructures.chunk_list([1, 2, 3, 4, 5], 2) == [[1, 2], [3, 4], [5]]
+    assert tum_esm_utils.datastructures.chunk_list([1, 2, 3, 4, 5], 3) == [[1, 2, 3], [4, 5]]
+    assert tum_esm_utils.datastructures.chunk_list([1, 2, 3, 4, 5], 4) == [[1, 2, 3, 4], [5]]
+    assert tum_esm_utils.datastructures.chunk_list([1, 2, 3, 4, 5, 6], 3) == [[1, 2, 3], [4, 5, 6]]
