@@ -130,3 +130,19 @@ def test_merge_dicts() -> None:
     ) == {
         "a": {"e": 80},
     }
+
+
+@pytest.mark.order(3)
+@pytest.mark.quick
+def test_concat_lists() -> None:
+    assert tum_esm_utils.datastructures.concat_lists([], []) == []
+    assert tum_esm_utils.datastructures.concat_lists([1], []) == [1]
+    assert tum_esm_utils.datastructures.concat_lists([], [1]) == [1]
+    assert tum_esm_utils.datastructures.concat_lists([1], [2]) == [1, 2]
+    assert tum_esm_utils.datastructures.concat_lists([1, 2], [3, 4]) == [1, 2, 3, 4]
+    assert tum_esm_utils.datastructures.concat_lists([1, 2], []) == [1, 2]
+    assert tum_esm_utils.datastructures.concat_lists([], [3, 4]) == [3, 4]
+    assert tum_esm_utils.datastructures.concat_lists([1, 2], [3, 4], [5]) == [1, 2, 3, 4, 5]
+    assert tum_esm_utils.datastructures.concat_lists([1, 2], [3, 4], [], [5]) == [1, 2, 3, 4, 5]
+    assert tum_esm_utils.datastructures.concat_lists([1, 2], [3, 4], [5, 6]) == [1, 2, 3, 4, 5, 6]
+
