@@ -90,6 +90,7 @@ build-backend = "pdm.backend"
 [tool.pytest.ini_options]
 filterwarnings = [
     "ignore::pytest.PytestUnhandledThreadExceptionWarning",
+    "ignore::UserWarning",
 ]
 markers = [
     "quick: tests that run very quickly",
