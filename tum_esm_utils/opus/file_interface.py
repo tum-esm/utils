@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 from typing import Optional, Literal
+import warnings
 import numpy as np
 import numpy.typing as npt
 import datetime
@@ -116,15 +117,17 @@ class OpusFile(pydantic.BaseModel):
                 }
             )
 
-            channel_count = len(block_indices["DBTDSTAT"])
-            assert len(block_indices["interferogram"]) == channel_count, (
-                f"found {len(block_indices['interferogram'])} interferogram blocks, but {channel_count} DBTDSTAT blocks"
-            )
-            read_channel_count = channel_count if read_all_channels else 1
+            channel_parameter_count = len(block_indices["DBTDSTAT"]) if read_all_channels else 1
+            interferogram_count = len(block_indices["interferogram"]) if read_all_channels else 1
+
+            if channel_parameter_count != interferogram_count:
+                warnings.warn(
+                    f'There are {channel_parameter_count} "DBTDSTAT" blocks, but {interferogram_count} interferogram blocks. File is still readable.'
+                )
 
             # all channels share the same parameters, except for the spectrum
             channel_parameters = [parameters_ch1]
-            for i in range(1, read_channel_count):
+            for i in range(1, channel_parameter_count):
                 p = parameters_ch1.model_copy(deep=True)
                 p.spectrum = utils.read_opus_block(
                     f,
@@ -146,7 +149,7 @@ class OpusFile(pydantic.BaseModel):
                     f,
                     channel_parameters=channel_parameters,
                     ifg_opus_dirs=[opus_dirs[i] for i in block_indices["interferogram"]][
-                        :read_channel_count
+                        :interferogram_count
                     ],
                     read_all_channels=read_all_channels,
                 )

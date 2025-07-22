@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 from typing import Optional, TypeVar
+import warnings
 import numpy as np
 import numpy.typing as npt
 import io
@@ -151,8 +152,8 @@ def read_interferogram(
     ifg_opus_dirs: list[types.OpusDirectoryEntry],
     read_all_channels: bool = True,
 ) -> npt.NDArray[np.float64]:
-    if len(channel_parameters) != len(ifg_opus_dirs):
-        raise RuntimeError("Number of channel parameters and interferogram blocks do not match!")
+    if len(channel_parameters) < len(ifg_opus_dirs):
+        raise RuntimeError("There are fewer channel parameter blocks than interferogram blocks!")
 
     if len(channel_parameters) == 0:
         raise RuntimeError("No channel parameters found!")
@@ -164,7 +165,9 @@ def read_interferogram(
     spectrum_length = channel_parameters[0].spectrum["NPT"]
     for channel_parameter in channel_parameters[1:]:
         if channel_parameter.spectrum["NPT"] != spectrum_length:
-            raise RuntimeError("The interferograms don't have the same length!")
+            warnings.warn(
+                "Channel parameters indicate different lengths. Using the first channel's length."
+            )
 
     if len(ifg_opus_dirs) not in [1, 2]:
         raise RuntimeError(f"Invalid number of interferogram blocks found: {len(ifg_opus_dirs)}")
