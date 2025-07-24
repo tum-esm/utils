@@ -89,6 +89,16 @@ def download_github_release_asset(
             f"Repository '{repository}' not found or access token does not have the required permissions."
         )
 
+    if not isinstance(releases, list):
+        raise RuntimeError(
+            f"Failed to fetch releases from repository '{repository}'. Response: {releases}"
+        )
+    for release in releases:
+        if not isinstance(release, dict):
+            raise RuntimeError(
+                f"Invalid release format in repository '{repository}'. Release: {releases}"
+            )
+
     url: Optional[str] = None
     for o in sorted(releases, key=lambda x: x["published_at"], reverse=True):
         for asset in o["assets"]:
