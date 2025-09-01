@@ -28,6 +28,8 @@ def _compile_fortran_code(
     fortran_compiler: Literal["gfortran", "gfortran-9"] = "gfortran",
     force_recompile: bool = False,
 ) -> None:
+    assert os.name == "posix"
+
     if force_recompile or (not os.path.isfile(os.path.join(_PARSER_DIR, "opus_file_validator"))):
         if not silent:
             print("compiling fortran code")
@@ -78,6 +80,9 @@ def detect_corrupt_opus_files(
     Returns:
         A dictionary containing corrupt filenames as keys and a list of error
         messages as values."""
+
+    if os.name != "posix":
+        raise OSError("detect_corrupt_opus_files is only supported on Unix systems")
 
     # compiling the fortran code in a semaphore
     with filelock.FileLock(
