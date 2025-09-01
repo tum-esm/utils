@@ -155,7 +155,7 @@ def read_last_n_lines(
                 # reached the beginning of the file
                 break
 
-    return last_characters.decode()[::-1].replace("\r\n", "\n").split("\n")
+    return last_characters.decode()[::-1].strip("\r").replace("\r\n", "\n").split("\n")
 
 
 def expect_file_contents(
