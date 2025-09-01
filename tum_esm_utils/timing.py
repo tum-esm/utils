@@ -3,6 +3,7 @@
 Implements: `date_range`, `ensure_section_duration`, `set_alarm`,
 `clear_alarm`, `wait_for_condition`, `ExponentialBackoff`"""
 
+import os
 from typing import Any, Callable, Generator, Optional
 import contextlib
 import datetime
@@ -11,6 +12,7 @@ import signal
 import time
 import math
 import pytz
+import warnings
 
 
 def date_range(
@@ -65,6 +67,10 @@ def set_alarm(timeout: int, label: str) -> None:
     `timeout` seconds. The message will be formatted as
     `{label} took too long (timed out after {timeout} seconds)`."""
 
+    if os.name != "posix":
+        warnings.warn("set_alarm is only supported on Unix systems", RuntimeWarning)
+        return
+
     def alarm_handler(*args: Any) -> None:
         raise TimeoutError(f"{label} took too long (timed out after {timeout} seconds)")
 
@@ -74,6 +80,10 @@ def set_alarm(timeout: int, label: str) -> None:
 
 def clear_alarm() -> None:
     """Clear the alarm set by `set_alarm`."""
+
+    if os.name != "posix":
+        warnings.warn("clear_alarm is only supported on Unix systems", RuntimeWarning)
+        return
 
     signal.alarm(0)
 
