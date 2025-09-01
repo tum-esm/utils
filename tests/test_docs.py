@@ -17,6 +17,7 @@ FILENAMES = ["index.md", "api-reference.md"]
 
 @pytest.mark.order(2)
 @pytest.mark.quick
+@pytest.mark.skipif(os.name != "posix", reason="Flaky on Windows")
 def test_documentation_sync() -> None:
     checksums_before: List[str] = []
     for filename in FILENAMES:

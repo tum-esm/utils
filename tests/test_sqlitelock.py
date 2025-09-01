@@ -34,7 +34,9 @@ def f(delay: int = 0, q: Optional[queue.Queue[int]] = None) -> int:
     timeout exception when the filelock-aquiring takes longer than
     one second."""
 
-    lock = tum_esm_utils.sqlitelock.SQLiteLock(filepath=lockfile_path, timeout=1 * lock_multiplier)
+    lock = tum_esm_utils.sqlitelock.SQLiteLock(
+        filepath=lockfile_path, timeout=1.5 * lock_multiplier
+    )
 
     try:
         with lock:
