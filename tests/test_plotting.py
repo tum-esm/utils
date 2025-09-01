@@ -2,12 +2,13 @@ import os
 import platform
 
 import pytest
+import tum_esm_utils.files
 import tum_esm_utils.plotting
 
 
 @pytest.mark.order(4)
 def test_plotting() -> None:
-    figure_path = "/tmp/tum_esm_utils_plotting_test.png"
+    figure_path = tum_esm_utils.files.rel_to_abs_path("./tum_esm_utils_plotting_test.png")
     if os.path.exists(figure_path):
         os.remove(figure_path)
 
@@ -15,7 +16,7 @@ def test_plotting() -> None:
         font_family="Roboto" if platform.system() == "Darwin" else None
     )
 
-    with tum_esm_utils.plotting.create_figure("/tmp/tum_esm_utils_plotting_test.png") as fig:
+    with tum_esm_utils.plotting.create_figure(figure_path) as fig:
         axis1 = tum_esm_utils.plotting.add_subplot(
             fig, (2, 1, 1), title="Test Plot", xlabel="X", ylabel="Y"
         )
