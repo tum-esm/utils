@@ -30,6 +30,7 @@ def test_ungraceful_process() -> None:
 
 
 @pytest.mark.order(4)
+@pytest.mark.skipif(os.name != "posix", reason="Graceful process teardown does not work on Windows")
 def test_graceful_process() -> None:
     expected_pid = start_background_process(sys.executable, SCRIPT_PATH_GRACE, waiting_period=2)
     time.sleep(0.1)
