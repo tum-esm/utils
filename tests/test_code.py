@@ -8,7 +8,7 @@ import tum_esm_utils.code
 @pytest.mark.quick
 def test_request_github_file() -> None:
     c1 = tum_esm_utils.code.request_github_file(
-        repository="tum-esm/em27-retrieval-pipeline",
+        repository="tum-esm/utils",
         filepath="pyproject.toml",
         branch_name="main",
         access_token=os.getenv("GITHUB_API_TOKEN", None),
@@ -16,8 +16,8 @@ def test_request_github_file() -> None:
     assert len(c1.replace(" ", "")) > 0, "String c1 is empty"
 
     c2 = tum_esm_utils.code.request_github_file(
-        repository="tum-esm/em27-retrieval-pipeline",
-        filepath="tests/__init__.py",
+        repository="tum-esm/utils",
+        filepath="tum_esm_utils/__init__.py",
         branch_name="main",
         access_token=os.getenv("GITHUB_API_TOKEN", None),
     )
@@ -45,17 +45,16 @@ def test_request_github_file() -> None:
 def test_download_github_release_asset() -> None:
     with tempfile.TemporaryDirectory() as tmpdir:
         for finalname in [None, "anothername.exe"]:
-            for v in ["4.2.2", "4.1.0"]:
-                tum_esm_utils.code.download_github_release_asset(
-                    repository="tum-esm/pyra",
-                    asset_name=f"Pyra.UI_{v}_x64-setup.exe",
-                    final_name=finalname,
-                    dst_dir=tmpdir,
-                    access_token=os.getenv("GITHUB_API_TOKEN", None),
-                )
-                if finalname is None:
-                    finalname = "Pyra.UI_4.2.2_x64-setup.exe"
-                assert os.path.isfile(os.path.join(tmpdir, finalname)), "File not found"
-                assert os.path.getsize(os.path.join(tmpdir, finalname)) > 2 * 1024 * 1024, (
-                    "File size is less than 2MB"
-                )
+            tum_esm_utils.code.download_github_release_asset(
+                repository="tum-esm/utils",
+                asset_name="tum-esm-group-icon-download-test.png",
+                final_name=finalname,
+                dst_dir=tmpdir,
+                access_token=os.getenv("GITHUB_API_TOKEN", None),
+            )
+            if finalname is None:
+                finalname = "tum-esm-group-icon-download-test.png"
+            assert os.path.isfile(os.path.join(tmpdir, finalname)), "File not found"
+            assert os.path.getsize(os.path.join(tmpdir, finalname)) > 512, (
+                "File size is less than 512B"
+            )
