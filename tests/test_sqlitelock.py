@@ -1,16 +1,20 @@
 from __future__ import annotations
 from typing import Optional
+import os
 import time
+import pytest
 import queue
-import tum_esm_utils
 import multiprocessing
 import threading
-import tum_esm_utils
+
+os.environ["TUM_ESM_UTILS_EXPLICIT_IMPORTS"] = "1"
+import tum_esm_utils.files
+import tum_esm_utils.sqlitelock
 
 multiprocessing.set_start_method("spawn", force=True)
 res_queue_th: queue.Queue[int] = queue.Queue()
 res_queue_mp: queue.Queue[int] = multiprocessing.Queue()  # type: ignore
-lockfile_path = tum_esm_utils.files.rel_to_abs_path("./sqlitelock.lock")
+lockfile_path = tum_esm_utils.files.rel_to_abs_path("./pytest_sqlitelock_test.lock")
 
 
 def count_queue_items(q: queue.Queue[int]) -> int:
@@ -40,14 +44,19 @@ def f(delay: int = 0, q: Optional[queue.Queue[int]] = None) -> int:
             return 1
     except TimeoutError:
         pass
+        return 0
 
 
+@pytest.mark.order(4)
+@pytest.mark.quick
 def test_filelock_without_concurrency() -> None:
     assert f() == 1
     # calling again to make sure that lock opens again
     assert f() == 1
 
 
+@pytest.mark.order(4)
+@pytest.mark.multithreaded
 def test_filelock_with_threading() -> None:
     lock = tum_esm_utils.sqlitelock.SQLiteLock(filepath=lockfile_path, timeout=1)
     assert not lock.is_locked(), "Lock should not be locked"
@@ -56,7 +65,7 @@ def test_filelock_with_threading() -> None:
     t2 = threading.Thread(target=f, kwargs={"delay": 0.5, "q": res_queue_th})
     t1.start()
     t2.start()
-    time.sleep(0.1)
+    time.sleep(0.25)
     assert lock.is_locked(), "Lock should be locked"
     t1.join()
     t2.join()
@@ -68,7 +77,7 @@ def test_filelock_with_threading() -> None:
     t4 = threading.Thread(target=f, kwargs={"delay": 1.5, "q": res_queue_th})
     t3.start()
     t4.start()
-    time.sleep(0.1)
+    time.sleep(0.25)
     assert lock.is_locked(), "Lock should be locked"
     t3.join()
     t4.join()
@@ -77,15 +86,17 @@ def test_filelock_with_threading() -> None:
     assert not lock.is_locked(), "Lock should not be locked"
 
 
+@pytest.mark.order(4)
+@pytest.mark.multithreaded
 def test_filelock_with_multiprocessing() -> None:
-    lock = tum_esm_utils.sqlitelock.SQLiteLock(filepath=lockfile_path, timeout=1)
+    lock = tum_esm_utils.sqlitelock.SQLiteLock(filepath=lockfile_path, timeout=1.5)
     assert not lock.is_locked(), "Lock should not be locked"
 
-    t1 = multiprocessing.Process(target=f, kwargs={"delay": 0.5, "q": res_queue_mp})
-    t2 = multiprocessing.Process(target=f, kwargs={"delay": 0.5, "q": res_queue_mp})
+    t1 = multiprocessing.Process(target=f, kwargs={"delay": 1, "q": res_queue_mp})
+    t2 = multiprocessing.Process(target=f, kwargs={"delay": 1, "q": res_queue_mp})
     t1.start()
     t2.start()
-    time.sleep(0.1)
+    time.sleep(0.75)
     assert lock.is_locked(), "Lock should be locked"
     t1.join()
     t2.join()
@@ -93,11 +104,11 @@ def test_filelock_with_multiprocessing() -> None:
 
     assert not lock.is_locked(), "Lock should not be locked"
 
-    t3 = multiprocessing.Process(target=f, kwargs={"delay": 1.5, "q": res_queue_mp})
-    t4 = multiprocessing.Process(target=f, kwargs={"delay": 1.5, "q": res_queue_mp})
+    t3 = multiprocessing.Process(target=f, kwargs={"delay": 2, "q": res_queue_mp})
+    t4 = multiprocessing.Process(target=f, kwargs={"delay": 2, "q": res_queue_mp})
     t3.start()
     t4.start()
-    time.sleep(0.1)
+    time.sleep(0.75)
     assert lock.is_locked(), "Lock should be locked"
     t3.join()
     t4.join()

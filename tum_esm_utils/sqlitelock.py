@@ -43,7 +43,7 @@ class SQLiteLock:
 
         self.timeout = timeout
         self.poll_interval = poll_interval
-        self.is_locked: bool = False
+        self._is_locked: bool = False
 
         # Ensure directory exists
         os.makedirs(os.path.dirname(filepath), exist_ok=True)
@@ -69,7 +69,7 @@ class SQLiteLock:
         while True:
             try:
                 self.conn.execute("BEGIN EXCLUSIVE")
-                self.is_locked = True
+                self._is_locked = True
                 # Success: we now hold the lock until we end the transaction.
                 return True
             except sqlite3.OperationalError:
@@ -83,7 +83,7 @@ class SQLiteLock:
         """Release the lock."""
 
         try:
-            self.is_locked = False
+            self._is_locked = False
             self.conn.execute("ROLLBACK")
         except (sqlite3.OperationalError, sqlite3.ProgrammingError):
             pass
@@ -91,7 +91,7 @@ class SQLiteLock:
     def is_locked(self) -> bool:
         """Check if the lock is currently held by any process."""
 
-        if self.is_locked:
+        if self._is_locked:
             return True
 
         is_locked: bool = False

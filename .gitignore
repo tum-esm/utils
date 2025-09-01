@@ -1,5 +1,6 @@
 # custom
 tests/pytest_filelock_test.lock
+tests/pytest_sqlitelock_test.lock
 nohup.out
 .vscode
 old-docs
