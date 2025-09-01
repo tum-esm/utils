@@ -2,11 +2,10 @@
 
 Implements: `request_github_file`, `request_gitlab_file`"""
 
+from typing import Optional
 import json
 import os
-from typing import Optional
-
-import tum_esm_utils
+import tum_esm_utils.shell
 
 
 def request_github_file(

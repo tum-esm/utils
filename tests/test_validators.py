@@ -1,7 +1,7 @@
 import random
 import pydantic
 import pytest
-import tum_esm_utils
+import tum_esm_utils.files
 from tum_esm_utils.validators import StrictFilePath, StrictDirectoryPath, Version, StrictIPv4Adress
 
 

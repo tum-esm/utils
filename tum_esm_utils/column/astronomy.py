@@ -1,6 +1,6 @@
 from typing import Any
 import datetime
-import tum_esm_utils
+import tum_esm_utils.files
 
 
 class Astronomy:

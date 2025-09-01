@@ -5,7 +5,7 @@ import time
 import queue
 
 import pytest
-import tum_esm_utils
+import tum_esm_utils.decorators
 import multiprocessing
 
 multiprocessing.set_start_method("spawn", force=True)

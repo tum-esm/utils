@@ -13,7 +13,7 @@ import traceback
 import hashlib
 import json
 import os
-import tum_esm_utils
+import tum_esm_utils.shell
 
 
 def load_file(path: str) -> str:

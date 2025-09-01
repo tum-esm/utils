@@ -1,7 +1,7 @@
 import os
 import tempfile
 import pytest
-import tum_esm_utils
+import tum_esm_utils.code
 
 
 @pytest.mark.order(3)

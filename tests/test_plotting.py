@@ -2,7 +2,7 @@ import os
 import platform
 
 import pytest
-import tum_esm_utils
+import tum_esm_utils.plotting
 
 
 @pytest.mark.order(4)

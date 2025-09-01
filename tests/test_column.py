@@ -3,7 +3,8 @@ import os
 import random
 import numpy as np
 import pytest
-import tum_esm_utils
+import tum_esm_utils.files
+import tum_esm_utils.column
 
 base = tum_esm_utils.files.rel_to_abs_path("./data/column")
 

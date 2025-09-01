@@ -1,6 +1,7 @@
 import numpy as np
 import pytest
-import tum_esm_utils
+import tum_esm_utils.opus
+import tum_esm_utils.files
 
 
 IFG1 = tum_esm_utils.files.rel_to_abs_path("./data/ifgs/md20220409s0e00a.0198")

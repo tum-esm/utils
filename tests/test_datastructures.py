@@ -1,5 +1,5 @@
 import pytest
-import tum_esm_utils
+import tum_esm_utils.datastructures
 
 
 @pytest.mark.order(3)

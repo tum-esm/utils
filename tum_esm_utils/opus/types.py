@@ -5,7 +5,7 @@ from typing import Any, Literal, Optional
 import math
 import datetime
 import pydantic
-import tum_esm_utils
+import tum_esm_utils.timing
 
 
 class OpusHeader(pydantic.BaseModel):

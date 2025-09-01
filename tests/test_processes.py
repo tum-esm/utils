@@ -3,7 +3,7 @@ import sys
 import time
 
 import pytest
-import tum_esm_utils
+import tum_esm_utils.files
 from tum_esm_utils.processes import get_process_pids, start_background_process, terminate_process
 
 PROJECT_DIR = tum_esm_utils.files.get_parent_dir_path(__file__, current_depth=2)

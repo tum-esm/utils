@@ -1,6 +1,6 @@
 import re
 import pytest
-import tum_esm_utils
+import tum_esm_utils.text
 
 
 @pytest.mark.order(3)

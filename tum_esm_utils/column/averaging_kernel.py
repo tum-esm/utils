@@ -3,7 +3,7 @@
 from __future__ import annotations
 from typing import Any, Optional
 import numpy as np
-import tum_esm_utils
+import tum_esm_utils.files
 
 
 class ColumnAveragingKernel:

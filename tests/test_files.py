@@ -2,7 +2,7 @@ import os
 import tempfile
 import polars as pl
 import pytest
-import tum_esm_utils
+import tum_esm_utils.files
 
 PROJECT_DIR = tum_esm_utils.files.get_parent_dir_path(__file__, current_depth=2)
 

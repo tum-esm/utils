@@ -3,7 +3,7 @@ import time
 from typing import Callable
 
 import pytest
-import tum_esm_utils
+import tum_esm_utils.timing
 import datetime
 
 DURATION = 0.75

@@ -16,7 +16,7 @@ from typing_extensions import deprecated
 import os
 import subprocess
 import filelock
-import tum_esm_utils
+import tum_esm_utils.text
 import polars as pl
 from tailwind_colors import TAILWIND_COLORS_HEX as TCH
 
