@@ -1,4 +1,4 @@
-from typing import Optional
+from typing import Any, Optional
 import os
 import time
 import sqlite3
@@ -71,7 +71,6 @@ class SQLiteLock:
                 self.conn.execute("BEGIN EXCLUSIVE")
                 self._is_locked = True
                 # Success: we now hold the lock until we end the transaction.
-                return True
             except sqlite3.OperationalError:
                 if (time.time() - start_time) >= used_timeout:
                     raise TimeoutError(
@@ -106,10 +105,10 @@ class SQLiteLock:
     def __enter__(self) -> None:
         self.acquire()
 
-    def __exit__(self, exc_type, exc, tb) -> None:
+    def __exit__(self, exc_type: Any, exc: Any, tb: Any) -> None:
         self.release()
 
-    def __del__(self):
+    def __del__(self) -> None:
         try:
             self.release()
             self.conn.close()
