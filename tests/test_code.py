@@ -11,6 +11,7 @@ def test_request_github_file() -> None:
         repository="tum-esm/em27-retrieval-pipeline",
         filepath="pyproject.toml",
         branch_name="main",
+        access_token=os.getenv("GITHUB_API_TOKEN", None),
     )
     assert len(c1.replace(" ", "")) > 0, "String c1 is empty"
 
@@ -18,6 +19,7 @@ def test_request_github_file() -> None:
         repository="tum-esm/em27-retrieval-pipeline",
         filepath="tests/__init__.py",
         branch_name="main",
+        access_token=os.getenv("GITHUB_API_TOKEN", None),
     )
     assert len(c2.replace(" ", "")) > 0, "String c2 is empty"
 
@@ -49,6 +51,7 @@ def test_download_github_release_asset() -> None:
                     asset_name=f"Pyra.UI_{v}_x64-setup.exe",
                     final_name=finalname,
                     dst_dir=tmpdir,
+                    access_token=os.getenv("GITHUB_API_TOKEN", None),
                 )
                 if finalname is None:
                     finalname = "Pyra.UI_4.2.2_x64-setup.exe"
