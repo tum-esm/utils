@@ -37,11 +37,10 @@ def f(delay: int = 0, q: Optional[queue.Queue[int]] = None) -> int:
 
     try:
         with lock:
-            print("acquired lock")
             time.sleep(delay)
             if q is not None:
                 q.put(1)
-            return 1
+        return 1
     except TimeoutError:
         pass
         return 0
@@ -96,7 +95,7 @@ def test_filelock_with_multiprocessing() -> None:
     t2 = multiprocessing.Process(target=f, kwargs={"delay": 1, "q": res_queue_mp})
     t1.start()
     t2.start()
-    time.sleep(0.75)
+    time.sleep(0.5)
     assert lock.is_locked(), "Lock should be locked"
     t1.join()
     t2.join()
@@ -108,7 +107,7 @@ def test_filelock_with_multiprocessing() -> None:
     t4 = multiprocessing.Process(target=f, kwargs={"delay": 2, "q": res_queue_mp})
     t3.start()
     t4.start()
-    time.sleep(0.75)
+    time.sleep(0.5)
     assert lock.is_locked(), "Lock should be locked"
     t3.join()
     t4.join()

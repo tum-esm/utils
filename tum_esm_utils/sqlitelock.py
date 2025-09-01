@@ -46,10 +46,14 @@ class SQLiteLock:
         self._is_locked: bool = False
 
         # Ensure directory exists
+        if not filepath.startswith("/"):
+            raise ValueError("Filepath must be absolute.")
         os.makedirs(os.path.dirname(filepath), exist_ok=True)
 
         # open the connection
-        self.conn: sqlite3.Connection = sqlite3.connect(filepath, timeout=0)
+        self.conn: sqlite3.Connection = sqlite3.connect(
+            filepath, timeout=0, check_same_thread=False, isolation_level=None
+        )
 
     def acquire(self, timeout: Optional[float] = None) -> None:
         """Acquire the lock.
@@ -71,6 +75,7 @@ class SQLiteLock:
                 self.conn.execute("BEGIN EXCLUSIVE")
                 self._is_locked = True
                 # Success: we now hold the lock until we end the transaction.
+                break
             except sqlite3.OperationalError:
                 if (time.time() - start_time) >= used_timeout:
                     raise TimeoutError(
@@ -112,5 +117,5 @@ class SQLiteLock:
         try:
             self.release()
             self.conn.close()
-        except (sqlite3.OperationalError, sqlite3.ProgrammingError):
+        except (sqlite3.OperationalError, sqlite3.ProgrammingError, AttributeError):
             pass
