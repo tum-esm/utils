@@ -19,6 +19,6 @@ signal.signal(signal.SIGTERM, _graceful_teardown)
 
 print("waiting")
 
-time.sleep(3)
+time.sleep(15)
 
 print("stopping")

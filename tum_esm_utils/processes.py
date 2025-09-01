@@ -8,6 +8,7 @@ from typing import Optional
 import os
 import time
 import psutil
+import subprocess
 
 
 def get_process_pids(script_path: str) -> list[int]:
@@ -51,7 +52,15 @@ def start_background_process(
     assert len(existing_pids) == 0, "process is already running"
 
     cwd = os.path.dirname(script_path)
-    os.system(f"cd {cwd} && nohup {interpreter_path} {script_path} &")
+    if os.name == "posix":
+        os.system(f"cd {cwd} && nohup {interpreter_path} {script_path} &")
+    else:
+        p = subprocess.Popen(
+            [interpreter_path, script_path],
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+            cwd=cwd,
+        )
     time.sleep(waiting_period)
 
     new_pids = get_process_pids(script_path)
