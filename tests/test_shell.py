@@ -7,6 +7,7 @@ import tum_esm_utils.shell
 
 @pytest.mark.order(3)
 @pytest.mark.quick
+@pytest.mark.skipif(os.name != "posix", reason="Not supported on Windows")
 def test_change_file_permissions() -> None:
     with tempfile.TemporaryFile() as f:
         # try to change the permissions of the file

@@ -70,7 +70,9 @@ def download_github_release_asset(
     """
 
     if os.name != "posix":
-        warnings.warn("set_alarm is only supported on Unix systems", RuntimeWarning)
+        warnings.warn(
+            "download_github_release_asset is only supported on Unix systems", RuntimeWarning
+        )
         return
 
     if final_name is None:

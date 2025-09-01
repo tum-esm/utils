@@ -109,6 +109,10 @@ def change_file_permissions(file_path: str, permission_string: str) -> None:
         file_path:         The path to the file.
         permission_string: The new permission string."""
 
+    if os.name != "posix":
+        warnings.warn("change_file_permissions is only supported on Unix systems", RuntimeWarning)
+        return
+
     assert _permission_string_pattern.match(permission_string), "Invalid permission string"
 
     permission_str_to_bit: Callable[[str], int] = lambda p: sum(
