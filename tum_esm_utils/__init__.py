@@ -11,7 +11,8 @@ By setting the environment variable `TUM_ESM_UTILS_EXPLICIT_IMPORTS=1`, the
 package disables automatic submodule imports. This means you cannot import the
 whole package and access submodules directly (e.g., `tum_esm_utils.code` will
 not be available after `import tum_esm_utils`). Instead, you must explicitly
-import each submodule, e.g. `from tum_esm_utils import code`.
+import each submodule, e.g. `from tum_esm_utils import code` or
+`import tum_esm_utils.code`.
 
 This reduces the import time of the package by up to 60 times
 """
@@ -27,6 +28,7 @@ if os.getenv("TUM_ESM_UTILS_EXPLICIT_IMPORTS") != "1":
         mathematics,
         processes,
         shell,
+        sqlitelock,
         system,
         text,
         timing,
