@@ -6,9 +6,10 @@ Feel free to use it in any other project ✨
 
 [![PyPI](https://img.shields.io/pypi/v/tum-esm-utils?color=f43f5e&label=latest%20release&labelColor=%230f172a&cacheSeconds=60)](https://pypi.org/project/tum-esm-utils)
 [![PyPI - Python Version](https://img.shields.io/pypi/pyversions/tum-esm-utils?color=f43f5e&label=python%20versions&labelColor=%230f172a&cacheSeconds=60)](https://pypi.org/project/tum-esm-utils/)<br/>
-[![GitHub Workflow Status (with branch)](https://img.shields.io/github/actions/workflow/status/tum-esm/utils/test.yaml?branch=main&label=CI%20tests&labelColor=%230f172a&cacheSeconds=60)](https://github.com/tum-esm/utils/actions/workflows/test.yaml)
 [![GitHub](https://img.shields.io/github/license/tum-esm/utils?color=0ea5e9&labelColor=%230f172a&cacheSeconds=60)](https://github.com/tum-esm/utils/blob/main/LICENSE)
-[![](https://img.shields.io/badge/DOI-10.5281/zenodo.14284949-%230ea5e9?labelColor=%230f172a)](https://doi.org/10.5281/zenodo.14284949)
+[![](https://img.shields.io/badge/DOI-10.5281/zenodo.14284949-%230ea5e9?labelColor=%230f172a)](https://doi.org/10.5281/zenodo.14284949)<br/>
+[![](https://img.shields.io/github/actions/workflow/status/tum-esm/utils/test-unix.yaml?branch=main&label=unix%20tests&labelColor=%230f172a&cacheSeconds=60)](https://github.com/tum-esm/utils/actions/workflows/test-unix.yaml)
+[![](https://img.shields.io/github/actions/workflow/status/tum-esm/utils/test-windows.yaml?branch=main&label=windows%20tests&labelColor=%230f172a&cacheSeconds=60)](https://github.com/tum-esm/utils/actions/workflows/test-windows.yaml)
 
 <br/>
 
