@@ -1,4 +1,5 @@
 from __future__ import annotations
+import os
 import time
 from typing import Callable
 
@@ -22,6 +23,7 @@ def test_ensure_section_duration() -> None:
 
 
 @pytest.mark.order(4)
+@pytest.mark.skipif(os.name != "posix", reason="Not supported on Windows")
 def test_set_alarm() -> None:
     def func() -> None:
         time.sleep(1.5)
@@ -36,6 +38,7 @@ def test_set_alarm() -> None:
 
 
 @pytest.mark.order(4)
+@pytest.mark.skipif(os.name != "posix", reason="Not supported on Windows")
 def test_clear_alarm() -> None:
     def func() -> None:
         time.sleep(1.5)

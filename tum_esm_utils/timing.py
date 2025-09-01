@@ -12,7 +12,6 @@ import signal
 import time
 import math
 import pytz
-import warnings
 
 
 def date_range(
@@ -68,8 +67,7 @@ def set_alarm(timeout: int, label: str) -> None:
     `{label} took too long (timed out after {timeout} seconds)`."""
 
     if os.name != "posix":
-        warnings.warn("set_alarm is only supported on Unix systems", RuntimeWarning)
-        return
+        raise OSError("set_alarm is only supported on Unix systems")
 
     def alarm_handler(*args: Any) -> None:
         raise TimeoutError(f"{label} took too long (timed out after {timeout} seconds)")
@@ -82,8 +80,7 @@ def clear_alarm() -> None:
     """Clear the alarm set by `set_alarm`."""
 
     if os.name != "posix":
-        warnings.warn("clear_alarm is only supported on Unix systems", RuntimeWarning)
-        return
+        raise OSError("clear_alarm is only supported on Unix systems")
 
     signal.alarm(0)  # type: ignore
 

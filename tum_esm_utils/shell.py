@@ -9,7 +9,6 @@ from typing import Callable, Literal, Optional
 import os
 import re
 import subprocess
-import warnings
 
 
 class CommandLineException(Exception):
@@ -111,8 +110,7 @@ def change_file_permissions(file_path: str, permission_string: str) -> None:
         permission_string: The new permission string."""
 
     if os.name != "posix":
-        warnings.warn("change_file_permissions is only supported on Unix systems", RuntimeWarning)
-        return
+        raise OSError("change_file_permissions is only supported on Unix systems")
 
     assert _permission_string_pattern.match(permission_string), "Invalid permission string"
 

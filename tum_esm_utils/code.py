@@ -5,7 +5,6 @@ Implements: `request_github_file`, `request_gitlab_file`"""
 from typing import Optional
 import json
 import os
-import warnings
 import tum_esm_utils.shell
 
 
@@ -70,10 +69,7 @@ def download_github_release_asset(
     """
 
     if os.name != "posix":
-        warnings.warn(
-            "download_github_release_asset is only supported on Unix systems", RuntimeWarning
-        )
-        return
+        raise OSError("download_github_release_asset is only supported on Unix systems")
 
     if final_name is None:
         final_name = asset_name
