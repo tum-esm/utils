@@ -2,7 +2,7 @@ from __future__ import annotations
 import os
 import tempfile
 
-import tum_esm_utils
+import tum_esm_utils.files
 
 PROJECT_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 INDEX_SRC = os.path.join(PROJECT_DIR, "README.md")
@@ -36,6 +36,7 @@ module_names = [
     "plotting",
     "processes",
     "shell",
+    "sqlitelock",
     "system",
     "text",
     "timing",

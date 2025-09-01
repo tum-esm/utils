@@ -49,7 +49,7 @@ def f(delay: int = 0, q: Optional[queue.Queue[int]] = None) -> int:
 
 @pytest.mark.order(4)
 @pytest.mark.quick
-def test_filelock_without_concurrency() -> None:
+def test_sqlitelock_without_concurrency() -> None:
     assert f() == 1
     # calling again to make sure that lock opens again
     assert f() == 1
@@ -57,7 +57,7 @@ def test_filelock_without_concurrency() -> None:
 
 @pytest.mark.order(4)
 @pytest.mark.multithreaded
-def test_filelock_with_threading() -> None:
+def test_sqlitelock_with_threading() -> None:
     lock = tum_esm_utils.sqlitelock.SQLiteLock(filepath=lockfile_path, timeout=1)
     assert not lock.is_locked(), "Lock should not be locked"
 
