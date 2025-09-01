@@ -51,9 +51,7 @@ class SQLiteLock:
         os.makedirs(os.path.dirname(filepath), exist_ok=True)
 
         # open the connection
-        self.conn: sqlite3.Connection = sqlite3.connect(
-            filepath, timeout=0, check_same_thread=False, isolation_level=None
-        )
+        self.conn: sqlite3.Connection = sqlite3.connect(filepath, timeout=0, isolation_level=None)
 
     def acquire(self, timeout: Optional[float] = None) -> None:
         """Acquire the lock.

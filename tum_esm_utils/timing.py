@@ -74,8 +74,8 @@ def set_alarm(timeout: int, label: str) -> None:
     def alarm_handler(*args: Any) -> None:
         raise TimeoutError(f"{label} took too long (timed out after {timeout} seconds)")
 
-    signal.signal(signal.SIGALRM, alarm_handler)
-    signal.alarm(timeout)
+    signal.signal(signal.SIGALRM, alarm_handler)  # type: ignore
+    signal.alarm(timeout)  # type: ignore
 
 
 def clear_alarm() -> None:
@@ -85,7 +85,7 @@ def clear_alarm() -> None:
         warnings.warn("clear_alarm is only supported on Unix systems", RuntimeWarning)
         return
 
-    signal.alarm(0)
+    signal.alarm(0)  # type: ignore
 
 
 def parse_timezone_string(
