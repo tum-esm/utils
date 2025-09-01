@@ -67,6 +67,8 @@ def download_github_release_asset(repository: str,
 
 Downloads a specific asset from the latest release of a GitHub repository.
 
+Not supported on windows!
+
 **Arguments**:
 
 - `repository` - In the format "owner/repo".

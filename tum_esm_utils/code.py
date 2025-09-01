@@ -5,6 +5,7 @@ Implements: `request_github_file`, `request_gitlab_file`"""
 from typing import Optional
 import json
 import os
+import warnings
 import tum_esm_utils.shell
 
 
@@ -57,6 +58,8 @@ def download_github_release_asset(
 ) -> None:
     """Downloads a specific asset from the latest release of a GitHub repository.
 
+    Not supported on windows!
+
     Args:
         repository:    In the format "owner/repo".
         asset_name:    The name of the asset to download.
@@ -65,6 +68,10 @@ def download_github_release_asset(
         access_token:  The GitHub access token. Only required if the repo is private.
         force:         If True, forces the download even if the file already exists.
     """
+
+    if os.name != "posix":
+        warnings.warn("set_alarm is only supported on Unix systems", RuntimeWarning)
+        return
 
     if final_name is None:
         final_name = asset_name

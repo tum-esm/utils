@@ -42,6 +42,7 @@ def test_request_github_file() -> None:
 
 @pytest.mark.order(3)
 @pytest.mark.quick
+@pytest.mark.skipif(os.name != "posix", reason="Not working on Windows")
 def test_download_github_release_asset() -> None:
     with tempfile.TemporaryDirectory() as tmpdir:
         for finalname in [None, "anothername.exe"]:
