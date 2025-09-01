@@ -46,9 +46,9 @@ class SQLiteLock:
         self._is_locked: bool = False
 
         # Ensure directory exists
-        if not filepath.startswith("/"):
-            raise ValueError("Filepath must be absolute.")
-        os.makedirs(os.path.dirname(filepath), exist_ok=True)
+        dirpath = os.path.dirname(filepath)
+        if dirpath != "":
+            os.makedirs(dirpath, exist_ok=True)
 
         # open the connection
         self.conn: sqlite3.Connection = sqlite3.connect(filepath, timeout=0, isolation_level=None)
