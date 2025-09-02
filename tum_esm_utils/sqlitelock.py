@@ -13,7 +13,7 @@ class SQLiteLock:
 
     Usage example:
 
-    ````python
+    ```python
     lock = tum_esm_utils.sqlitelock.SQLiteLock("sqlitelock.lock", timeout=5)
 
     try:
