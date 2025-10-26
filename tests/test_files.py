@@ -1,6 +1,5 @@
 import os
 import tempfile
-import polars as pl
 import pytest
 import tum_esm_utils.files
 

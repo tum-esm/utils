@@ -15,7 +15,7 @@ def test_strict_path_validators() -> None:
     test_file = tum_esm_utils.files.rel_to_abs_path("../pyproject.toml")
     test_dir = tum_esm_utils.files.rel_to_abs_path("..")
 
-    c = Config(f=test_file, d=test_dir)
+    c = Config(f=test_file, d=test_dir) # pyright: ignore[reportArgumentType]
     assert isinstance(c.f, StrictFilePath)
     assert isinstance(c.f.root, str)
     assert set(c.model_dump().keys()) == {"f", "d"}
@@ -97,7 +97,7 @@ def test_version_validator() -> None:
 @pytest.mark.quick
 def test_ipv4_validator() -> None:
     # validate bunch of valid IPv4 addresses
-    for i in range(10):
+    for _ in range(10):
         random_port = random.randint(0, 65535)
         for valid_string in [
             "192.168.1.1",
@@ -116,8 +116,8 @@ def test_ipv4_validator() -> None:
             "172.31.255.249",
             "169.254.0.1",
         ]:
-            v = StrictIPv4Adress(f"{valid_string}")
-            v = StrictIPv4Adress(f"{valid_string}:{random_port}")
+            StrictIPv4Adress(f"{valid_string}")
+            StrictIPv4Adress(f"{valid_string}:{random_port}")
 
     # validate bunch of invalid IPv4 addresses
     for invalid_string in [
@@ -145,7 +145,7 @@ def test_ipv4_validator() -> None:
         "192.168.1.1:999999",  # Port out of range
     ]:
         try:
-            v = StrictIPv4Adress(invalid_string)
+            StrictIPv4Adress(invalid_string)
         except pydantic.ValidationError:
             pass
         else:

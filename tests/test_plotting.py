@@ -1,6 +1,7 @@
+# pyright: basic
+
 import os
 import platform
-
 import pytest
 import tum_esm_utils.files
 import tum_esm_utils.plotting
@@ -21,7 +22,6 @@ def test_plotting() -> None:
             fig, (2, 1, 1), title="Test Plot", xlabel="X", ylabel="Y"
         )
         axis1.plot([1, 2, 3], [1, 2, 3])
-
         axis2 = tum_esm_utils.plotting.add_subplot(
             fig, (2, 1, 2), title="Test Plot 2", xlabel="X", ylabel="Y"
         )

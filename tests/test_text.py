@@ -124,7 +124,7 @@ def test_container_name_generation() -> None:
         )
         assert name in tum_esm_utils.text.CONTAINER_NAMES, f"Invalid name: {name}"
 
-    used_labels = set()
+    used_labels: set[str] = set()
     generator = tum_esm_utils.text.RandomLabelGenerator(
         adjectives=set(["a", "b", "c"]), names=set(["d", "e", "f"])
     )
