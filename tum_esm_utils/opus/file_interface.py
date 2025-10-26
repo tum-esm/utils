@@ -56,9 +56,6 @@ class OpusFile(pydantic.BaseModel):
             An OpusFile object, optionally containing the interferogram data (in read mode)
         """
 
-        if os.name != "posix":
-            raise OSError("OpusFile.read is only supported on Unix systems")
-
         # what to copy when only manipulating the interferogram
         # 4 (MAGIC) + struct.calcsize('<dIII') + len(opus_dirs) * struct.calcsize('<III')
         # for each opus dirs:
