@@ -55,7 +55,7 @@ def start_background_process(
     if os.name == "posix":
         os.system(f"cd {cwd} && nohup {interpreter_path} {script_path} &")
     else:
-        p = subprocess.Popen(
+        subprocess.Popen(
             [interpreter_path, script_path],
             stdout=subprocess.PIPE,
             stderr=subprocess.PIPE,
