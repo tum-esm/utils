@@ -9,14 +9,14 @@ class Astronomy:
     def __init__(self) -> None:
         """Initializes the Astronomy class, downloads the latest `de421.bsp` dataset."""
 
-        import skyfield.api
+        import skyfield.api # pyright: ignore[reportMissingTypeStubs]
 
         self.planets: Any = skyfield.api.Loader(tum_esm_utils.files.rel_to_abs_path("."))(
             "de421.bsp"
         )
-        self.timescale = skyfield.api.load.timescale()
-        self.earth: Any = self.planets["Earth"]
-        self.sun: Any = self.planets["Sun"]
+        self.timescale = skyfield.api.load.timescale() # pyright: ignore[reportUnknownMemberType]
+        self.earth: Any = self.planets["Earth"] # pyright: ignore[reportUnknownMemberType]
+        self.sun: Any = self.planets["Sun"] # pyright: ignore[reportUnknownMemberType]
 
     def get_sun_position(
         self,
@@ -27,10 +27,10 @@ class Astronomy:
     ) -> tuple[float, float]:
         """Computes current sun elevation and azimuth in degrees."""
 
-        import skyfield.api
+        import skyfield.api # pyright: ignore[reportMissingTypeStubs]
 
-        skyfield_dt = self.timescale.from_datetime(dt)
-        skyfield_location = self.earth + skyfield.api.wgs84.latlon(
+        skyfield_dt = self.timescale.from_datetime(dt) # pyright: ignore[reportUnknownMemberType]
+        skyfield_location = self.earth + skyfield.api.wgs84.latlon( # pyright: ignore[reportUnknownMemberType]
             latitude_degrees=lat,
             longitude_degrees=lon,
             elevation_m=alt_asl,

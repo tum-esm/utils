@@ -10,6 +10,8 @@ pip install "tum_esm_utils[plotting]"
 pdm add "tum_esm_utils[plotting]"
 ```"""
 
+# pyright: basic
+
 from typing import Generator, Optional, Any, Union
 import contextlib
 
@@ -49,7 +51,6 @@ def apply_better_defaults(font_family: Optional[str] = "Roboto") -> None:
     plt.rcParams["xtick.labelcolor"] = "black"
     plt.rcParams["ytick.labelcolor"] = "black"
     plt.rcParams["scatter.edgecolors"] = "none"
-    matplotlib.style.use("fast")
 
 
 @contextlib.contextmanager
@@ -61,7 +62,7 @@ def create_figure(
     suptitle_y: float = 0.97,
     padding: float = 2,
     dpi: int = 250,
-) -> Generator[plt.Figure, None, None]:
+) -> Generator[plt.Figure, None, None]: # pyright: ignore[reportPrivateImportUsage]
     """Create a figure for plotting.
 
     Usage:
@@ -92,13 +93,13 @@ def create_figure(
 
 
 def add_subplot(
-    fig: plt.Figure,
+    fig: plt.Figure, # pyright: ignore[reportPrivateImportUsage]
     position: tuple[int, int, int] | matplotlib.gridspec.SubplotSpec,
     title: Optional[str] = None,
     xlabel: Optional[str] = None,
     ylabel: Optional[str] = None,
     **kwargs: dict[str, Any],
-) -> plt.Axes:
+) -> plt.Axes: # pyright: ignore[reportPrivateImportUsage]
     """Add a subplot to a figure.
 
     Use a gridspec for more control:
@@ -124,7 +125,7 @@ def add_subplot(
     Raises:
         ValueError: If the index of the subplot is invalid."""
 
-    axis: plt.Axes
+    axis: plt.Axes # pyright: ignore[reportPrivateImportUsage]
     if isinstance(position, matplotlib.gridspec.SubplotSpec):
         axis = fig.add_subplot(position, **kwargs)
     else:
@@ -146,7 +147,7 @@ def add_subplot(
 
 
 def add_colorpatch_legend(
-    fig: plt.Figure,
+    fig: plt.Figure, # pyright: ignore[reportPrivateImportUsage]
     handles: list[
         tuple[
             str,

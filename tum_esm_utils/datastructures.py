@@ -89,10 +89,10 @@ def merge_dicts(old_object: Any, new_object: Any) -> Any:
 
     # merging is only possible when both are dicts
     if (type(old_object) == dict) and (type(new_object) == dict):
-        updated_dict = {}
+        updated_dict: dict[Any, Any] = {}
 
-        old_keys = set(old_object.keys())
-        new_keys = set(new_object.keys())
+        old_keys: set[Any] = set(old_object.keys()) # pyright: ignore[reportUnknownArgumentType]
+        new_keys: set[Any] = set(new_object.keys()) # pyright: ignore[reportUnknownArgumentType]
 
         # recursively merge keys that are in both dicts
         for k in old_keys.intersection(new_keys):

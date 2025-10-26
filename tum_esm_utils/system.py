@@ -59,7 +59,7 @@ def get_system_battery() -> Optional[int]:
     battery_state: Any = psutil.sensors_battery()  # type: ignore
     try:
         assert battery_state is not None
-        percent = battery_state.percent
+        percent: Any = battery_state.percent # pyright: ignore[reportUnknownVariableType, reportUnknownMemberType]
         assert isinstance(percent, int)
         assert 1 <= percent <= 100
         return percent

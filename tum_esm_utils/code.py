@@ -97,19 +97,19 @@ def download_github_release_asset(
         raise RuntimeError(
             f"Failed to fetch releases from repository '{repository}'. Response: {releases}"
         )
-    for release in releases:
+    for release in releases: # pyright: ignore[reportUnknownVariableType]
         if not isinstance(release, dict):
             raise RuntimeError(
                 f"Invalid release format in repository '{repository}'. Release: {releases}"
             )
 
     url: Optional[str] = None
-    for o in sorted(releases, key=lambda x: x["published_at"], reverse=True):
-        for asset in o["assets"]:
+    for o in sorted(releases, key=lambda x: x["published_at"], reverse=True): # type: ignore
+        for asset in o["assets"]: # pyright: ignore[reportUnknownVariableType]
             if asset["name"] == asset_name:
-                url = asset["url"]
+                url = asset["url"] # pyright: ignore[reportUnknownVariableType]
                 break
-    if url is None:
+    if not isinstance(url, str):
         raise RuntimeError(
             f"Asset '{asset_name}' not found in any release of repository '{repository}'."
         )

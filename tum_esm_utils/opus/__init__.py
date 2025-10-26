@@ -15,8 +15,8 @@ pdm add "tum_esm_utils[opus]"
 Credits to Friedrich Klappenbach (friedrich.klappenbach@tum.de) for decoding the OPUS file
 format."""
 
-from . import file_interface
+from . import file_interface as file_interface
 from .file_interface import OpusFile as OpusFile
 
-from . import http_interface
+from . import http_interface as http_interface
 from .http_interface import OpusHTTPInterface as OpusHTTPInterface

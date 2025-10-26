@@ -21,18 +21,18 @@ import os
 
 if os.getenv("TUM_ESM_UTILS_EXPLICIT_IMPORTS") != "1":
     from . import (
-        code,
-        datastructures,
-        decorators,
-        files,
-        mathematics,
-        processes,
-        shell,
-        sqlitelock,
-        system,
-        text,
-        timing,
-        validators,
+        code as code,
+        datastructures as datastructures,
+        decorators as decorators,
+        files as files,
+        mathematics as mathematics,
+        processes as processes,
+        shell as shell,
+        sqlitelock as sqlitelock,
+        system as system,
+        text as text,
+        timing as timing,
+        validators as validators,
     )
 
     # ignore import errors from the following submodules
@@ -40,24 +40,24 @@ if os.getenv("TUM_ESM_UTILS_EXPLICIT_IMPORTS") != "1":
 
     # requires extra "em27"
     try:
-        from . import em27
+        from . import em27 as em27
     except ImportError:
         pass
 
     # requires extra "plotting"
     try:
-        from . import plotting
+        from . import plotting as plotting
     except ImportError:
         pass
 
     # requires extra "opus"
     try:
-        from . import opus
+        from . import opus as opus
     except ImportError:
         pass
 
     # requires extra "modeling"
     try:
-        from . import column
+        from . import column as column
     except ImportError:
         pass

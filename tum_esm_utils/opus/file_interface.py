@@ -1,7 +1,6 @@
 """Functions for interacting with OPUS files."""
 
 from __future__ import annotations
-import os
 from typing import Optional, Literal
 import warnings
 import numpy as np
