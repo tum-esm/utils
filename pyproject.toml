@@ -8,7 +8,7 @@ authors = [
 ]
 dependencies = [
     "filelock>=3.18.0",
-    "requests>=2.32.3",
+    "requests>=2.32.5",
     "psutil>=7.1.2",
     "pydantic>=2.11.3",
     "pytz>=2025.2",
@@ -68,7 +68,12 @@ all = [
     "scipy>=1.15.2",
     "skyfield>=1.53",
 ]
-modeling = ["polars>=1.16.0", "scipy>=1.15.2", "skyfield>=1.53"]
+modeling = [
+    "polars>=1.16.0",
+    "scipy>=1.15.2",
+    "skyfield>=1.53",
+    "numpy>=2.2.6",
+]
 
 [build-system]
 requires = ["pdm-backend"]

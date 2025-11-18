@@ -27,6 +27,7 @@ if os.getenv("TUM_ESM_UTILS_EXPLICIT_IMPORTS") != "1":
         files as files,
         mathematics as mathematics,
         processes as processes,
+        rebinning as rebinning,
         shell as shell,
         sqlitelock as sqlitelock,
         system as system,
@@ -59,5 +60,11 @@ if os.getenv("TUM_ESM_UTILS_EXPLICIT_IMPORTS") != "1":
     # requires extra "modeling"
     try:
         from . import column as column
+    except ImportError:
+        pass
+
+    # requires extra "modeling"
+    try:
+        from . import rebinning as rebinning
     except ImportError:
         pass
