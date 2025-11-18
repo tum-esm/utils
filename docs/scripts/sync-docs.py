@@ -35,6 +35,7 @@ module_names = [
     "opus.http_interface",
     "plotting",
     "processes",
+    "rebinning",
     "shell",
     "sqlitelock",
     "system",
