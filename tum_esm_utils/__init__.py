@@ -68,3 +68,9 @@ if os.getenv("TUM_ESM_UTILS_EXPLICIT_IMPORTS") != "1":
         from . import rebinning as rebinning
     except ImportError:
         pass
+
+    # requires extra "netcdf"
+    try:
+        from . import netcdf as netcdf
+    except ImportError:
+        pass
