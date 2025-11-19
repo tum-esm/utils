@@ -276,6 +276,7 @@ def test_datetime_to_julian_day_number() -> None:
         (datetime.datetime(1976, 3, 3, 1, 36), 2442840.5666667),
         (datetime.datetime(1999, 12, 3, 23, 36), 2451516.4833333),
         (datetime.datetime(2024, 6, 3, 18, 1), 2460465.2506944),
+        (datetime.datetime(1997, 4, 29, 11, 0), 2450567.9583333),
     ]
     for dt, jdn in test_cases:
         # JDN
