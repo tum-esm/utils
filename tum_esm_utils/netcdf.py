@@ -21,7 +21,7 @@ class NetCDFFile:
         filepath: str,
         parallel: bool = False,
         diskless: bool = True,
-        mode: Literal["w", "a", "r"] = "w",
+        mode: Literal["w", "a", "r"] = "r",
     ) -> None:
         """A simple wrapper around netCDF4.Dataset to make the interaction with NetCDF files easier.
 
@@ -180,17 +180,17 @@ class NetCDFFile:
         )
         self.variables[name][:] = variable[:]
 
-    def add_attribute(self, key: str, value: str) -> None:
+    def add_attribute(self, key: str, value: str, allow_overwrite: bool = False) -> None:
         """Add a global attribute to the NetCDF file.
 
         Raises:
-            ValueError: If the attribute already exists.
+            ValueError: If the attribute already exists and `allow_overwrite` is False.
             RuntimeError: If the NetCDF file is not opened in write mode."""
 
         if self.mode == "r":
             raise RuntimeError("Cannot add attribute in read-only mode")
 
-        if key in self.attributes:
+        if (not allow_overwrite) and (key in self.attributes):
             raise ValueError(f"Attribute {key} already exists in the NetCDF file")
         self.attributes[key] = value
         self.ds.setncattr(key, value)
