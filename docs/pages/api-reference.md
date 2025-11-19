@@ -816,7 +816,7 @@ Using `math.fmod` also does not seem to work correctly with floats.
 
 A thin wrapper over the netCDF4 library to make working with NetCDF files easier.
 
-Implements: `NetCDFFile`
+Implements: `NetCDFFile`, `remove_elements_from_netcdf_file`, `compress_netcdf_file`.
 
 This requires you to install this utils library with the optional `netcdf` dependencies:
 
@@ -840,7 +840,7 @@ class NetCDFFile()
 def __init__(filepath: str,
              parallel: bool = False,
              diskless: bool = True,
-             mode: Literal["w", "a", "r"] = "w") -> None
+             mode: Literal["w", "a", "r"] = "r") -> None
 ```
 
 A simple wrapper around netCDF4.Dataset to make the interaction with NetCDF files easier.
@@ -922,14 +922,14 @@ Import a variable from another NetCDF file.
 ##### `add_attribute`
 
 ```python
-def add_attribute(key: str, value: str) -> None
+def add_attribute(key: str, value: str, allow_overwrite: bool = False) -> None
 ```
 
 Add a global attribute to the NetCDF file.
 
 **Raises**:
 
-- `ValueError` - If the attribute already exists.
+- `ValueError` - If the attribute already exists and `allow_overwrite` is False.
 - `RuntimeError` - If the NetCDF file is not opened in write mode.
 
 
@@ -949,6 +949,41 @@ def __getitem__(key: str) -> "nc.Variable[Any]"
 ```
 
 Get a variable from the NetCDF file.
+
+
+##### `remove_elements_from_netcdf_file`
+
+```python
+def remove_elements_from_netcdf_file(source_filepath: str,
+                                     destination_filepath: str,
+                                     variables_to_remove: list[str] = [],
+                                     dimensions_to_remove: list[str] = [],
+                                     attributes_to_remove: list[str] = [],
+                                     compression_level: int = 2) -> None
+```
+
+Create a new NetCDF file by copying an existing one, but removing specified variables, dimensions, and attributes. This is useful because NetCDF4 does not support removing elements from an existing file.
+
+**Raises**:
+
+- `FileNotFoundError` - If the source file does not exist.
+- `FileExistsError` - If the destination file already exists.
+
+
+##### `compress_netcdf_file`
+
+```python
+def compress_netcdf_file(source_filepath: str,
+                         destination_filepath: str,
+                         compression_level: int = 2) -> None
+```
+
+Compress an existing NetCDF file by creating a new one with the specified compression level. This is useful because some NetCDF4 files given to you might not be (very well) compressed.
+
+**Raises**:
+
+- `FileNotFoundError` - If the source file does not exist.
+- `FileExistsError` - If the destination file already exists.
 
 
 ## `tum_esm_utils.opus`
