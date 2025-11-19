@@ -265,3 +265,21 @@ def test_date_span_intersection() -> None:
         assert tum_esm_utils.timing.date_span_intersection(dt_span_2, dt_span_1) == expected, (
             f"Test case {i}b failed"
         )
+
+
+@pytest.mark.order(3)
+@pytest.mark.quick
+def test_datetime_to_julian_day_number() -> None:
+    test_cases = [
+        (datetime.datetime(2000, 1, 1, 12, 0, 0), 2451545.0),
+        (datetime.datetime(1995, 7, 23, 14, 36), 2449922.1083333),
+        (datetime.datetime(1976, 3, 3, 1, 36), 2442840.5666667),
+        (datetime.datetime(1999, 12, 3, 23, 36), 2451516.4833333),
+        (datetime.datetime(2024, 6, 3, 18, 1), 2460465.2506944),
+    ]
+    for dt, jdn in test_cases:
+        calculated_jdn = tum_esm_utils.timing.datetime_to_julian_day_number(dt)
+        assert abs(calculated_jdn - jdn) < 1e-6, f"Failed for {dt}"
+
+        calculated_dt = tum_esm_utils.timing.julian_day_number_to_datetime(jdn)
+        assert abs((calculated_dt - dt).total_seconds()) < 1, f"Failed for {jdn}"
