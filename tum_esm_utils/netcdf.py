@@ -21,7 +21,7 @@ class NetCDFFile:
         filepath: str,
         parallel: bool = False,
         diskless: bool = True,
-        mode: Literal["w", "a"] = "w",
+        mode: Literal["w", "a", "r"] = "w",
     ) -> None:
         """A simple wrapper around netCDF4.Dataset to make the interaction with NetCDF files easier.
 
@@ -29,6 +29,7 @@ class NetCDFFile:
         filepath when closing the file. This ensures that the final filepath will only exist if the file
         was written completely. In append mode, the filepath is not changes."""
 
+        assert filepath.endswith(".nc"), "Only the .nc file extension is supported"
         self.tmp_filepath = filepath[:-3] + ".tmp.nc"
         self.filepath = filepath
         self.mode = mode
@@ -48,7 +49,7 @@ class NetCDFFile:
         self.variables: dict[str, nc.Variable[Any]] = {}
         self.attributes: dict[str, str] = {}
 
-        if mode == "a":
+        if mode in ["a", "r"]:
             for dim_name, dim in self.ds.dimensions.items():
                 self.dimensions[dim_name] = dim
             for var_name, var in self.ds.variables.items():
@@ -60,7 +61,11 @@ class NetCDFFile:
         """Create a new dimension in the NetCDF file.
 
         Raises:
-            ValueError: If the dimension already exists."""
+            ValueError: If the dimension already exists
+            RuntimeError: If the NetCDF file is not opened in write mode."""
+
+        if self.mode == "r":
+            raise RuntimeError("Cannot create dimension in read-only mode")
 
         if name in self.dimensions:
             raise ValueError(f"Dimension {name} already exists in the NetCDF file")
@@ -79,11 +84,18 @@ class NetCDFFile:
         fill_value: Optional[float | int] = None,
         chunk_dimensions: list[str] = [],
         datatype: Literal["f4", "f8", "i4", "i8"] = "f4",
+        zlib: bool = True,
+        compression_level: int = 2,
     ) -> None:
         """Create a new variable in the NetCDF file.
 
         Raises:
-            ValueError: If the variable already exists or if a dimension is not found."""
+            ValueError: If the variable already exists or if a dimension is not found.
+            RuntimeError: If the NetCDF file is not opened in write mode."""
+
+        if self.mode == "r":
+            raise RuntimeError("Cannot create dimension in read-only mode")
+
         if name in self.variables:
             raise ValueError(f"Variable {name} already exists in the NetCDF file")
 
@@ -103,12 +115,12 @@ class NetCDFFile:
             if dimension.name in chunk_dimensions:
                 chunk_sizes[i] = 1
 
-        var: Any = self.ds.createVariable(  # pyright: ignore[reportUnknownMemberType, reportUnknownVariableType]
+        var: Any = self.ds.createVariable(  # pyright: ignore[reportUnknownMemberType,reportUnknownVariableType]
             name,
             datatype=datatype,
             dimensions=object_dimensions,
-            zlib=(len(dimensions) > 1) or (name != object_dimensions[0].name),
-            complevel=2,
+            zlib=zlib and ((len(dimensions) > 1) or (name != object_dimensions[0].name)),
+            complevel=compression_level,  # type: ignore
             fill_value=fill_value,
             chunksizes=chunk_sizes if len(chunk_dimensions) > 0 else None,
         )
@@ -127,7 +139,11 @@ class NetCDFFile:
         """Import a dimension from another NetCDF file.
 
         Raises:
-            ValueError: If the dimension already exists."""
+            ValueError: If the dimension already exists.
+            RuntimeError: If the NetCDF file is not opened in write mode."""
+
+        if self.mode == "r":
+            raise RuntimeError("Cannot import dimension in read-only mode")
 
         if dimension.name in self.dimensions:
             raise ValueError(f"Dimension {dimension.name} already exists in the NetCDF file")
@@ -135,13 +151,19 @@ class NetCDFFile:
 
     def import_variable(
         self,
-        variable: nc.Variable,  # type: ignore
+        variable: "nc.Variable[Any]",
         new_name: Optional[str] = None,
+        zlib: bool = True,
+        compression_level: int = 2,
     ) -> None:
         """Import a variable from another NetCDF file.
 
         Raises:
-            ValueError: If the variable already exists."""
+            ValueError: If the variable already exists.
+            RuntimeError: If the NetCDF file is not opened in write mode."""
+
+        if self.mode == "r":
+            raise RuntimeError("Cannot import variable in read-only mode")
 
         if variable.name in self.variables:
             raise ValueError(f"Variable {variable.name} already exists in the NetCDF file")
@@ -153,6 +175,8 @@ class NetCDFFile:
             long_name=variable.long_name if hasattr(variable, "long_name") else None,  # pyright: ignore[reportUnknownArgumentType]
             description=variable.description if hasattr(variable, "description") else None,  # pyright: ignore[reportUnknownArgumentType]
             fill_value=float(variable.get_fill_value()),
+            zlib=zlib,
+            compression_level=compression_level,
         )
         self.variables[name][:] = variable[:]
 
@@ -160,7 +184,11 @@ class NetCDFFile:
         """Add a global attribute to the NetCDF file.
 
         Raises:
-            ValueError: If the attribute already exists."""
+            ValueError: If the attribute already exists.
+            RuntimeError: If the NetCDF file is not opened in write mode."""
+
+        if self.mode == "r":
+            raise RuntimeError("Cannot add attribute in read-only mode")
 
         if key in self.attributes:
             raise ValueError(f"Attribute {key} already exists in the NetCDF file")
@@ -178,6 +206,6 @@ class NetCDFFile:
 
         del self
 
-    def __getitem__(self, key: str) -> nc.Variable:  # type: ignore
+    def __getitem__(self, key: str) -> "nc.Variable[Any]":
         """Get a variable from the NetCDF file."""
         return self.variables[key]
