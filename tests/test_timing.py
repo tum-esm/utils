@@ -278,8 +278,22 @@ def test_datetime_to_julian_day_number() -> None:
         (datetime.datetime(2024, 6, 3, 18, 1), 2460465.2506944),
     ]
     for dt, jdn in test_cases:
-        calculated_jdn = tum_esm_utils.timing.datetime_to_julian_day_number(dt)
+        # JDN
+        calculated_jdn = tum_esm_utils.timing.datetime_to_julian_day_number(dt, variant="JDN")
+        calculated_dt = tum_esm_utils.timing.julian_day_number_to_datetime(jdn, variant="JDN")
         assert abs(calculated_jdn - jdn) < 1e-6, f"Failed for {dt}"
-
-        calculated_dt = tum_esm_utils.timing.julian_day_number_to_datetime(jdn)
         assert abs((calculated_dt - dt).total_seconds()) < 1, f"Failed for {jdn}"
+
+        # MJD
+        mjd = jdn - 2400000.5
+        calculated_mjd = tum_esm_utils.timing.datetime_to_julian_day_number(dt, variant="MJD")
+        calculated_dt = tum_esm_utils.timing.julian_day_number_to_datetime(mjd, variant="MJD")
+        assert abs(calculated_mjd - mjd) < 1e-6, f"Failed for {dt}"
+        assert abs((calculated_dt - dt).total_seconds()) < 1, f"Failed for {mjd}"
+
+        # MJD2K
+        mjd2k = jdn - 2451544.5
+        calculated_mjd2k = tum_esm_utils.timing.datetime_to_julian_day_number(dt, variant="MJD2K")
+        calculated_dt = tum_esm_utils.timing.julian_day_number_to_datetime(mjd2k, variant="MJD2K")
+        assert abs(calculated_mjd2k - mjd2k) < 1e-6, f"Failed for {dt}"
+        assert abs((calculated_dt - dt).total_seconds()) < 1, f"Failed for {mjd2k}"
