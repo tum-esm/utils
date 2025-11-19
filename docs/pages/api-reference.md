@@ -255,6 +255,37 @@ def load_ggg2020_vmr(filepath: str) -> pl.DataFrame
 Load the Atmospheric profile from a GGG2020 vmr file.
 
 
+## `tum_esm_utils.dataframes`
+
+Dataframe-related utility functions.
+
+Implements: `fill_df_time_gaps_with_nans`
+
+This requires you to install this utils library with the optional `polars` dependency:
+
+```bash
+pip install "tum_esm_utils[polars]"
+## `or`
+pdm add "tum_esm_utils[polars]"
+```
+
+
+##### `fill_df_time_gaps_with_nans`
+
+```python
+def fill_df_time_gaps_with_nans(df: pl.DataFrame, time_col: str,
+                                max_gap_seconds: int) -> pl.DataFrame
+```
+
+Fill time gaps in a dataframe with NaN rows. This is very useful for plotting dataframes where time gaps should be visible.
+
+**Arguments**:
+
+- `df` - The input dataframe.
+- `time_col` - The name of the time column.
+- `max_gap_seconds` - The maximum gap in seconds to fill with NaN rows.
+
+
 ## `tum_esm_utils.datastructures`
 
 Datastructures not in the standard library.

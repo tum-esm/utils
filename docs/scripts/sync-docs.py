@@ -25,6 +25,7 @@ module_names = [
     "column.astronomy",
     "column.averaging_kernel",
     "column.ncep_profiles",
+    "dataframes",
     "datastructures",
     "decorators",
     "em27",
