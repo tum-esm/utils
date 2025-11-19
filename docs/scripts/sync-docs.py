@@ -30,6 +30,7 @@ module_names = [
     "em27",
     "files",
     "mathematics",
+    "netcdf",
     "opus",
     "opus.file_interface",
     "opus.http_interface",
