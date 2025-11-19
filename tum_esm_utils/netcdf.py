@@ -1,6 +1,6 @@
 """A thin wrapper over the netCDF4 library to make working with NetCDF files easier.
 
-Implements: `NetCDFFile`, `compress_netcdf_file`.
+Implements: `NetCDFFile`, `remove_elements_from_netcdf_file`, `compress_netcdf_file`.
 
 This requires you to install this utils library with the optional `netcdf` dependencies:
 
@@ -211,12 +211,15 @@ class NetCDFFile:
         return self.variables[key]
 
 
-def compress_netcdf_file(
+def remove_elements_from_netcdf_file(
     source_filepath: str,
     destination_filepath: str,
+    variables_to_remove: list[str] = [],
+    dimensions_to_remove: list[str] = [],
+    attributes_to_remove: list[str] = [],
     compression_level: int = 2,
 ) -> None:
-    """Compress an existing NetCDF file by creating a new one with the specified compression level. This is useful because some NetCDF4 files given to you might not be (very well) compressed.
+    """Create a new NetCDF file by copying an existing one, but removing specified variables, dimensions, and attributes. This is useful because NetCDF4 does not support removing elements from an existing file.
 
     Raises:
         FileNotFoundError: If the source file does not exist.
@@ -231,18 +234,48 @@ def compress_netcdf_file(
     src_nc = NetCDFFile(source_filepath, mode="r")
     dest_nc = NetCDFFile(destination_filepath, mode="w")
 
+    # check that no variable depends on a dimension to be removed
+    vars = [v for v in src_nc.variables.values() if v.name not in variables_to_remove]
+    for var in vars:
+        for dim_name in var.dimensions:
+            if dim_name in dimensions_to_remove:
+                raise ValueError(
+                    f"Cannot remove dimension {dim_name} because it is used by variable {var.name}."
+                )
+
     # Copy dimensions
-    for dim in src_nc.dimensions.values():
-        dest_nc.import_dimension(dim)
+    for dim_name, dim in src_nc.dimensions.items():
+        if dim_name not in dimensions_to_remove:
+            dest_nc.import_dimension(dim)
 
     # Copy variables
-    for var in src_nc.variables.values():
-        dest_nc.import_variable(var, compression_level=compression_level)
+    for var_name, var in src_nc.variables.items():
+        if var_name not in variables_to_remove:
+            dest_nc.import_variable(var, compression_level=compression_level)
 
     # Copy attributes
     for attr_name, attr_value in src_nc.attributes.items():
-        dest_nc.add_attribute(attr_name, attr_value)
+        if attr_name not in attributes_to_remove:
+            dest_nc.add_attribute(attr_name, attr_value)
 
     src_nc.close()
     dest_nc.close()
 
+
+def compress_netcdf_file(
+    source_filepath: str,
+    destination_filepath: str,
+    compression_level: int = 2,
+) -> None:
+    """Compress an existing NetCDF file by creating a new one with the specified compression level. This is useful because some NetCDF4 files given to you might not be (very well) compressed.
+
+    Raises:
+        FileNotFoundError: If the source file does not exist.
+        FileExistsError: If the destination file already exists.
+    """
+
+    remove_elements_from_netcdf_file(
+        source_filepath,
+        destination_filepath,
+        compression_level=compression_level,
+    )
