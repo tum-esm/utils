@@ -4,7 +4,7 @@ Implements: `date_range`, `ensure_section_duration`, `set_alarm`,
 `clear_alarm`, `wait_for_condition`, `ExponentialBackoff`"""
 
 import os
-from typing import Any, Callable, Generator, Optional
+from typing import Any, Callable, Generator, Literal, Optional
 import contextlib
 import datetime
 import re
@@ -364,53 +364,79 @@ def timed_section(label: str) -> Generator[None, None, None]:
     print(f"{label}: {end - start:6.3f}s")
 
 
-def datetime_to_julian_day_number(dt: datetime.datetime) -> float:
-    """Convert a datetime to a Julian Day Number (JDN).
+_JDN_BASE_DTS = {
+    "JDN": datetime.datetime(2000, 1, 1, 12, 0, 0),
+    "MJD": datetime.datetime(1858, 11, 17, 0, 0, 0),
+    "MJD2K": datetime.datetime(2000, 1, 1, 0, 0, 0),
+}
+_JDN_BASE_NUMS = {
+    "JDN": 2451545.0,
+    "MJD": 0.0,
+    "MJD2K": 0.0,
+}
 
-    The Julian Day Number is the continuous count of days since the beginning
-    of the Julian Period on January 1, 4713 BC. This function was validated against
-    https://ssd.jpl.nasa.gov/tools/jdc/#/cd
+
+def datetime_to_julian_day_number(
+    dt: datetime.datetime,
+    variant: Literal["JDN", "MJD", "MJD2K"],
+) -> float:
+    """Convert a datetime to a Julian Day Number (JDN) or MJD/MJD2K.
+
+    The Julian Day Number (JDN) is the continuous count of days since the beginning
+    of the Julian Period on January 1, 4713 BC. THe modified variant MJD starts
+    counting from November 17, 1858 at 00:00:00 UTC, and MJD2K starts counting
+    from January 1, 2000 at 00:00:00 UTC.
 
     Args:
         dt: The datetime to convert.
+        variant: The variant of the Julian Day Number ("JDN", "MJD", "MJD2K").
 
     Returns:
         The Julian Day Number as a float.
     """
 
-    JDN_BASE_DT = datetime.datetime(2000, 1, 1, 12, 0, 0)  # JDN 2451545.0
-    JDN_BASE_NUM = 2451545.0
+    assert variant in _JDN_BASE_DTS, f"Invalid variant: {variant}"
+    base_dt = _JDN_BASE_DTS[variant]
+    base_num = _JDN_BASE_NUMS[variant]
 
-    delta = dt - JDN_BASE_DT
+    delta = dt - base_dt
+    return base_num + delta.days + (delta.seconds + delta.microseconds / 1_000_000) / 86400.0
 
-    return JDN_BASE_NUM + delta.days + (delta.seconds + delta.microseconds / 1_000_000) / 86400.0
 
+def julian_day_number_to_datetime(
+    jdn: float,
+    variant: Literal["JDN", "MJD", "MJD2K"],
+) -> datetime.datetime:
+    """Convert a Julian Day Number (JDN) or MJD/MJD2K to a datetime.
 
-def julian_day_number_to_datetime(jdn: float) -> datetime.datetime:
-    """Convert a Julian Day Number (JDN) to a datetime.
+    The Julian Day Number (JDN) is the continuous count of days since the beginning
+    of the Julian Period on January 1, 4713 BC. THe modified variant MJD starts
+    counting from November 17, 1858 at 00:00:00 UTC, and MJD2K starts counting
+    from January 1, 2000 at 00:00:00 UTC.
 
-    The Julian Day Number is the continuous count of days since the beginning
-    of the Julian Period on January 1, 4713 BC. This function was validated against
+    This function was validated against
     https://ssd.jpl.nasa.gov/tools/jdc/#/cd
 
     Args:
         jdn: The Julian Day Number to convert.
+        variant: The variant of the Julian Day Number ("JDN", "MJD", "MJD2K").
 
     Returns:
         The corresponding datetime.
     """
 
-    JDN_BASE_DT = datetime.datetime(2000, 1, 1, 12, 0, 0)  # JDN 2451545.0
-    JDN_BASE_NUM = 2451545.0
+    assert variant in _JDN_BASE_DTS, f"Invalid variant: {variant}"
+    base_dt = _JDN_BASE_DTS[variant]
+    base_num = _JDN_BASE_NUMS[variant]
 
-    delta_days = jdn - JDN_BASE_NUM
+    delta_days = jdn - base_num
     delta_whole_days = int(delta_days)
     delta_fractional_day = delta_days - delta_whole_days
 
     delta_seconds = int(delta_fractional_day * 86400)
     delta_microseconds = int((delta_fractional_day * 86400 - delta_seconds) * 1_000_000)
 
-    return JDN_BASE_DT + datetime.timedelta(
+    return base_dt + datetime.timedelta(
         days=delta_whole_days,
         seconds=delta_seconds,
         microseconds=delta_microseconds,

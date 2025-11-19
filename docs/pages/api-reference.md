@@ -2355,18 +2355,22 @@ with timed_section("my_section"):
 ##### `datetime_to_julian_day_number`
 
 ```python
-def datetime_to_julian_day_number(dt: datetime.datetime) -> float
+def datetime_to_julian_day_number(
+        dt: datetime.datetime, variant: Literal["JDN", "MJD",
+                                                "MJD2K"]) -> float
 ```
 
-Convert a datetime to a Julian Day Number (JDN).
+Convert a datetime to a Julian Day Number (JDN) or MJD/MJD2K.
 
-The Julian Day Number is the continuous count of days since the beginning
-of the Julian Period on January 1, 4713 BC. This function was validated against
-https://ssd.jpl.nasa.gov/tools/jdc/#/cd
+The Julian Day Number (JDN) is the continuous count of days since the beginning
+of the Julian Period on January 1, 4713 BC. THe modified variant MJD starts
+counting from November 17, 1858 at 00:00:00 UTC, and MJD2K starts counting
+from January 1, 2000 at 00:00:00 UTC.
 
 **Arguments**:
 
 - `dt` - The datetime to convert.
+- `variant` - The variant of the Julian Day Number ("JDN", "MJD", "MJD2K").
   
 
 **Returns**:
@@ -2377,18 +2381,25 @@ https://ssd.jpl.nasa.gov/tools/jdc/#/cd
 ##### `julian_day_number_to_datetime`
 
 ```python
-def julian_day_number_to_datetime(jdn: float) -> datetime.datetime
+def julian_day_number_to_datetime(
+        jdn: float, variant: Literal["JDN", "MJD",
+                                     "MJD2K"]) -> datetime.datetime
 ```
 
-Convert a Julian Day Number (JDN) to a datetime.
+Convert a Julian Day Number (JDN) or MJD/MJD2K to a datetime.
 
-The Julian Day Number is the continuous count of days since the beginning
-of the Julian Period on January 1, 4713 BC. This function was validated against
+The Julian Day Number (JDN) is the continuous count of days since the beginning
+of the Julian Period on January 1, 4713 BC. THe modified variant MJD starts
+counting from November 17, 1858 at 00:00:00 UTC, and MJD2K starts counting
+from January 1, 2000 at 00:00:00 UTC.
+
+This function was validated against
 https://ssd.jpl.nasa.gov/tools/jdc/#/cd
 
 **Arguments**:
 
 - `jdn` - The Julian Day Number to convert.
+- `variant` - The variant of the Julian Day Number ("JDN", "MJD", "MJD2K").
   
 
 **Returns**:
