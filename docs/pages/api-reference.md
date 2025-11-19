@@ -2352,6 +2352,50 @@ with timed_section("my_section"):
 ```
 
 
+##### `datetime_to_julian_day_number`
+
+```python
+def datetime_to_julian_day_number(dt: datetime.datetime) -> float
+```
+
+Convert a datetime to a Julian Day Number (JDN).
+
+The Julian Day Number is the continuous count of days since the beginning
+of the Julian Period on January 1, 4713 BC. This function was validated against
+https://ssd.jpl.nasa.gov/tools/jdc/#/cd
+
+**Arguments**:
+
+- `dt` - The datetime to convert.
+  
+
+**Returns**:
+
+  The Julian Day Number as a float.
+
+
+##### `julian_day_number_to_datetime`
+
+```python
+def julian_day_number_to_datetime(jdn: float) -> datetime.datetime
+```
+
+Convert a Julian Day Number (JDN) to a datetime.
+
+The Julian Day Number is the continuous count of days since the beginning
+of the Julian Period on January 1, 4713 BC. This function was validated against
+https://ssd.jpl.nasa.gov/tools/jdc/#/cd
+
+**Arguments**:
+
+- `jdn` - The Julian Day Number to convert.
+  
+
+**Returns**:
+
+  The corresponding datetime.
+
+
 ## `tum_esm_utils.validators`
 
 Implements validator utils for use with pydantic models.

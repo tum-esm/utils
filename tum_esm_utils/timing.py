@@ -362,3 +362,56 @@ def timed_section(label: str) -> Generator[None, None, None]:
     yield
     end = time.time()
     print(f"{label}: {end - start:6.3f}s")
+
+
+def datetime_to_julian_day_number(dt: datetime.datetime) -> float:
+    """Convert a datetime to a Julian Day Number (JDN).
+
+    The Julian Day Number is the continuous count of days since the beginning
+    of the Julian Period on January 1, 4713 BC. This function was validated against
+    https://ssd.jpl.nasa.gov/tools/jdc/#/cd
+
+    Args:
+        dt: The datetime to convert.
+
+    Returns:
+        The Julian Day Number as a float.
+    """
+
+    JDN_BASE_DT = datetime.datetime(2000, 1, 1, 12, 0, 0)  # JDN 2451545.0
+    JDN_BASE_NUM = 2451545.0
+
+    delta = dt - JDN_BASE_DT
+
+    return JDN_BASE_NUM + delta.days + (delta.seconds + delta.microseconds / 1_000_000) / 86400.0
+
+
+def julian_day_number_to_datetime(jdn: float) -> datetime.datetime:
+    """Convert a Julian Day Number (JDN) to a datetime.
+
+    The Julian Day Number is the continuous count of days since the beginning
+    of the Julian Period on January 1, 4713 BC. This function was validated against
+    https://ssd.jpl.nasa.gov/tools/jdc/#/cd
+
+    Args:
+        jdn: The Julian Day Number to convert.
+
+    Returns:
+        The corresponding datetime.
+    """
+
+    JDN_BASE_DT = datetime.datetime(2000, 1, 1, 12, 0, 0)  # JDN 2451545.0
+    JDN_BASE_NUM = 2451545.0
+
+    delta_days = jdn - JDN_BASE_NUM
+    delta_whole_days = int(delta_days)
+    delta_fractional_day = delta_days - delta_whole_days
+
+    delta_seconds = int(delta_fractional_day * 86400)
+    delta_microseconds = int((delta_fractional_day * 86400 - delta_seconds) * 1_000_000)
+
+    return JDN_BASE_DT + datetime.timedelta(
+        days=delta_whole_days,
+        seconds=delta_seconds,
+        microseconds=delta_microseconds,
+    )
