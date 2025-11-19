@@ -1,6 +1,6 @@
 """A thin wrapper over the netCDF4 library to make working with NetCDF files easier.
 
-Implements: `NetCDFFile`
+Implements: `NetCDFFile`, `compress_netcdf_file`.
 
 This requires you to install this utils library with the optional `netcdf` dependencies:
 
@@ -209,3 +209,40 @@ class NetCDFFile:
     def __getitem__(self, key: str) -> "nc.Variable[Any]":
         """Get a variable from the NetCDF file."""
         return self.variables[key]
+
+
+def compress_netcdf_file(
+    source_filepath: str,
+    destination_filepath: str,
+    compression_level: int = 2,
+) -> None:
+    """Compress an existing NetCDF file by creating a new one with the specified compression level. This is useful because some NetCDF4 files given to you might not be (very well) compressed.
+
+    Raises:
+        FileNotFoundError: If the source file does not exist.
+        FileExistsError: If the destination file already exists.
+    """
+
+    if not os.path.isfile(source_filepath):
+        raise FileNotFoundError(f"Source file {source_filepath} does not exist.")
+    if os.path.isfile(destination_filepath):
+        raise FileExistsError(f"Destination file {destination_filepath} already exists.")
+
+    src_nc = NetCDFFile(source_filepath, mode="r")
+    dest_nc = NetCDFFile(destination_filepath, mode="w")
+
+    # Copy dimensions
+    for dim in src_nc.dimensions.values():
+        dest_nc.import_dimension(dim)
+
+    # Copy variables
+    for var in src_nc.variables.values():
+        dest_nc.import_variable(var, compression_level=compression_level)
+
+    # Copy attributes
+    for attr_name, attr_value in src_nc.attributes.items():
+        dest_nc.add_attribute(attr_name, attr_value)
+
+    src_nc.close()
+    dest_nc.close()
+
