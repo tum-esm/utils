@@ -868,10 +868,12 @@ class NetCDFFile()
 ##### `__init__`
 
 ```python
-def __init__(filepath: str,
-             parallel: bool = False,
-             diskless: bool = True,
-             mode: Literal["w", "a", "r"] = "r") -> None
+def __init__(
+    filepath: str,
+    parallel: bool = False,
+    diskless: bool = False,
+    mode: Literal["r", "w", "r+", "a", "x", "rs", "ws", "r+s", "as"] = "r"
+) -> None
 ```
 
 A simple wrapper around netCDF4.Dataset to make the interaction with NetCDF files easier.
