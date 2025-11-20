@@ -29,8 +29,8 @@ class NetCDFFile:
         filepath when closing the file. This ensures that the final filepath will only exist if the file
         was written completely. In append mode, the filepath is not changes."""
 
-        assert filepath.endswith(".nc"), "Only the .nc file extension is supported"
-        self.tmp_filepath = filepath[:-3] + ".tmp.nc"
+        extension = filepath.split(".")[-1]
+        self.tmp_filepath = filepath[: -(len(extension) + 1)] + f".tmp.{extension}"
         self.filepath = filepath
         self.mode = mode
 
