@@ -86,3 +86,28 @@ def test_netcdffile_import_dimension_and_variable() -> None:
         assert "foo" in tgt_nc.variables
         np.testing.assert_array_equal(tgt_nc.variables["foo"][:], np.arange(4))
         tgt_nc.close()
+
+
+@pytest.mark.order(3)
+@pytest.mark.quick
+def test_netcdffile_append() -> None:
+    with tempfile.TemporaryDirectory() as tmpdirname:
+        fp = os.path.join(tmpdirname, "file.nc")
+
+        ds1 = tum_esm_utils.netcdf.NetCDFFile(fp, mode="w")
+        ds1.create_dimension("time", 5)
+        ds1.create_variable("temperature", dimensions=("time",), units="K", datatype="f8")
+        ds1["temperature"][:] = np.random.rand(5) * 300  # Random temperatures in Kelvin
+        ds1.close()
+
+        ds2 = tum_esm_utils.netcdf.NetCDFFile(fp, mode="a")
+        ds2.create_variable("pressure", dimensions=("time",), units="hPa", datatype="f8")
+        ds2["pressure"][:] = np.random.rand(5) * 1000  # Random pressures in hPa
+        ds2.close()
+
+        ds3 = tum_esm_utils.netcdf.NetCDFFile(fp, mode="r")
+        assert "temperature" in ds3.variables
+        assert "pressure" in ds3.variables
+        assert np.nansum(ds3["temperature"][:]) > 1
+        assert np.nansum(ds3["pressure"][:]) > 1
+        ds3.close()

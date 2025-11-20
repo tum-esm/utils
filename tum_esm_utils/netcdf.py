@@ -20,8 +20,8 @@ class NetCDFFile:
         self,
         filepath: str,
         parallel: bool = False,
-        diskless: bool = True,
-        mode: Literal["w", "a", "r"] = "r",
+        diskless: bool = False,
+        mode: Literal["r", "w", "r+", "a", "x", "rs", "ws", "r+s", "as"] = "r",
     ) -> None:
         """A simple wrapper around netCDF4.Dataset to make the interaction with NetCDF files easier.
 
@@ -49,7 +49,7 @@ class NetCDFFile:
         self.variables: dict[str, nc.Variable[Any]] = {}
         self.attributes: dict[str, str] = {}
 
-        if mode in ["a", "r"]:
+        if mode != "w":
             for dim_name, dim in self.ds.dimensions.items():
                 self.dimensions[dim_name] = dim
             for var_name, var in self.ds.variables.items():
