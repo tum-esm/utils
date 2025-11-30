@@ -27,7 +27,6 @@ if os.getenv("TUM_ESM_UTILS_EXPLICIT_IMPORTS") != "1":
         files as files,
         mathematics as mathematics,
         processes as processes,
-        rebinning as rebinning,
         shell as shell,
         sqlitelock as sqlitelock,
         system as system,
