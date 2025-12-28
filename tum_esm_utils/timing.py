@@ -36,6 +36,8 @@ def time_range(
     _datetimes = [datetime.datetime.combine(_d, from_time)]
     while True:
         next_dt = _datetimes[-1] + time_step
+        if next_dt.date() > _d:
+            break
         if next_dt.time() > to_time:
             break
         _datetimes.append(next_dt)
