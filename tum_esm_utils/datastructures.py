@@ -1,9 +1,53 @@
 """Datastructures not in the standard library.
 
-Implements: `RingList`, `merge_dicts`"""
+Implements: `LazyDict`, `RingList`, `merge_dicts`"""
 
 from __future__ import annotations
-from typing import Any, TypeVar
+from typing import Any, TypeVar, Generic, Callable
+
+
+KeyType = TypeVar("KeyType", int, str, bytes)
+ValueType = TypeVar("ValueType")
+
+
+class LazyDict(Generic[KeyType, ValueType]):
+    """A dictionary that loads/computes its values lazily.
+
+    The goal is that it only runs this computation or loading operation once and only when it's needed.
+
+    Usage:
+
+    ```python
+    ld = LazyDict[str,int](lambda key: len(key))
+    x = ld["hello"]  # computes len("hello") and stores it
+    y = ld["hello"]  # uses the stored value for "world"
+    ```
+    """
+
+    def __init__(self, getitem: Callable[[KeyType], ValueType]) -> None:
+        self.getitem: Callable[[KeyType], ValueType] = getitem
+        self._data: dict[KeyType, ValueType] = {}
+
+    def __getitem__(self, key: KeyType) -> ValueType:
+        if key not in self._data:
+            self._data[key] = self.getitem(key)
+        return self._data[key]
+
+    def __setitem__(self, key: KeyType, value: ValueType) -> None:
+        """Sets the value for a given key. Overrides any existing value."""
+        self._data[key] = value
+
+    def __len__(self) -> int:
+        """Returns the number of stored items."""
+        return len(self._data)
+
+    def keys(self) -> list[KeyType]:
+        """Returns all stored keys."""
+        return list(self._data.keys())
+
+    def values(self) -> list[ValueType]:
+        """Returns all stored values."""
+        return list(self._data.values())
 
 
 class RingList:
@@ -91,8 +135,8 @@ def merge_dicts(old_object: Any, new_object: Any) -> Any:
     if (type(old_object) == dict) and (type(new_object) == dict):
         updated_dict: dict[Any, Any] = {}
 
-        old_keys: set[Any] = set(old_object.keys()) # pyright: ignore[reportUnknownArgumentType]
-        new_keys: set[Any] = set(new_object.keys()) # pyright: ignore[reportUnknownArgumentType]
+        old_keys: set[Any] = set(old_object.keys())  # pyright: ignore[reportUnknownArgumentType]
+        new_keys: set[Any] = set(new_object.keys())  # pyright: ignore[reportUnknownArgumentType]
 
         # recursively merge keys that are in both dicts
         for k in old_keys.intersection(new_keys):
