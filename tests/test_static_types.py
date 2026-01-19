@@ -20,10 +20,10 @@ def test_with_mypy() -> None:
 
     for path in ["tests/", "tum_esm_utils/"]:
         print(f"Checking {path} ...")
-        assert os.system(f"cd {PROJECT_DIR} && {sys.executable} -m mypy {path}") == 0
+        assert os.system(f"cd {PROJECT_DIR} && {sys.executable} -m mypy {path}") == 0  # pyright: ignore[reportDeprecated]
 
 
 @pytest.mark.order(1)
 @pytest.mark.quick
 def test_with_pyright() -> None:
-    assert os.system(f"cd {PROJECT_DIR} && {sys.executable} -m pyright") == 0
+    assert os.system(f"cd {PROJECT_DIR} && {sys.executable} -m pyright") == 0  # pyright: ignore[reportDeprecated]

@@ -53,7 +53,7 @@ def start_background_process(
 
     cwd = os.path.dirname(script_path)
     if os.name == "posix":
-        os.system(f"cd {cwd} && nohup {interpreter_path} {script_path} &")
+        os.system(f"cd {cwd} && nohup {interpreter_path} {script_path} &")  # pyright: ignore[reportDeprecated]
     else:
         subprocess.Popen(
             [interpreter_path, script_path],

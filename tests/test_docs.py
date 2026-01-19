@@ -26,7 +26,7 @@ def test_documentation_sync() -> None:
             print(f"Content of {filename} (before):\n{content}")
             checksums_before.append(hashlib.md5(content.encode()).hexdigest())
 
-    assert os.system(f"python {os.path.join(PROJECT_DIR, 'docs', 'scripts', 'sync-docs.py')}") == 0
+    assert os.system(f"python {os.path.join(PROJECT_DIR, 'docs', 'scripts', 'sync-docs.py')}") == 0  # pyright: ignore[reportDeprecated]
 
     checksums_after: List[str] = []
     for filename in FILENAMES:
