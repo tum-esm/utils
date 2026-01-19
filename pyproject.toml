@@ -3,7 +3,7 @@ name = "tum_esm_utils"
 version = "2.11.3"
 description = "Python utilities by the Professorship of Environmental Sensing and Modeling at the Technical University of Munich"
 authors = [
-    { name = "Moritz Makowski", email = "moritz.makowski@tum.de" },
+    { name = "Moritz Oliveira Makowski", email = "moritz.makowski@tum.de" },
     { name = "Friedrich Klappenbach", email = "friedrich.klappenbach@tum.de" },
 ]
 dependencies = [
@@ -56,11 +56,24 @@ dev = [
     "scipy-stubs>=1.15.2.2",
     "pyright>=1.1.407",
 ]
-plotting = ["matplotlib>=3.10.7", "numpy>=2.2.5"]
+plotting = [
+    "matplotlib>=3.10.7",
+    "numpy>=2.2.5",
+]
 em27 = ["polars>=1.16.0"]
-polars = ["polars>=1.16.0"] # alias for em27 (will be removed with 3.0)
-opus = ["numpy>=2.2.5", "tenacity>=9.1.2"]
-modeling = ["polars>=1.16.0", "scipy>=1.15.2", "skyfield>=1.53", "numpy>=2.2.6"]
+polars = [
+    "polars>=1.16.0",
+] # alias for em27 (will be removed with 3.0)
+opus = [
+    "numpy>=2.2.5",
+    "tenacity>=9.1.2",
+]
+modeling = [
+    "polars>=1.16.0",
+    "scipy>=1.15.2",
+    "skyfield>=1.53",
+    "numpy>=2.2.6",
+]
 netcdf = ["netcdf4>=1.7.3"]
 all = [
     "matplotlib>=3.10.1",
@@ -77,7 +90,10 @@ requires = ["pdm-backend"]
 build-backend = "pdm.backend"
 
 [tool.pytest.ini_options]
-filterwarnings = ["ignore::pytest.PytestUnhandledThreadExceptionWarning", "ignore::UserWarning"]
+filterwarnings = [
+    "ignore::pytest.PytestUnhandledThreadExceptionWarning",
+    "ignore::UserWarning",
+]
 markers = [
     "quick: tests that run very quickly",
     "multithreaded: tests that run on multiple threads",
@@ -99,7 +115,9 @@ line-length = 100
 
 [tool.pdm]
 distribution = true
-build.includes = ["tum_esm_utils"]
+build.includes = [
+    "tum_esm_utils",
+]
 build.excludes = [
     "tests",
     "tum_esm_utils/opus_file_validator/*.mod",
@@ -110,5 +128,12 @@ build.excludes = [
 ]
 
 [tool.pyright]
-exclude = [".venv", "dist", "build"]
-strict = ["tum_esm_utils", "tests"]
+exclude = [
+    ".venv",
+    "dist",
+    "build",
+]
+strict = [
+    "tum_esm_utils",
+    "tests",
+]

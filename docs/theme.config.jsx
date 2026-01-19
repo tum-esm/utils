@@ -61,7 +61,7 @@ export default {
   footer: {
     text: (
       <span>
-        © Moritz Makowski, Professorship of Environmental Sensing and Modeling,{" "}
+        © Moritz Oliveira Makowski, Professorship of Environmental Sensing and Modeling,{" "}
         {new Date().getFullYear()}
       </span>
     ),
