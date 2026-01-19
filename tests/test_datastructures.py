@@ -1,5 +1,51 @@
+import time
 import pytest
 import tum_esm_utils.datastructures
+
+
+@pytest.mark.order(3)
+@pytest.mark.quick
+def test_lazy_dict() -> None:
+    def get_item(key: str) -> int:
+        time.sleep(0.2)
+        return len(key)
+
+    ld = tum_esm_utils.datastructures.LazyDict[str, int](get_item)
+    t1 = time.time()
+    x = ld["hello"]  # computes len("hello") and stores it
+    t2 = time.time()
+    assert x == 5
+    assert t2 - t1 >= 0.15  # took at least 0.15 seconds
+    assert len(ld) == 1
+    assert ld.keys() == ["hello"]
+    assert ld.values() == [5]
+
+    t3 = time.time()
+    y = ld["hello"]  # retrieves stored value, does not recompute
+    t4 = time.time()
+    assert y == 5
+    assert t4 - t3 < 0.05  # took less than 0.05 seconds
+    assert len(ld) == 1
+    assert ld.keys() == ["hello"]
+    assert ld.values() == [5]
+
+    t5 = time.time()
+    z = ld["world!"]  # computes len("world") and stores it
+    t6 = time.time()
+    assert z == 6
+    assert t6 - t5 >= 0.15  # took at least 0.15 seconds
+    assert len(ld) == 2
+    assert ld.keys() == ["hello", "world!"]
+    assert ld.values() == [5, 6]
+
+    t7 = time.time()
+    w = ld["world!"]  # retrieves stored value, does not recompute
+    t8 = time.time()
+    assert w == 6
+    assert t8 - t7 < 0.05  # took less than 0.05 seconds
+    assert len(ld) == 2
+    assert ld.keys() == ["hello", "world!"]
+    assert ld.values() == [5, 6]
 
 
 @pytest.mark.order(3)
