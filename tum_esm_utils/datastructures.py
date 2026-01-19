@@ -29,24 +29,25 @@ class LazyDict(Generic[KeyType, ValueType]):
         self._data: dict[KeyType, ValueType] = {}
 
     def __getitem__(self, key: KeyType) -> ValueType:
+        """Get the value for a given key. Computes and stores it if not already present."""
         if key not in self._data:
             self._data[key] = self.getitem(key)
         return self._data[key]
 
     def __setitem__(self, key: KeyType, value: ValueType) -> None:
-        """Sets the value for a given key. Overrides any existing value."""
+        """Set the value for a given key. Overrides any existing value."""
         self._data[key] = value
 
     def __len__(self) -> int:
-        """Returns the number of stored items."""
+        """Return the number of stored items."""
         return len(self._data)
 
     def keys(self) -> list[KeyType]:
-        """Returns all stored keys."""
+        """Return all stored keys."""
         return list(self._data.keys())
 
     def values(self) -> list[ValueType]:
-        """Returns all stored values."""
+        """Return all stored values."""
         return list(self._data.values())
 
 

@@ -290,7 +290,71 @@ Fill time gaps in a dataframe with NaN rows. This is very useful for plotting da
 
 Datastructures not in the standard library.
 
-Implements: `RingList`, `merge_dicts`
+Implements: `LazyDict`, `RingList`, `merge_dicts`
+
+
+### `LazyDict` Objects
+
+```python
+class LazyDict(Generic[KeyType, ValueType])
+```
+
+A dictionary that loads/computes its values lazily.
+
+The goal is that it only runs this computation or loading operation once and only when it's needed.
+
+Usage:
+
+```python
+ld = LazyDict[str,int](lambda key: len(key))
+x = ld["hello"]  # computes len("hello") and stores it
+y = ld["hello"]  # uses the stored value for "world"
+```
+
+
+##### `__getitem__`
+
+```python
+def __getitem__(key: KeyType) -> ValueType
+```
+
+Get the value for a given key. Computes and stores it if not already present.
+
+
+##### `__setitem__`
+
+```python
+def __setitem__(key: KeyType, value: ValueType) -> None
+```
+
+Set the value for a given key. Overrides any existing value.
+
+
+##### `__len__`
+
+```python
+def __len__() -> int
+```
+
+Return the number of stored items.
+
+
+##### `keys`
+
+```python
+def keys() -> list[KeyType]
+```
+
+Return all stored keys.
+
+
+##### `values`
+
+```python
+def values() -> list[ValueType]
+```
+
+Return all stored values.
 
 
 ### `RingList` Objects
