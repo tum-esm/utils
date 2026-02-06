@@ -1463,7 +1463,8 @@ pdm add "tum_esm_utils[plotting]"
 ##### `apply_better_defaults`
 
 ```python
-def apply_better_defaults(font_family: Optional[str] = "Roboto") -> None
+def apply_better_defaults(font_family: Optional[str] = "Roboto",
+                          load_system_fonts: bool = False) -> None
 ```
 
 Apply better defaults to matplotlib plots.
@@ -1472,6 +1473,8 @@ Apply better defaults to matplotlib plots.
 
 - `font_family` - The font family to use for the plots. If None, the default
   settings are not changed.
+- `load_system_fonts` - If True, the system fonts are manually added to the
+  font manager. Normally, this is not necessary.
 
 
 ##### `create_figure`
