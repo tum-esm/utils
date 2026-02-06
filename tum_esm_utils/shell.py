@@ -27,18 +27,24 @@ def run_shell_command(
     command: str,
     working_directory: Optional[str] = None,
     executable: str = "/bin/bash",
+    environment_variables: Optional[dict[str, str]] = None,
 ) -> str:
     """runs a shell command and raises a `CommandLineException`
     if the return code is not zero, returns the stdout. Uses
     `/bin/bash` by default.
 
     Args:
-        command:           The command to run.
-        working_directory: The working directory for the command.
-        executable:        The shell executable to use.
+        command:               The command to run.
+        working_directory:     The working directory for the command.
+        executable:            The shell executable to use.
+        environment_variables: A dictionary of environment variables to set for the command.
 
     Returns:
         The stdout of the command as a string."""
+
+    env = os.environ.copy()
+    if environment_variables is not None:
+        env.update(environment_variables)
 
     p = subprocess.run(
         command,
@@ -46,7 +52,7 @@ def run_shell_command(
         stdout=subprocess.PIPE,
         stderr=subprocess.PIPE,
         cwd=working_directory,
-        env=os.environ.copy(),
+        env=env,
         executable=executable,
     )
     stdout = p.stdout.decode("utf-8", errors="replace").strip()

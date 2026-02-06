@@ -1707,9 +1707,11 @@ Exception raised for errors in the command line.
 ##### `run_shell_command`
 
 ```python
-def run_shell_command(command: str,
-                      working_directory: Optional[str] = None,
-                      executable: str = "/bin/bash") -> str
+def run_shell_command(
+        command: str,
+        working_directory: Optional[str] = None,
+        executable: str = "/bin/bash",
+        environment_variables: Optional[dict[str, str]] = None) -> str
 ```
 
 runs a shell command and raises a `CommandLineException`
@@ -1721,6 +1723,7 @@ if the return code is not zero, returns the stdout. Uses
 - `command` - The command to run.
 - `working_directory` - The working directory for the command.
 - `executable` - The shell executable to use.
+- `environment_variables` - A dictionary of environment variables to set for the command.
   
 
 **Returns**:
