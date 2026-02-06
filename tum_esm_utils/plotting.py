@@ -20,23 +20,31 @@ import matplotlib.gridspec
 from tailwind_colors import TAILWIND_COLORS_HEX
 
 
-def apply_better_defaults(font_family: Optional[str] = "Roboto") -> None:
+def apply_better_defaults(
+    font_family: Optional[str] = "Roboto",
+    load_system_fonts: bool = False,
+) -> None:
     """Apply better defaults to matplotlib plots.
 
     Args:
         font_family: The font family to use for the plots. If None, the default
                         settings are not changed.
+        load_system_fonts: If True, the system fonts are manually added to the
+                     font manager. Normally, this is not necessary.
     """
 
     import matplotlib.font_manager
 
     if font_family is not None:
-        system_fonts = matplotlib.font_manager.findSystemFonts()
-        matching_fonts = [font for font in system_fonts if font_family in font]
-        if len(matching_fonts) == 0:
-            raise ValueError(f"Font family '{font_family}' not found. System fonts: {system_fonts}")
-        for font in matching_fonts:
-            matplotlib.font_manager.fontManager.addfont(font)
+        if load_system_fonts:
+            system_fonts = matplotlib.font_manager.findSystemFonts()
+            matching_fonts = [font for font in system_fonts if font_family in font]
+            if len(matching_fonts) == 0:
+                raise ValueError(
+                    f"Font family '{font_family}' not found. System fonts: {system_fonts}"
+                )
+            for font in matching_fonts:
+                matplotlib.font_manager.fontManager.addfont(font)
         plt.rcParams["font.sans-serif"] = [font_family, *plt.rcParams["font.sans-serif"]]
 
     plt.rcParams["figure.titleweight"] = "bold"
