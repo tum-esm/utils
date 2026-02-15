@@ -26,7 +26,7 @@ class CommandLineException(Exception):
 def run_shell_command(
     command: str,
     working_directory: Optional[str] = None,
-    executable: str = "/bin/bash",
+    executable: Optional[str] = "/bin/bash",
     environment_variables: Optional[dict[str, str]] = None,
 ) -> str:
     """runs a shell command and raises a `CommandLineException`
