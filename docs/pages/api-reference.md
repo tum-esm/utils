@@ -1710,7 +1710,7 @@ Exception raised for errors in the command line.
 def run_shell_command(
         command: str,
         working_directory: Optional[str] = None,
-        executable: str = "/bin/bash",
+        executable: Optional[str] = "/bin/bash",
         environment_variables: Optional[dict[str, str]] = None) -> str
 ```
 
@@ -2261,7 +2261,7 @@ parse_timezone_string("UTC-02:00")  # returns -2
 def wait_for_condition(is_successful: Callable[[], bool],
                        timeout_message: str,
                        timeout_seconds: float = 5,
-                       check_interval_seconds: float = 0.25) -> None
+                       check_interval_seconds: float = 0.25) -> float
 ```
 
 Wait for the given condition to be true, or raise a TimeoutError
@@ -2274,6 +2274,8 @@ is passed as a function that will be called periodically.
 - `timeout_message` - The message to include in the TimeoutError.
 - `timeout_seconds` - The maximum time to wait for the condition to be met.
 - `check_interval_seconds` - How long to wait inbetween `is_successful()` calls.
+  
+- `Returns` - The time it took for the condition to be met in seconds.
 
 
 ##### `parse_iso_8601_datetime`
