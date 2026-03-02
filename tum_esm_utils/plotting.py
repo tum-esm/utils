@@ -17,6 +17,7 @@ import contextlib
 
 import matplotlib.pyplot as plt
 import matplotlib.gridspec
+import matplotlib.axes
 from tailwind_colors import TAILWIND_COLORS_HEX
 
 
@@ -155,7 +156,7 @@ def add_subplot(
 
 
 def add_colorpatch_legend(
-    fig: plt.Figure,  # pyright: ignore[reportPrivateImportUsage]
+    fig: plt.Figure | matplotlib.axes.Axes,  # pyright: ignore[reportPrivateImportUsage]
     handles: list[
         tuple[
             str,
@@ -168,6 +169,7 @@ def add_colorpatch_legend(
     ],
     ncols: Optional[int] = None,
     location: str = "upper left",
+    **kwargs: dict[str, Any],
 ) -> None:
     """Add a color patch legend to a figure.
 
@@ -186,4 +188,5 @@ def add_colorpatch_legend(
         handles=[matplotlib.patches.Patch(color=color, label=label) for label, color in handles],
         ncol=len(handles) if ncols is None else ncols,
         loc=location,
+        **kwargs,
     )

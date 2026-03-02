@@ -1557,7 +1557,7 @@ add_subplot(fig, gs[0], ...)
 ##### `add_colorpatch_legend`
 
 ```python
-def add_colorpatch_legend(fig: plt.Figure,
+def add_colorpatch_legend(fig: plt.Figure | matplotlib.axes.Axes,
                           handles: list[tuple[
                               str,
                               Union[
@@ -1567,7 +1567,8 @@ def add_colorpatch_legend(fig: plt.Figure,
                               ],
                           ]],
                           ncols: Optional[int] = None,
-                          location: str = "upper left") -> None
+                          location: str = "upper left",
+                          **kwargs: dict[str, Any]) -> None
 ```
 
 Add a color patch legend to a figure.
