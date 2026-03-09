@@ -7,10 +7,10 @@ import queue
 import pytest
 import tum_esm_utils.decorators
 import multiprocessing
+import threading
 
 multiprocessing.set_start_method("spawn", force=True)
 
-import threading
 
 TIMEOUT_UNIT = 0.5
 res_queue_th: queue.Queue[int] = queue.Queue()

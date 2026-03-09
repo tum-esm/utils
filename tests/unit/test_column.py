@@ -6,12 +6,12 @@ import pytest
 import tum_esm_utils.files
 import tum_esm_utils.column
 
-base = tum_esm_utils.files.rel_to_abs_path("./data/column")
+base = tum_esm_utils.files.rel_to_abs_path("../data/column")
 
 
 @pytest.mark.order(3)
 def test_astronomy() -> None:
-    f = tum_esm_utils.files.rel_to_abs_path("../tum_esm_utils/column/de421.bsp")
+    f = tum_esm_utils.files.rel_to_abs_path("../../tum_esm_utils/column/de421.bsp")
     if os.path.isfile(f):
         os.remove(f)
     astronomy = tum_esm_utils.column.astronomy.Astronomy()

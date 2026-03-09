@@ -1,11 +1,10 @@
 # custom
-tests/pytest_filelock_test.lock
-tests/pytest_sqlitelock_test.lock
-tests/pytest_sqlitelock_test.lock-journal
 nohup.out
 .vscode
 old-docs
 .pdm-python
+*pytest*test.lock
+*pytest*test.lock-journal
 
 # Created by https://www.toptal.com/developers/gitignore/api/linux,macos,python,windows,jetbrains,fortran
 # Edit at https://www.toptal.com/developers/gitignore?templates=linux,macos,python,windows,jetbrains,fortran

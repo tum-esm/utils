@@ -3,7 +3,7 @@ import tempfile
 import pytest
 import tum_esm_utils.files
 
-PROJECT_DIR = tum_esm_utils.files.get_parent_dir_path(__file__, current_depth=2)
+PROJECT_DIR = tum_esm_utils.files.get_parent_dir_path(__file__, current_depth=3)
 
 
 @pytest.mark.order(3)
@@ -24,9 +24,9 @@ def test_rel_to_abs_path() -> None:
     a3 = tum_esm_utils.files.rel_to_abs_path("tests", "data/some.csv")
     a4 = tum_esm_utils.files.rel_to_abs_path("tests/data", "some.csv")
     a5 = tum_esm_utils.files.rel_to_abs_path("tests/data/", "some.csv")
-    a6 = tum_esm_utils.files.rel_to_abs_path("..", "tests", "tests", "data", "some.csv")
+    a6 = tum_esm_utils.files.rel_to_abs_path("..", "unit", "tests", "data", "some.csv")
     a7 = tum_esm_utils.files.rel_to_abs_path(
-        "..", "tests", "tests", "data", "..", "data", "some.csv"
+        "..", "unit", "tests", "data", "..", "data", "some.csv"
     )
     assert a1 == a2 == a3 == a4 == a5 == a6 == a7
 

@@ -12,10 +12,10 @@ def test_strict_path_validators() -> None:
         f: StrictFilePath
         d: StrictDirectoryPath
 
-    test_file = tum_esm_utils.files.rel_to_abs_path("../pyproject.toml")
-    test_dir = tum_esm_utils.files.rel_to_abs_path("..")
+    test_file = tum_esm_utils.files.rel_to_abs_path("../../pyproject.toml")
+    test_dir = tum_esm_utils.files.rel_to_abs_path("../..")
 
-    c = Config(f=test_file, d=test_dir) # pyright: ignore[reportArgumentType]
+    c = Config(f=test_file, d=test_dir)  # pyright: ignore[reportArgumentType]
     assert isinstance(c.f, StrictFilePath)
     assert isinstance(c.f.root, str)
     assert set(c.model_dump().keys()) == {"f", "d"}

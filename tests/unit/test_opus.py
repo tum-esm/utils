@@ -1,15 +1,17 @@
+import os
 import numpy as np
 import pytest
 import tum_esm_utils.opus
 import tum_esm_utils.files
 
 
-IFG1 = tum_esm_utils.files.rel_to_abs_path("./data/ifgs/md20220409s0e00a.0198")
-IFG2 = tum_esm_utils.files.rel_to_abs_path("./data/ifgs/md20220409s0e00a.0199")
-IFG3 = tum_esm_utils.files.rel_to_abs_path("./data/ifgs/md20220409s0e00a.0200")
-IFG4 = tum_esm_utils.files.rel_to_abs_path("./data/ifgs/ma20240514s0e00a.0975")
-IFG5 = tum_esm_utils.files.rel_to_abs_path("./data/ifgs/so20170608.ifg.000")
-IFG6 = tum_esm_utils.files.rel_to_abs_path("./data/ifgs/so20170608.ifg.050")
+IFG_DIR = tum_esm_utils.files.rel_to_abs_path("../data/ifgs")
+IFG1 = os.path.join(IFG_DIR, "md20220409s0e00a.0198")
+IFG2 = os.path.join(IFG_DIR, "md20220409s0e00a.0199")
+IFG3 = os.path.join(IFG_DIR, "md20220409s0e00a.0200")
+IFG4 = os.path.join(IFG_DIR, "ma20240514s0e00a.0975")
+IFG5 = os.path.join(IFG_DIR, "so20170608.ifg.000")
+IFG6 = os.path.join(IFG_DIR, "so20170608.ifg.050")
 
 
 @pytest.mark.order(3)
