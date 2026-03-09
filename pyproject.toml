@@ -96,6 +96,7 @@ ignore_missing_imports = true
 
 [tool.ruff]
 line-length = 100
+lint.ignore = ["E712", "E731", "E722", "E741"]
 
 [tool.pdm]
 distribution = true
