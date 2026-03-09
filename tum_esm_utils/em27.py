@@ -36,7 +36,7 @@ def _compile_fortran_code(
 
         command = (
             f"{fortran_compiler} -nocpp -O3 -o ./opus_file_validator "
-            + f"glob_prepro6.F90 glob_OPUSparms6.F90 opus_file_validator.F90"
+            + "glob_prepro6.F90 glob_OPUSparms6.F90 opus_file_validator.F90"
         )
         p = subprocess.run(
             command,
@@ -295,13 +295,8 @@ PROFFAST_MULTIPLIERS: dict[str, float] = {
     "XCO": 1000,
     "XAIR": 1,
     "XH2O": 1,
-    "XAIR": 1,
-    "XCO2": 1,
     "XCO2_STR": 1,
-    "XCH4": 1000,
-    "XCO": 1000,
     "XCH4_S5P": 1000,
-    "XAIR": 1,
     "H2O": 1 / (6.022 * 10e23),
     "O2": 1 / (6.022 * 10e23),
     "CO2": 1 / (6.022 * 10e23),
@@ -313,7 +308,6 @@ PROFFAST_MULTIPLIERS: dict[str, float] = {
 
 PROFFAST_UNITS: dict[str, str] = {
     "XH2O": "ppm",
-    "XAIR": "ppm",
     "XCO2": "ppm",
     "XCO2_STR": "ppm",
     "XCH4": "ppb",

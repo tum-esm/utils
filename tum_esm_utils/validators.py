@@ -14,7 +14,7 @@ class StrictFilePath(pydantic.RootModel[str]):
     Example usage:
 
     ```python
-    class MyModel(pyndatic.BaseModel):
+    class MyModel(pydantic.BaseModel):
         path: StrictFilePath
 
     m = MyModel(path='/path/to/file') # validates that the file exists
@@ -35,8 +35,8 @@ class StrictFilePath(pydantic.RootModel[str]):
     @pydantic.field_validator("root")
     @classmethod
     def path_should_exist(cls, v: str, info: pydantic.ValidationInfo) -> str:
-        ignore_path_existence: bool = ( # pyright: ignore[reportUnknownVariableType]
-            (info.context.get("ignore-path-existence") == True) # pyright: ignore[reportUnknownMemberType]
+        ignore_path_existence: bool = (  # pyright: ignore[reportUnknownVariableType]
+            (info.context.get("ignore-path-existence") == True)  # pyright: ignore[reportUnknownMemberType]
             if isinstance(info.context, dict)
             else False
         )
@@ -72,8 +72,8 @@ class StrictDirectoryPath(pydantic.RootModel[str]):
     @pydantic.field_validator("root")
     @classmethod
     def path_should_exist(cls, v: str, info: pydantic.ValidationInfo) -> str:
-        ignore_path_existence = ( # pyright: ignore[reportUnknownVariableType]
-            (info.context.get("ignore-path-existence") == True) # pyright: ignore[reportUnknownMemberType]
+        ignore_path_existence = (  # pyright: ignore[reportUnknownVariableType]
+            (info.context.get("ignore-path-existence") == True)  # pyright: ignore[reportUnknownMemberType]
             if isinstance(info.context, dict)
             else False
         )

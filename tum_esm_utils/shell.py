@@ -61,7 +61,7 @@ def run_shell_command(
     if p.returncode != 0:
         raise CommandLineException(
             f"command '{command}' failed with exit code {p.returncode}",
-            details=f"\nstderr:\n{stderr}\nstout:\n{stdout}",
+            details=f"\nstderr:\n{stderr}\nstdout:\n{stdout}",
         )
 
     return stdout

@@ -424,7 +424,7 @@ Returns the max size of the list
 def set_max_size(new_max_size: int) -> None
 ```
 
-Sets a new max size fo the list.
+Sets a new max size to the list.
 
 
 ##### `merge_dicts`
@@ -1166,7 +1166,7 @@ class OpusHTTPInterface()
 Interface to the OPUS HTTP interface.
 
 It uses the socket library, because the HTTP interface of OPUS does not
-reuturn valid HTTP/1 or HTTP/2 headers. It opens and closes a new socket
+return valid HTTP/1 or HTTP/2 headers. It opens and closes a new socket
 because OPUS closes the socket after the answer has been sent.
 
 **Raises**:
@@ -1192,7 +1192,7 @@ def request(request: str,
 
 Send a request to the OPUS HTTP interface and return the answer.
 
-Commands will be send to `GET http://localhost/OpusCommand.htm?<request>`.
+Commands will be sent to `GET http://localhost/OpusCommand.htm?<request>`.
 This function will retry the request up to 3 times and wait 5 seconds
 inbetween retries.
 
@@ -1653,7 +1653,7 @@ terminated forcefully after the given timeout (in seconds).
 
 ## `tum_esm_utils.rebinning`
 
-Functions to rebin binned data poins
+Functions to rebin binned data points
 
 Implements: `rebin_1d`, `rebin_2d`.
 
@@ -2500,7 +2500,7 @@ A pydantic model that validates a file path.
 Example usage:
 
 ```python
-class MyModel(pyndatic.BaseModel):
+class MyModel(pydantic.BaseModel):
     path: StrictFilePath
 
 m = MyModel(path='/path/to/file') # validates that the file exists

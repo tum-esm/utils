@@ -330,7 +330,7 @@ class ExponentialBackoff:
         if minutes > 0:
             message += f" {minutes} minute(s)"
             if seconds > 0:
-                message += f" and"
+                message += " and"
         if seconds > 0:
             message += f" {round(seconds, 2)} second(s)"
         if self.log_info is not None:

@@ -80,8 +80,8 @@ def download_github_release_asset(
         releases = json.loads(
             tum_esm_utils.shell.run_shell_command(
                 (
-                    f"curl -L "
-                    + f'-H "Accept: application/vnd.github+json" '
+                    "curl -L "
+                    + '-H "Accept: application/vnd.github+json" '
                     + (f'-H "Authorization: Bearer {access_token}" ' if access_token else "")
                     + ' -H "X-GitHub-Api-Version: 2022-11-28" '
                     + f"https://api.github.com/repos/{repository}/releases"
@@ -97,17 +97,17 @@ def download_github_release_asset(
         raise RuntimeError(
             f"Failed to fetch releases from repository '{repository}'. Response: {releases}"
         )
-    for release in releases: # pyright: ignore[reportUnknownVariableType]
+    for release in releases:  # pyright: ignore[reportUnknownVariableType]
         if not isinstance(release, dict):
             raise RuntimeError(
                 f"Invalid release format in repository '{repository}'. Release: {releases}"
             )
 
     url: Optional[str] = None
-    for o in sorted(releases, key=lambda x: x["published_at"], reverse=True): # type: ignore
-        for asset in o["assets"]: # pyright: ignore[reportUnknownVariableType]
+    for o in sorted(releases, key=lambda x: x["published_at"], reverse=True):  # type: ignore
+        for asset in o["assets"]:  # pyright: ignore[reportUnknownVariableType]
             if asset["name"] == asset_name:
-                url = asset["url"] # pyright: ignore[reportUnknownVariableType]
+                url = asset["url"]  # pyright: ignore[reportUnknownVariableType]
                 break
     if not isinstance(url, str):
         raise RuntimeError(
@@ -115,9 +115,9 @@ def download_github_release_asset(
         )
 
     tum_esm_utils.shell.run_shell_command(
-        f"curl -L "
+        "curl -L "
         + (f'-H "Authorization: Bearer {access_token}" ' if access_token else "")
-        + f'-H "Accept: application/octet-stream" '
+        + '-H "Accept: application/octet-stream" '
         + f"-o {asset_name} "
         + url,
         working_directory=dst_dir,

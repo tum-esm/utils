@@ -11,7 +11,7 @@ class OpusHTTPInterface:
     """Interface to the OPUS HTTP interface.
 
     It uses the socket library, because the HTTP interface of OPUS does not
-    reuturn valid HTTP/1 or HTTP/2 headers. It opens and closes a new socket
+    return valid HTTP/1 or HTTP/2 headers. It opens and closes a new socket
     because OPUS closes the socket after the answer has been sent.
 
     Raises:
@@ -33,7 +33,7 @@ class OpusHTTPInterface:
     ) -> list[str]:
         """Send a request to the OPUS HTTP interface and return the answer.
 
-        Commands will be send to `GET http://localhost/OpusCommand.htm?<request>`.
+        Commands will be sent to `GET http://localhost/OpusCommand.htm?<request>`.
         This function will retry the request up to 3 times and wait 5 seconds
         inbetween retries.
 
@@ -88,7 +88,7 @@ class OpusHTTPInterface:
             return answer_lines
         except:
             raise ConnectionError(
-                f"Invalid response from OPUS HTTP interface: "
+                "Invalid response from OPUS HTTP interface: "
                 + ("no answer" if answer_lines is None else str(answer_lines))
             )
 

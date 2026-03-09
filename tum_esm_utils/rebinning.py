@@ -1,4 +1,4 @@
-"""Functions to rebin binned data poins
+"""Functions to rebin binned data points
 
 Implements: `rebin_1d`, `rebin_2d`.
 

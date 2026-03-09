@@ -52,7 +52,7 @@ for m in module_names:
     parsed_modules.append(f"--module=tum_esm_utils.{m}")
 
 with tempfile.NamedTemporaryFile() as f:
-    command = f"pydoc-markdown " + (" ").join(parsed_modules)
+    command = "pydoc-markdown " + (" ").join(parsed_modules)
     os.system(f"cd {PROJECT_DIR} && {command} > {f.name}")  # pyright: ignore[reportDeprecated]
     raw_api_reference_content = tum_esm_utils.files.load_file(f.name)
 

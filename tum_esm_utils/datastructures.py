@@ -101,7 +101,7 @@ class RingList:
         return self._max_size
 
     def set_max_size(self, new_max_size: int) -> None:
-        """Sets a new max size fo the list."""
+        """Sets a new max size to the list."""
         current_list = self.get()
         self._max_size = new_max_size
         self._data = [0] * new_max_size
@@ -133,7 +133,7 @@ def merge_dicts(old_object: Any, new_object: Any) -> Any:
         return new_object
 
     # merging is only possible when both are dicts
-    if (type(old_object) == dict) and (type(new_object) == dict):
+    if (type(old_object) is dict) and (type(new_object) is dict):
         updated_dict: dict[Any, Any] = {}
 
         old_keys: set[Any] = set(old_object.keys())  # pyright: ignore[reportUnknownArgumentType]
