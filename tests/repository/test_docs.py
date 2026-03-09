@@ -10,7 +10,7 @@ from typing import List
 
 import pytest
 
-PROJECT_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+PROJECT_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 DOCS_PAGES_DIR = os.path.join(PROJECT_DIR, "docs", "pages")
 FILENAMES = ["index.md", "api-reference.md"]
 

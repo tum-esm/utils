@@ -3,7 +3,7 @@ import shutil
 import sys
 import pytest
 
-PROJECT_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+PROJECT_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 
 def _rmdir(path: str) -> None:
