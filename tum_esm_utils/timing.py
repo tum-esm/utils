@@ -44,6 +44,23 @@ def time_range(
     return [d.time() for d in _datetimes]
 
 
+def datetime_range(
+    from_dt: datetime.datetime,
+    to_dt: datetime.datetime,
+    time_step: datetime.timedelta,
+) -> list[datetime.datetime]:
+    """Returns a list of datetimes between from_dt and to_dt (inclusive)."""
+    assert from_dt.tzinfo == to_dt.tzinfo, "from_dt and to_dt must have the same tzinfo"
+    assert from_dt <= to_dt, "from_dt must be less equal to_dt"
+    _datetimes = [from_dt]
+    while True:
+        next_dt = _datetimes[-1] + time_step
+        if next_dt > to_dt:
+            break
+        _datetimes.append(next_dt)
+    return _datetimes
+
+
 @contextlib.contextmanager
 def ensure_section_duration(duration: float) -> Generator[None, None, None]:
     """Make sure that the duration of the section is at least the given duration.

@@ -2192,6 +2192,16 @@ def time_range(from_time: datetime.time, to_time: datetime.time,
 Returns a list of times between from_time and to_time (inclusive).
 
 
+##### `datetime_range`
+
+```python
+def datetime_range(from_dt: datetime.datetime, to_dt: datetime.datetime,
+                   time_step: datetime.timedelta) -> list[datetime.datetime]
+```
+
+Returns a list of datetimes between from_dt and to_dt (inclusive).
+
+
 ##### `ensure_section_duration`
 
 ```python
