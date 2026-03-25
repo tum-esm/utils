@@ -1519,7 +1519,7 @@ def add_subplot(fig: plt.Figure,
                 title: Optional[str] = None,
                 xlabel: Optional[str] = None,
                 ylabel: Optional[str] = None,
-                **kwargs: dict[str, Any]) -> plt.Axes
+                **kwargs: Any) -> plt.Axes
 ```
 
 Add a subplot to a figure.

@@ -107,7 +107,7 @@ def add_subplot(
     title: Optional[str] = None,
     xlabel: Optional[str] = None,
     ylabel: Optional[str] = None,
-    **kwargs: dict[str, Any],
+    **kwargs: Any,
 ) -> plt.Axes:  # pyright: ignore[reportPrivateImportUsage]
     """Add a subplot to a figure.
 
