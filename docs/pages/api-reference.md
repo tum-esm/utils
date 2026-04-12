@@ -703,6 +703,24 @@ def dump_json_file(path: str, content: Any, indent: Optional[int] = 4) -> None
 Dump content to a JSON file.
 
 
+##### `load_toml_file`
+
+```python
+def load_toml_file(path: str) -> Any
+```
+
+Load the content of a TOML file.
+
+
+##### `dump_toml_file`
+
+```python
+def dump_toml_file(path: str, content: Any) -> None
+```
+
+Dump content to a TOML file.
+
+
 ##### `get_parent_dir_path`
 
 ```python

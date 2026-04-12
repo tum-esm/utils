@@ -151,3 +151,15 @@ def test_list_directory() -> None:
 
     l = tum_esm_utils.files.list_directory(PROJECT_DIR, include_files=False, include_links=False)
     assert set(l) == {f for f in os.listdir(PROJECT_DIR) if os.path.isdir(f)}
+
+
+# test load dump toml file
+@pytest.mark.order(3)
+@pytest.mark.quick
+def test_load_dump_toml_file() -> None:
+    with tempfile.TemporaryDirectory() as d:
+        filepath = os.path.join(d, "file.toml")
+        data = {"key1": "value1", "key2": 2, "key3": [1, 2, 3]}
+        tum_esm_utils.files.dump_toml_file(filepath, data)
+        loaded_data = tum_esm_utils.files.load_toml_file(filepath)
+        assert loaded_data == data

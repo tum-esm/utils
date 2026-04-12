@@ -52,6 +52,28 @@ def dump_json_file(path: str, content: Any, indent: Optional[int] = 4) -> None:
         json.dump(content, f, indent=indent)
 
 
+def load_toml_file(path: str) -> Any:
+    """Load the content of a TOML file."""
+    try:
+        import tomllib  # type: ignore
+
+        with open(path, "rb") as f:
+            return tomllib.load(f)  # type: ignore
+    except ImportError:
+        import tomli  # type: ignore
+
+        with open(path, "rb") as f:
+            return tomli.load(f)  # type: ignore
+
+
+def dump_toml_file(path: str, content: Any) -> None:
+    """Dump content to a TOML file."""
+    import tomli_w
+
+    with open(path, "wb") as f:
+        tomli_w.dump(content, f)
+
+
 def get_parent_dir_path(script_path: str, current_depth: int = 1) -> str:
     """Get the absolute path of a parent directory based on the
     current script path. Simply pass the `__file__` variable of
