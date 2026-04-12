@@ -41,6 +41,6 @@ def test_opus_file_reading() -> None:
     assert ifg is not None
     fwd = ifg[0][: ifg.shape[1] // 2]
     assert len(fwd) == 114256
-    computed_peak = np.argmax(fwd)
+    computed_peak = np.argmax(fwd)  # type: ignore
     ifg_center = fwd.shape[0] // 2
     assert abs(computed_peak - ifg_center) < 10
