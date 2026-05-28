@@ -85,13 +85,68 @@ class NetCDFFile:
         chunk_dimensions: list[str] = [],
         datatype: Literal["f4", "f8", "i4", "i8"] = "f4",
         zlib: bool = True,
-        compression_level: int = 2,
+        compression: Optional[
+            Literal[
+                "zlib",
+                "szip",
+                "zstd",
+                "bzip2",
+                "blosc_lz",
+                "blosc_lz4",
+                "blosc_lz4hc",
+                "blosc_zlib",
+                "blosc_zstd",
+            ]
+        ] = None,
+        compression_level: Optional[int] = 2,
     ) -> None:
         """Create a new variable in the NetCDF file.
+
+        We added the `zlib` argument a while ago, but should support different
+        compression types without a breaking release. The `compression` argument
+        is set to `None` by default, but will override the `zlib` argument if it
+        is set. To disable compression, set `zlib` to `False` and leave
+        `compression` at `None`.
 
         Raises:
             ValueError: If the variable already exists or if a dimension is not found.
             RuntimeError: If the NetCDF file is not opened in write mode."""
+
+        if zlib and (compression is None):
+            compression = "zlib"
+        if compression != "zstd":
+            zlib = False
+
+        if compression_level is not None:
+            if compression == "zlib":
+                if not (0 <= compression_level <= 9):
+                    raise ValueError("Invalid compression level for zlib. Must be between 0 and 9.")
+            elif compression == "szip":
+                if not (0 <= compression_level <= 32):
+                    raise ValueError(
+                        "Invalid compression level for szip. Must be between 0 and 32."
+                    )
+            elif compression == "zstd":
+                if not (1 <= compression_level <= 22):
+                    raise ValueError(
+                        "Invalid compression level for zstd. Must be between 1 and 22."
+                    )
+            elif compression == "bzip2":
+                if not (1 <= compression_level <= 9):
+                    raise ValueError(
+                        "Invalid compression level for bzip2. Must be between 1 and 9."
+                    )
+            elif compression in [
+                "blosc_lz",
+                "blosc_lz4",
+                "blosc_lz4hc",
+                "blosc_zlib",
+                "blosc_zstd",
+            ]:
+                if not (1 <= compression_level <= 9):
+                    raise ValueError(
+                        f"Invalid compression level for {compression}. Must be between 1 and 9."
+                    )
 
         if self.mode == "r":
             raise RuntimeError("Cannot create dimension in read-only mode")
@@ -119,6 +174,7 @@ class NetCDFFile:
             name,
             datatype=datatype,
             dimensions=object_dimensions,
+            compression=compression,
             zlib=zlib and ((len(dimensions) > 1) or (name != object_dimensions[0].name)),
             complevel=compression_level,  # type: ignore
             fill_value=fill_value,
