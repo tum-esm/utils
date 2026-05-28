@@ -99,3 +99,19 @@ lint.ignore = ["E712", "E731", "E722", "E741"]
 [tool.pyright]
 exclude = [".venv", "dist", "build"]
 strict = ["tum_esm_utils", "tests"]
+
+[build-system]
+requires = ["uv_build>=0.11.17,<0.12"]
+build-backend = "uv_build"
+
+[tool.uv.build-backend]
+module-name = "tum_esm_utils"
+module-root = ""
+source-exclude = [
+    "tests",
+    "tum_esm_utils/opus_file_validator/*.mod",
+    "tum_esm_utils/opus_file_validator/*.lock",
+    "tum_esm_utils/opus_file_validator/*.txt",
+    "tum_esm_utils/opus_file_validator/opus_file_validator",
+    "tum_esm_utils/column/de421.bsp",
+]
