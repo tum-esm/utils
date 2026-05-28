@@ -3,6 +3,7 @@ nohup.out
 .vscode
 old-docs
 .pdm-python
+.python-version
 *pytest*test.lock
 *pytest*test.lock-journal
 

@@ -234,7 +234,7 @@ You have to have the optional `plotting` dependencies installed for this to work
 ```bash
 pip install "tum-esm-utils[plotting]"
 # or
-pdm add "tum-esm-utils[plotting]"
+uv add "tum-esm-utils[plotting]"
 ```
 
 ## Exponential Backoff

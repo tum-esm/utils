@@ -7,7 +7,7 @@ This requires you to install this utils library with the optional `polars` depen
 ```bash
 pip install "tum_esm_utils[polars]"
 # or
-pdm add "tum_esm_utils[polars]"
+uv add "tum_esm_utils[polars]"
 ```
 """
 

@@ -7,7 +7,7 @@ This requires you to install this utils library with the optional `em27` depende
 ```bash
 pip install "tum_esm_utils[em27]"
 # or
-pdm add "tum_esm_utils[em27]"
+uv add "tum_esm_utils[em27]"
 ```"""
 
 from __future__ import annotations

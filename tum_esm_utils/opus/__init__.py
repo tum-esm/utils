@@ -9,7 +9,7 @@ the optional `opus` dependency:
 ```bash
 pip install "tum_esm_utils[opus]"
 # or
-pdm add "tum_esm_utils[opus]"
+uv add "tum_esm_utils[opus]"
 ```
 
 Credits to Friedrich Klappenbach (friedrich.klappenbach@tum.de) for decoding the OPUS file

@@ -7,7 +7,7 @@ This requires you to install this utils library with the optional `netcdf` depen
 ```bash
 pip install "tum_esm_utils[netcdf]"
 # or
-pdm add "tum_esm_utils[netcdf]"
+uv add "tum_esm_utils[netcdf]"
 ```"""
 
 from typing import Any, Literal, Optional

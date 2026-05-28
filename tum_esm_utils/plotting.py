@@ -7,7 +7,7 @@ This requires you to install this utils library with the optional `plotting` dep
 ```bash
 pip install "tum_esm_utils[plotting]"
 # or
-pdm add "tum_esm_utils[plotting]"
+uv add "tum_esm_utils[plotting]"
 ```"""
 
 # pyright: basic
