@@ -991,10 +991,27 @@ def create_variable(name: str,
                     chunk_dimensions: list[str] = [],
                     datatype: Literal["f4", "f8", "i4", "i8"] = "f4",
                     zlib: bool = True,
-                    compression_level: int = 2) -> None
+                    compression: Optional[Literal[
+                        "zlib",
+                        "szip",
+                        "zstd",
+                        "bzip2",
+                        "blosc_lz",
+                        "blosc_lz4",
+                        "blosc_lz4hc",
+                        "blosc_zlib",
+                        "blosc_zstd",
+                    ]] = None,
+                    compression_level: Optional[int] = 2) -> None
 ```
 
 Create a new variable in the NetCDF file.
+
+We added the `zlib` argument a while ago, but should support different
+compression types without a breaking release. The `compression` argument
+is set to `None` by default, but will override the `zlib` argument if it
+is set. To disable compression, set `zlib` to `False` and leave
+`compression` at `None`.
 
 **Raises**:
 
@@ -1055,6 +1072,15 @@ def close() -> None
 ```
 
 Close the NetCDF file, possibly renaming the temporary file to the final filepath.
+
+
+##### `discard`
+
+```python
+def discard() -> None
+```
+
+Discard the NetCDF file, closing it and removing the temporary file if it exists.
 
 
 ##### `__getitem__`
