@@ -116,6 +116,7 @@ def test_netcdffile_append() -> None:
 
 @pytest.mark.order(3)
 @pytest.mark.slow
+@pytest.mark.skipif(os.name != "posix", reason="Not fully supported on Windows")
 def test_netcdffile_compression() -> None:
     with tempfile.TemporaryDirectory() as tmpdirname:
         random_temp = np.random.normal(loc=300, scale=10, size=(10, 50, 50))
