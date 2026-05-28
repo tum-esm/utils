@@ -6,16 +6,6 @@ authors = [
     { name = "Moritz Oliveira Makowski", email = "moritz.makowski@tum.de" },
     { name = "Friedrich Klappenbach", email = "friedrich.klappenbach@tum.de" },
 ]
-dependencies = [
-    "filelock>=3.18.0",
-    "requests>=2.32.5",
-    "psutil>=7.1.2",
-    "pydantic>=2.11.3",
-    "pytz>=2025.2",
-    "tailwind-colors>=1.3.0",
-    "tomli>=2.4.1; python_version < '3.11'",
-    "tomli_w>=1.2.0",
-]
 requires-python = ">=3.10,<4.0"
 readme = "README.md"
 license = { text = "GPL-3.0-or-later" }
@@ -38,6 +28,16 @@ keywords = [
     "python",
     "library",
     "pydoc-markdown",
+]
+dependencies = [
+    "filelock>=3.18.0",
+    "psutil>=7.1.2",
+    "pydantic>=2.11.3",
+    "pytz>=2025.2",
+    "requests>=2.32.5",
+    "tailwind-colors>=1.3.0",
+    "tomli>=2.4.1 ; python_full_version < '3.11'",
+    "tomli-w>=1.2.0",
 ]
 
 [project.urls]
@@ -74,10 +74,6 @@ all = [
     "netcdf4>=1.7.3",
 ]
 
-[build-system]
-requires = ["pdm-backend"]
-build-backend = "pdm.backend"
-
 [tool.pytest.ini_options]
 filterwarnings = ["ignore::pytest.PytestUnhandledThreadExceptionWarning", "ignore::UserWarning"]
 markers = [
@@ -99,18 +95,6 @@ ignore_missing_imports = true
 [tool.ruff]
 line-length = 100
 lint.ignore = ["E712", "E731", "E722", "E741"]
-
-[tool.pdm]
-distribution = true
-build.includes = ["tum_esm_utils"]
-build.excludes = [
-    "tests",
-    "tum_esm_utils/opus_file_validator/*.mod",
-    "tum_esm_utils/opus_file_validator/*.lock",
-    "tum_esm_utils/opus_file_validator/*.txt",
-    "tum_esm_utils/opus_file_validator/opus_file_validator",
-    "tum_esm_utils/column/de421.bsp",
-]
 
 [tool.pyright]
 exclude = [".venv", "dist", "build"]
