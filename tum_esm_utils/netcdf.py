@@ -262,6 +262,15 @@ class NetCDFFile:
 
         del self
 
+    def discard(self) -> None:
+        """Discard the NetCDF file, closing it and removing the temporary file if it exists."""
+
+        self.ds.close()
+        if os.path.isfile(self.tmp_filepath):
+            os.remove(self.tmp_filepath)
+
+        del self
+
     def __getitem__(self, key: str) -> "nc.Variable[Any]":
         """Get a variable from the NetCDF file."""
         return self.variables[key]
