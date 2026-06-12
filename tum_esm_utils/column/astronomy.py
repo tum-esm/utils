@@ -1,3 +1,5 @@
+"""Functions to perform astronomical calculations"""
+
 from typing import Any
 import datetime
 import tum_esm_utils.files
