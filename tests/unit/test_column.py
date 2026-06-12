@@ -14,7 +14,10 @@ def test_astronomy() -> None:
     f = tum_esm_utils.files.rel_to_abs_path("../../tum_esm_utils/column/de421.bsp")
     if os.path.isfile(f):
         os.remove(f)
-    astronomy = tum_esm_utils.column.astronomy.Astronomy()
+    try:
+        astronomy = tum_esm_utils.column.astronomy.Astronomy()
+    except OSError as e:
+        pytest.skip(f"Could not download astronomy ephemeris data: {e}")
     assert os.path.isfile(f)
     lat = 48.151
     lon = 11.369
