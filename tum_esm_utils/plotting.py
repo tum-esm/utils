@@ -184,7 +184,7 @@ def add_colorpatch_legend(
 
     import matplotlib.patches
 
-    fig.legend(
+    fig.legend(  # type: ignore
         handles=[matplotlib.patches.Patch(color=color, label=label) for label, color in handles],
         ncol=len(handles) if ncols is None else ncols,
         loc=location,
