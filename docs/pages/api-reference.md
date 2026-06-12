@@ -115,6 +115,8 @@ Functions related to column observation data.
 
 ## `tum_esm_utils.column.astronomy`
 
+Functions to perform astronomical calculations
+
 
 ### `Astronomy` Objects
 
