@@ -2270,7 +2270,7 @@ wheels = [
 
 [[package]]
 name = "tum-esm-utils"
-version = "2.12.1"
+version = "2.12.2"
 source = { editable = "." }
 dependencies = [
     { name = "filelock" },
