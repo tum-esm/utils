@@ -1614,7 +1614,7 @@ def add_colorpatch_legend(fig: plt.Figure | matplotlib.axes.Axes,
                           ]],
                           ncols: Optional[int] = None,
                           location: str = "upper left",
-                          **kwargs: dict[str, Any]) -> None
+                          **kwargs: Any) -> None
 ```
 
 Add a color patch legend to a figure.

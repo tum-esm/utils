@@ -169,7 +169,7 @@ def add_colorpatch_legend(
     ],
     ncols: Optional[int] = None,
     location: str = "upper left",
-    **kwargs: dict[str, Any],
+    **kwargs: Any,
 ) -> None:
     """Add a color patch legend to a figure.
 
